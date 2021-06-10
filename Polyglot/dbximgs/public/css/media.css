@@ -1,0 +1,15 @@
+body {
+	font-size: 0.5cm;
+}
+
+@media all and (min-height: 500px) {
+	body { font-size: 0.7cm; }
+}
+
+@media all and (min-height: 700px) {
+	body { font-size: 1cm; }
+}
+
+@media all and (min-height: 900px) {
+	body { font-size: 1.2cm; }
+}

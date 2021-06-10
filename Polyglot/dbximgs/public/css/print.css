@@ -1,0 +1,11 @@
+#start, #time, #reset, #hint {
+	display: none;
+}
+
+section[id^=slide] {
+	border-bottom: 1px solid black;
+}
+
+h2:before {
+	content: counter(slide) " ";
+}
