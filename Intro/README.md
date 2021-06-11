@@ -1,178 +1,277 @@
-# Installing GraalVM Enterprise Edition and Setup
+# Install and Setup GraalVM Enterprise Edition
 
-This guide, will walk you through the process of getting setup with GraalVM. This guide is written to install GraalVM version 20.1.1. 
+This workshow will take you through downloading and installing the most recent GraalVM Enterprise, **21.1.0**, and adding support for its accompanying features and languages runtimes.
 
-## Notes on Setting up on the Mac
-These instructions, currently, are focused on installing on Linux and Mac. If youy install on a Mac, a number of the details will vary a little from the general approach. Where this is the case I will document them and highlight.
+## Downloading GraalVM Enterprise Edition 21.1.0
 
-It is worth pointing out these differences at the start as well, though.
+It is important to state that are there are two versions of `GraalVM`, the Enterprise Edition (supported and with better performance) and the Community Edition (free and open source). Both of these can be dwonloaded from the GraalVM website, but this workshop will detail downloading, and then installing the Enterprise Edition.
 
-First, if you place the GRAAL_HOME to /Library/Java/JavaVirtualMachines/, MAC OS picks the JDK up as default-jdk (as long it’s the newest JDK in the directory). You may not want to do this, I didn't. 
+1. Navigate to [Oracle GraalVM Downloads](https://www.oracle.com/downloads/graalvm-downloads.html?selected_tab=21).
 
-Secondly the path that the core GraalVM download extracts to is different from that for Linux. For Mac it adds a few directories. On Mac, the directory that will be used as your `GRAALVM_HOME` will be, relative to the directory that you extract it to:
+2. Click on the Current Release tab on the page to display the download links for the latest release containing new features. Make sure that you select 21.1.0 (the default should be selected already).
 
-    <install-dir>/graalvm-ee-java8-20.1.1/Contents/Home
+3. Select the JDK version (8, 11 or 16) and the operating system (Linux, macOS, Windows).
 
-The third major difference is that on some versions of OSX the `GateKeeper` service on OSX will block you from running `GraalVM` as it is not a signed application / binary. This can be worked around in a number of ways:
+   ![GraalVM Download Page - Select Current Verion, JDK and OS](./images/download-page.png " ")
 
-* Disabling `GateKeeper`, running and then reenabling
-* On latter versions of OSX, you will get prompted that it is blocked and `GateKeeper` will prompt you to add an exception for it
-* You can add make a command line app allowed by using the `spctl` tool:
+   <!-- [Description of asset](./files/download-page.txt) -->
 
-    ~~~ {.bash}
-    # Run from the terminal
-    # This assumes that you install /Library/Java/...
-    # Please update if you choose to install in another location
-    sudo spctl add $GRAALVM/bin/java
-    ~~~
+4. Click on the Oracle GraalVM Enterprise Edition Core download link.
 
-## Downloading GraalVM, Enterprise Edition 20.1.1
+5. Before the download starts, you must accept the [Oracle License Agreement](https://www.oracle.com/downloads/licenses/graalvm-otn-license.html), license that allows you to use GraalVM Enterprise for evaulation and devleopment purposes, in the popup window. It will then ask you to log into Oracle. If you have an Oracle OTN account then use this identity to download GraalVM. If not, create one by hitting the "Create Acount" button at the bottom opf the page.
 
-It is important to state that are there are two versions of `GraalVM`, the Enterprise Edition (supported and with better performance) and the Community Edition (free and Open Source).
+6. When the download button becomes active, press it to start downloading.
 
-Both of these can be dwonloaded from the GraalVM website, but my instrcutions here will detail downloading, and then install the Enterprise Edition.
+You see other plugins available for downloading down the page. These are GraalVM technologies that can be optionally installed, for example, "Oracle GraalVM Enterprise Edition Java on Truffle", "GraalVM LLVM Toolchain Plugin" etc. You don't have to download them. Later in the lab we will show how to install them from the command line.
 
-The download for the Enterprise Edition can be found at: [https://www.oracle.com/downloads/graalvm-downloads.html?selected_tab=20](https://www.oracle.com/downloads/graalvm-downloads.html?selected_tab=20)
+## Installing GraalVM Enterprise
 
-You should see the following when you go to the Download Page:
+Depending on the operating system, Linux, macOS or Windows, some steps may differ. Please follow commands for your platform.
 
-![GraalVM Download Page](./images/download-page-01.png)
+### Linux
 
-Click on the Current Release tab on the page, see image below, to display the download links for the current version. Make sure that you select the correct current minor version for the current release (the default should be selected already), the correct JDK version (8 or 11? Or both?) and the OS. Again these are all are high-lighted on the image below. The click on the "Download All" button.
+1. Move the _archive.tar.gz_ you downloaded at the previous setion to the directory where you want to install GraalVM Enterprise.
 
-![GraalVM Download Page - Select Current Verion, JDK and OS](./images/download-page-02.png)
+2. Open the terminal (command prompt) and unzip the archive:
 
-You will be asked to accept the license agreement (OTN license, this means that you can use GraalVM EE for evaulation and devleopment purposes). It will then ask you to log into Oracle. If you have an Oracle OTN account then use this identity to download GraalVM. If not, create one by hitting the "Create Acount" button at the bottom opf the page. This is shown below:
+   ```shell
+   tar -xzf archive.tar.gz
+   ```
+3. Configure the runtime environment, as there can be multiple JDKs installed on the machine:
 
-![GraalVM Download Page - Login](./images/download-page-03.png)
+      - Point the `PATH` environment variable to the GraalVM Enterprise `bin` directory:
+        ```shell
+        export PATH=/path/to/<graalvm>/bin:$PATH
+        ```
+      - Set the `JAVA_HOME` environment variable to resolve to the installation directory:
+        ```shell
+        export JAVA_HOME=/path/to/<graalvm>
+        ```
+ 4. Run the `java -version` command to check whether the installation was successful.
 
-After downloading the Core, which is the steps above, you can download any of the following optional package / languages for GraalVM. All of these are available form the page on whih we downloaded the core:
+### macOS
 
-Please download the following optional packages:
+1. Open the terminal and change to the location where you donwnloded the _archive.tar.gz_ (by default, it will be `Users/user_name/Downloads`):
 
-* Oracle GraalVM Enterprise Edition Native Image
-* GraalVM LLVM Toolchain Plugin
+2. Unzip the archive:
 
-Optional plugins for GraalVM: 
+    ```shell
+    tar -xzf archive.tar.gz
+    ```
+    Alternatively, open the file in Finder.
 
-* Ideal Graph Visualizer
-* Oracle GraalVM Enterprise Edition Ruby Language Plugin
-* Oracle GraalVM Enterprise Edition Python Language Plugin
-* Oracle GraalVM Enterprise Edition WebAssembly Language Plugin
+3. Move the downloaded package to its proper location, the `/Library/Java/JavaVirtualMachines` directory. Since this is a system directory, `sudo` is required:
 
-## Installing GraalVM
+    ```shell
+    sudo mv graalvm-ee-java<version>-<version> /Library/Java/JavaVirtualMachines
+    ```
+4. Run `/usr/libexec/java_home -V` to verify if the move is successful and to get a list of all installed JDKs:
 
-The full instructions on getting setup, can be found here, [Installing ](https://www.graalvm.org/docs/getting-started/#install-graalvm).
+    ```shell
+    /usr/libexec/java_home -V
+    ```
 
-A quick summary of the steps outlined in the link above are:
+5. Configure the runtime environment, as there can be multiple JDKs installed on the machine:
 
-1. Download the latest version of GraalVM EE for your OS, from [Download](https://www.oracle.com/downloads/graalvm-downloads.html)
-    - See earlier section, Downloading GraalVM
-2. You will need to download the following packages:
-    - Oracle GraalVM Enterprise Edition for JDK8 (Version 20.1.1)
-    - Oracle GraalVM Enterprise Editipon Native Image Early Adopter based on JDK8 (Version 20.1.1)
-    - GraalVM LLVM Toolchain Plugin (Version 20.1.1)
-    - Oracle GraalVM Enterprise Edition Python for JDK8 (Version 20.1.1)
-    - Oracle GraalVM Enterprise Edition Ruby for JDK8 (Version 20.1.1)
-3. Install the downloaded GraalVM EE core. This is a `tar.gz` file. You will need to extract it to a location that works for you and that will then become the root of your install. I chose the following: `~/bin/graal/graalvm-ee-java8-20.1.1`
-4. Update your environment in order to add a `GRAALVM_HOME` and add this to the path. You can do this by updating your shell startup script, in my case  `~/.zshrc` as follows:
+    - Point the `PATH` environment variable to the GraalVM Enterprise `bin` directory:
+    ```shell
+    export PATH=/Library/Java/JavaVirtualMachines/<graalvm>/Contents/Home/bin:$PATH
+    ```
+    - Set the `JAVA_HOME` environment variable to resolve to the GraalVM Enterprise installation directory:
+    ```shell
+    export JAVA_HOME=/Library/Java/JavaVirtualMachines/<graalvm>/Contents/Home
+    ```
 
-    ~~~ {.bash}
-    # Note that I am using the JDK8 version.
-    export GRAALVM_HOME=~/bin/graal/graalvm-ee-java8-20.1.1
-    export JAVA_HOME="${GRAALVM_HOME}"
-    # Add the bin dir of GraalVM to your path, so you will be able to reference the exes
-    export PATH="${GRAALVM_HOME}/bin:$PATH"
-    ~~~
+#### Notes on Setting up GraalVM on macOS
 
-#### Installing on Mac
+A number of the details will vary a little from the general approach.
 
-On Mac, when you extract the download for GraalVM, the core download, not the language packages, the path is slightly different to what it is on Linux. For me, using a Mac, I have the following setup:
+First, if you place GraalVM to `/Library/Java/JavaVirtualMachines/` location, macOS picks This JDK up as default (as long it is the newest JDK in the directory). You may not want to do this.
 
-~~~ {.bash}
-# Note that I am using the JDK8 version.
-export GRAALVM_HOME=~/bin/graal/graalvm-ee-java8-20.1.1/Contents/Home
-export JAVA_HOME=${GRAALVM_HOME}
-# Add the bin dir of GraalVM to your path, so you will be able to reference the exes
-export PATH=${GRAALVM_HOME}/bin:$PATH
-~~~
+Second, the path that the core GraalVM extracts to is different from that for Linux or Windows. On macOS, the
+directory for GraalVM contains extra directories as your `GRAALVM_HOME`: `<install-dir>/<graalvm-ee>/Contents/Home`.
 
-**NB**: Note that the `Home` directory for GraalVM contains extra directories from what it does on Linux, `Contents/Home`.
+The third major difference is that on some versions of macOS (Catalina and later ) the `GateKeeper` service will block you from running `GraalVM` as it is not a signed application / binary. This can be worked around in a number of ways:
+
+- Remove the quarantine attribute from the binary:
+
+  ```shell
+  sudo xattr -r -d com.apple.quarantine /path/to/GRAALVM_HOME
+  ```
+- Disabling `GateKeeper`, running and then reenabling.
+- On latter versions of macOS, you will get prompted that it is blocked and `GateKeeper` will prompt you to add an exception for it.
+- You can add make a command line app allowed by using the `spctl` tool:
+
+  ```shell
+  # Run from the terminal
+  # This assumes that you install GraalVM in /Library/Java/...
+  # Update if you choose to install in another location
+  sudo spctl add $GRAALVM/bin/java
+  ```
+
+Here is the configuration example from `~/.bash-profile`:
+  ~~~ {.bash}
+  # GraalVM Enterprise based on JDK11
+  export GRAALVM_HOME=~/bin/graal/graalvm-ee-java11-21.1.0/Contents/Home
+  export JAVA_HOME=${GRAALVM_HOME}
+  export PATH=${GRAALVM_HOME}/bin:$PATH
+  ~~~
+
+### Windows
+
+1. Change the directory to the location where you want to install GraalVM Enterprise, then move the _.zip_ archive to it.
+
+2. Unzip the archive to your file system.
+
+3. Configure the runtime environment, as there can be multiple JDKs installed on the machine. Setting environment variables via the command line will work the same way for Windows 7, 8 and 10.
+
+      - Point the `PATH` environment variable to the GraalVM Enterprise `bin` directory:
+        ```shell
+        setx /M PATH "C:\Progra~1\Java\<graalvm>\bin;%PATH%"
+        ```
+      - Set the `JAVA_HOME` environment variable to resolve to the GraalVM Enterprise installation directory:
+        ```shell
+        setx /M JAVA_HOME "C:\Progra~1\Java\<graalvm>"
+        ```
+      Note that the `/M` flag, equivalent to `-m`, requires elevated user privileges.
 
 ### Testing Your Installation
 
-Create a new shell (or source your shell script) and type the following:
+1. Open a new terminal window / command prompt and run `java -version` to check whether the installation was successful. The output should match the following:
 
-~~~ {.bash}
-java -version
-java version "1.8.0_261"
-Java(TM) SE Runtime Environment (build 1.8.0_261-b33)
-Java HotSpot(TM) 64-Bit Server VM GraalVM EE 20.1.1 (build 25.261-b33-jvmci-20.1-b04, mixed mode)
-~~~
+    ```shell
+    java -version
+    java version "1.8.0_261"
+    Java(TM) SE Runtime Environment (build 1.8.0_261-b33)
+    Java HotSpot(TM) 64-Bit Server VM GraalVM EE 21.1.0 (build 25.261-b33-jvmci-20.1-b04, mixed mode)
+    ```
+    
+2. Test out if the GraalVM Updater tool is available:
 
-> #### Mac - GateKeeper
-> On OSX you may see a pop-up warning you that the `java` is not a signed application and can not be run. This is not something to worry about, it is just OSX being over protectve :)
-> See the earlier section of this page on the Mac specific steps on installing GraalVM (you need to let the `GateKeeper` service know that GraalVm is safe to be run).
+    ```shell
+    gu --help
+    ```
 
-Did you see the same output as above? If so, then it worked.
+Did that work? If it did you now have access to the package tool that will allow you to install the various additional technologies that come with GraalVM. We will go through a few of these shortly.
 
-Test out the `gu` package tool:
+## Installing Languages Runtimes
 
-~~~ {.bash}
-$ gu --help
-~~~
+GraalVM provides the `gu` package tool to install additional technologies, such as the various language runtimes. In this section we will step through installing these.
 
-Did that work? If it did you now have access to the package tool that will allow you to install the various additional packages that come with GraalVM. We will go through a few of these shortly.
+All language / components installations are carried out using the `gu` tool that is distributed with GraalVM. The latest instructions on using this toll to install components can be found [here](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/graalvm-updater/).
 
-### Installing Language Modules
+### Installing Node.js Runtime (Optional)
 
-We use the `gu` package tool to install the extra additional modules that you can use with GraalVm, such as the various language runtimes. In this section we will step through installing these.
+GraalVM Enterprise can execute plain JavaScript code, both in REPL mode and by executing script files directly:
+  ```shell
+  js -version
+  ```
 
-All language / component installations are carrid out using the `gu` tool that is distributed with GraalVM. The latest instructions on using this toll to install components can be found at:
+GraalVM Enterprise also supports running Node.js applications, but you need to install the Node.js support:
+  ```shell
+  gu install nodejs
+  node -v
+  v14.16.1
+  ```
+If you have `node` already installed, you may need to change your path or explicitly specify the path to the GraalVM version of `node`.
 
-[gu Tool - Enterprise Edition](https://docs.oracle.com/en/graalvm/enterprise/20/guide/reference/graalvm-updater.html)
+### Installing LLVM Toolchain (Optional)
 
-#### Installing JS / Node
+The GraalVM LLVM runtime can execute C/C++, Rust, and other programming language that can be compiled to LLVM bitcode.
+A native program has to be compiled to LLVM bitcode using an LLVM frontend such as `clang`.
+The C/C++ code can be compiled to LLVM bitcode using `clang` shipped with GraalVM via a prebuilt LLVM toolchain.
 
-Nothing to do here, these are available by default.
+Also, a number of the supported languages runtimes require the `llvm-toolchain` in order to work. Regardless of whether you are using the Enterprise or Community Edition, you will need to install the same version of this.
 
-You can test the `node` and `JS` tooling as follows:
+1. This is installed simply, using the `gu` command:
 
-~~~ {.bash}
-$ node --help
-$ js --show-version
-~~~
+      ```shell
+      gu install llvm-toolchain
+      ```
+2. Additionally, you may export the `LLVM_TOOLCHAIN` variable to the toolchain location for convenience:
 
-Both of the above commands will make reference to graalvm and the version. If you have node already installed, you may need to change your path or explicitly specify the path to the GraalVm version of node
+      ```shell
+      export LLVM_TOOLCHAIN=$(lli --print-toolchain-path)
+      ```
 
-### Installing the llvm-toolchain
+### Installing Python Runtime (Optional)
 
-A number of the packages require the `llvm-toolchain` in order to work. Regardless of whether you are using the Enterprise, or Community, Edition you will need to install the same version of this.
+The Python support can be installed simply, using the `gu` command:
 
-This is installed simply, using the `gu` command:
+  ```shell
+  gu install python
+  ```
+Once it is installed, the `graalpython` launcher will become available to run Python programs with GraalLVM.
 
-~~~ {.bash}
-$ gu install -L <DOWNLOAD-DIR>/llvm-toolchain-installable-java8-darwin-amd64-20.1.1.jar
-~~~
+### Installing Ruby Runtime (Optional)
 
-#### Installing Native Image
+The Ruby support can be installed simply, using the `gu` command:
 
-Full instructions can be found [here](https://www.graalvm.org/docs/reference-manual/native-image/#install-native-image), but the process is very similar to that for Python.
+  ```shell
+  gu install ruby
+  ```
+Once it is installed, Ruby launchers like `ruby`, `gem`, `irb`, `rake`, `rdoc`, and `ri` become available to run Ruby programs with GraalLVM.
 
-1. Ensure you have the prerequisite libs available on your system: `glibc-devel, zlib-devel`
-    - On linux these can be installed using your package manager
-    - On OSX you will need to ensure that
-2. `$ gu install -L <DOWNLOAD-DIR>/native-image-installable-svm-svmee-java8-darwin-amd64-20.1.1.jar`
-3. Test the installation with: `native-image --version`
+### Installing R Runtime (Optional)
 
-### Install Visual Studio Code
+GraalVM provides a GNU-compatible environment to run R programs directly or in the REPL mode.
+To install the runtime for R, run:
 
-A number of plugins have been written for this editor, that allow for better integration with the GraalVM eco-system.
+  ```shell
+  gu install r
+  ```
+Then the `R` and `Rscript` launchers become available.
+
+### Installing WebAssembly Runtime (Optional)
+
+With GraalVM you can run programs compiled to WebAssembly.
+To install the support for WebAssembly, run:
+
+  ```shell
+  gu install wasm
+  ```
+Then the `wasm` launcher, that can run compiled WebAssembly binary code, becomes available.
+
+## Installing Additional Features
+
+### Installing Native Image (Optional)
+
+Using the Native Image technology offered by GraalVM, you can compile ahead-of-time Java bytecode into a platform-specific, self-contained, native executable to achieve faster startup and a smaller footprint for your application.
+
+1. Install support for ahead-of-time compilation (AOT:
+
+      ```shell
+      gu install native-image
+      ```
+
+2. Test if the installation was successful:
+
+      ```shell
+      native-image --version
+      ```
+3. Ensure you [meet the prerequisites](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/enterprise-native-image#prerequisites) (you have necessary libs, like `glibc-devel, zlib-devel`,  available on your system). Please note, the prerequisites for using Native Image on Windows differ.
+
+Full instructions can be found [here](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/enterprise-native-image/).
+
+### Installing Java on Truffle (Optional)
+
+[do we need it?]
+
+## Related Links
+
+### Visual Studio Code
+
+A number of plugins have been written for Visual Studio Code (VS Code) that allow for better integration with the GraalVM eco-system. Proceed to [this guide to learn about GraalVM intergation into VS Code](https://www.graalvm.org/tools/vscode/).
 
 You are more than welcome to use another editor. When it comes to the polyglot debugging, please make sure that you have the Google Chrome browser installed.
 
-## Docker - Pre-built Docker Images
+### Docker - Pre-built Docker Images
 
-GraalVM is available on a number of pre-built docker images that can be downloaded from Docker Hub. Currently only the Community Edition is available hee, but we will be making the Enterprise Edition available through Docker Hub soon.
+To support container-based development, GraalVM is available on a number of pre-built Docker images.
+Currently only the images of GraalVM Community Edition are available for pulling from the [GitHub Container Registry](https://github.com/orgs/graalvm/packages/container/package/graalvm-ce), but we will be making the GraalVM Enterprise images available in Oracle Container Registry soon. For now, you can learn [how to start using GraalVM Community images for Docker containers](https://www.graalvm.org/docs/getting-started/container-images/).
 
-You can find the Docker Images [here](https://hub.docker.com/r/oracle/graalvm-ce).
+### Other related resources:
+
+- [Get Started with GraalVM Enterprise](https://docs.oracle.com/en/graalvm/enterprise/21/docs/getting-started/)
+- [Get Started with GraalVM Enterprise on OCI](https://docs.oracle.com/en/graalvm/enterprise/21/docs/getting-started/oci/compute-instances/)
+- [Get started with GraalVM on Ampere A1 on Oracle Cloud Infrastructure](https://docs.oracle.com/en/learn/oci_graalvm_ampere_a1/index.html)
