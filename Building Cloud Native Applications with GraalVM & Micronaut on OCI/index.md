@@ -21,11 +21,12 @@ Watch the video and follow the [instructions](https://code.visualstudio.com/docs
 Follow the 'Installation and Setup' instructions for the [GraalVM Visual Studio Code Extension](https://docs.oracle.com/en/graalvm/enterprise/21/docs/tools/vscode/graalvm-extension) and the [Micronaut Visual Studio Code Extension](https://docs.oracle.com/en/graalvm/enterprise/21/docs/tools/vscode/micronaut-extension/).
 
 # How to build & deploy Micronaut & GraalVM app on the Oracle Cloud
+## Getting started with Micronaut, GraalVm and VSCode
 Now that you have completed the basic setup, watch the video about how to [get started with Micronaut, GraalVM and VSCode](https://www.youtube.com/watch?v=qh6BtwfDWQg) and follow the steps in the video.
 
 TODO Steps from video
 
-# Connecting to Oracle Autonomous Database with Micronaut
+## Connecting to Oracle Autonomous Database with Micronaut
 Now follow the instructions in this [video](https://www.youtube.com/watch?v=fGSikAt6PqQ) to connect to the Oracle Autonomous Database with Micronaut.
 
 TODO Steps from video
