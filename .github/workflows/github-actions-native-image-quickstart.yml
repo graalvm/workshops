@@ -16,7 +16,7 @@ jobs:
   create-release:
     name: Create Release
     runs-on: ubuntu-latest
-    needs: build-native-image-quickstart
+    needs: build-java
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
