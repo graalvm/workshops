@@ -2,13 +2,14 @@ name: GitHub Actions Demo
 on: [push]
 jobs:
   build-java:
-    name: Build & Test Java Code
-    container:
-      image: container-registry.oracle.com/graalvm/community:java11
+    name: Build and Test Java Code
+    runs-on: ubuntu-latest
+    container: container-registry.oracle.com/graalvm/community:java11
     steps:
       - name: Build / Test Code
         run: |
           cd Native-Image/Quick-Start/tutorial/demo
+          java -version
           mvn clean package test
       - run: echo "👷‍  Build status ${{ job.status }}."
 
