@@ -6,6 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     container: container-registry.oracle.com/graalvm/community:java11
     steps:
+      - uses: actions/checkout@v2
       - name: Build / Test Code
         run: |
           cd native-image/graalvm-native-image-quick-start/demo
