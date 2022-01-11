@@ -22,16 +22,21 @@ jobs:
           path: native-image/graalvm-native-image-quick-start/demo/target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar
       - run: echo "👷‍  Build status ${{ job.status }}."
 
-#  build-native-image:
-#    name: Build and Test Java Code
-#    needs: build-java
-#    runs-on:  ubuntu-latest
-#    container:
-#      image: container-registry.oracle.com/graalvm/native-image:ol7-java11
-#      options: --entrypoint /bin/sh
-#    steps:
-#      - run |
-#          yum install -y tar zip unzip
+  build-native-image:
+    name: Build and Test Java Code
+    needs: build-java
+    runs-on:  ubuntu-latest
+    container:
+      image: container-registry.oracle.com/graalvm/native-image:ol7-java11
+      options: --entrypoint /bin/sh
+    steps:
+      - name: Download a single artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: jar-file
+      - run |
+          ls -la
+
 #      - uses: actions/checkout@v2
 #      - name: Build / Test Code
 #        run: |
