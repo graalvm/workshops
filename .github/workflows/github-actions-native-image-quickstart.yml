@@ -3,13 +3,14 @@ on: [push]
 jobs:
   build-java:
     name: Build and Test Java Code
-    runs:
-      using: 'docker'
-      image: 'Dockerfiles/Dockerfile.java11'
+    runs-on:  ubuntu-latest
+    container:
+      image: container-registry.oracle.com/graalvm/community:ol7-java11
     steps:
       - uses: actions/checkout@v2
       - name: Build / Test Code
         run: |
+          yum install -y maven
           cd native-image/graalvm-native-image-quick-start/demo
           java -version
           mvn -version
