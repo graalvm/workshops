@@ -28,6 +28,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build / Test Code
         run: |
+          yum install -y tar zip unzip
           yum install -y maven
           cd native-image/graalvm-native-image-quick-start/demo
           java -version
