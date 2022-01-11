@@ -17,6 +17,23 @@ jobs:
           mvn clean package test
       - run: echo "👷‍  Build status ${{ job.status }}."
 
+  build-native-image:
+    name: Build and Test Java Code
+    needs: build-java
+    runs-on:  ubuntu-latest
+    container:
+      image: container-registry.oracle.com/graalvm/community:ol7-java11
+      options: --entrypoint /bin/sh
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build / Test Code
+        run: |
+          yum install -y maven
+          cd native-image/graalvm-native-image-quick-start/demo
+          java -version
+          mvn -version
+          mvn clean package test
+      - run: echo "👷‍  Build status ${{ job.status }}."
 
 #  create-release:
 #    name: Create Release
