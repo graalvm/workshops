@@ -22,7 +22,7 @@ jobs:
     needs: build-java
     runs-on:  ubuntu-latest
     container:
-      image: container-registry.oracle.com/graalvm/community:ol7-java11
+      image: container-registry.oracle.com/graalvm/native-image:ol7-java11
       options: --entrypoint /bin/sh
     steps:
       - uses: actions/checkout@v2
