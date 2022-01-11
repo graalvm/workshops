@@ -36,6 +36,8 @@ jobs:
           name: jar-file
       - run: |
           ls -la
+      - run: |
+          native-image -jar ./graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar --no-fallback -H:Class=oracle.App -H:Name=file-count
 
 #      - uses: actions/checkout@v2
 #      - name: Build / Test Code
