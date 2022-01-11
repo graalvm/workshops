@@ -34,7 +34,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: jar-file
-      - run |
+      - run: |
           ls -la
 
 #      - uses: actions/checkout@v2
