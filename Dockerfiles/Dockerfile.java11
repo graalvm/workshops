@@ -1,0 +1,3 @@
+FROM container-registry.oracle.com/graalvm/community:ol7-java11
+
+RUN yum install -y maven
