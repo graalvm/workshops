@@ -8,10 +8,6 @@ products: en/graalvm/enterprise/21
 keywords: Java,GraalVM,Cloud Native,Compute
 inject-note: true
 ---
-
-#  Get Started with GraalVM Native Image
-
-## Introduction
 <!-- Our custom styles -->
 <style type="text/css" scoped>
 img[src*="#input"] {
@@ -21,6 +17,9 @@ img[src*="#input"] {
    margin-bottom: 0px !important;
 }</style>
 
+#  Get Started with GraalVM Native Image
+
+## Introduction
 This lab is for developers looking to start building cloud native Java applications with [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/).
 
 GraalVM Native Image allows the ahead-of-time compilation of a Java application into a self-contained native executable. With GraalVM Native Image only the code that is required by the application at run time gets added into the native executable. 
@@ -60,59 +59,20 @@ In this lab you will perform the following tasks:
    # This is where we you will need to do something
    ```
 
-## **STEP 1**: Connect to a Virtual Host and Check the Development Environment
-<!-- Our custom styles -->
-<style type="text/css" scoped>
-img[src*="#input"] {
-   -webkit-box-shadow: none !important;
-   -moz-box-shadow: none !important;
-   box-shadow: none !important;
-   margin-bottom: 0px !important;
-}</style>
-
-The virtual host includes a Virtual Cloud Network (VCN) with secure access from everywhere, and a Compute Instance with 
-Oracle Linux 8 and 1 CPU / 15GB of memory configuration, which is the smallest VM shape in OCI. 
-The desktop environment will display before the virtual host is ready. 
-Deployment of the host can take around 2 minutes. 
-
-To connect to a remote host, you need to first find your Oracle Cloud VM Instance public IP address. 
-
-1. In the Oracle Cloud console, navigate to **Compute** and click **Instances**.
-
-   ![Find Compute Instances](images/find_compute_instances.png)
-
-2. Select the necessary compartment (its name begins with “luna”) in the **Compartment** dropdown on the left. Find your 
-   instance in the main view. Remember, the name of your compartment can be found on the `Luna-Lab.html` page. 
-
-3. Copy and note down the **Public IP** value. To copy, highlight the IP address with the mouse and press Ctrl+C.
-
-   ![Public IP Address](images/public_api.png)
-
-   Once done, minimize the OCI window so you can see the Luna Desktop.
-
-4. Right-click to open the context menu. Select **Open Terminal Here**. You can also open a Terminal from the 
-   **Applications menu** on the status bar of the desktop.
-
-5. Enter SSH connection command, where `<IP_ADDRESS_OF_COMPUTE_INSTANCE>` is your VM instance IP address:
-
-   ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
-   ```shell
-   ssh opc@<IP_ADDRESS_OF_COMPUTE_INSTANCE>
-   ```
-   You will be asked to accept the `ECDSA` key fingerprint.
-
-Congratulations, you are now successfully connected to a remote host in Oracle Cloud!
-
-### Note on the Development Environment
+## **STEP 1**: Test Out Your Development Environment
 
 We will use [GraalVM Enterprise 21](https://docs.oracle.com/en/graalvm/enterprise/21/docs/overview/architecture/#graalvm-enterprise-architecture), 
 as the Java enviroment for this lab. GraalVM is a high performance JDK distribution from Oracle built on the trusted and 
-secure Oracle Java SE.  
+secure Oracle Java SE.
 
-Your dev environment comes preconfigured with GraalVM and the Native Image tooling required for this lab.
+You can download GraalVM EE from this link, [Download GraalVM EE](https://www.oracle.com/downloads/graalvm-downloads.html?selected_tab=1), 
+and full instalation instructions can be found at, [Installation Instructions](https://docs.oracle.com/en/graalvm/enterprise/21/docs/getting-started/installation-macos/).
 
-You can easily check that by running these commands in the terminal:
+You will also need to install GraalVM EE Native Image, 
+[Download GraalVM EE Native Image](https://www.oracle.com/downloads/graalvm-downloads.html?selected_tab=1), and instructions 
+can be found here, [Native Image Installation Instructions](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/). 
 
+Once you have GraalVM EE installed, with Native Image, you can that everything works by running these commands in the terminal:
 
 ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
@@ -125,14 +85,6 @@ native-image --version
 ```
 
 ## **STEP 2**: Build and Run a Demo Applicaton
-<!-- Our custom styles -->
-<style type="text/css" scoped>
-img[src*="#input"] {
-   -webkit-box-shadow: none !important;
-   -moz-box-shadow: none !important;
-   box-shadow: none !important;
-   margin-bottom: 0px !important;
-}</style>
 
 To showcase GraalVM Native Image we are going to need a demo application. For this lab you will use a command line 
 Java application that counts the number of files within the current directory and subdirectories. As a nice extra, it 
@@ -201,14 +153,6 @@ Now that you have a basic understanding of what the application does. You can bu
     ```
 
 ## **STEP 3**: Turn a Java Application into a Native Executable
-<!-- Our custom styles -->
-<style type="text/css" scoped>
-img[src*="#input"] {
-   -webkit-box-shadow: none !important;
-   -moz-box-shadow: none !important;
-   box-shadow: none !important;
-   margin-bottom: 0px !important;
-}</style>
 
 Next, you are going to build a native version of the application with GraalVM Native Image. As a quick reminder, GraalVM 
 Native Image is an ahead-of-time compilation technology that converts your Java application into a self-contained native 
@@ -328,14 +272,6 @@ You can run the native executable as follows:
 ```
 
 ## **STEP 4**: Using Reflection - Adding a Dependency to Log4J
-<!-- Our custom styles -->
-<style type="text/css" scoped>
-img[src*="#input"] {
-   -webkit-box-shadow: none !important;
-   -moz-box-shadow: none !important;
-   box-shadow: none !important;
-   margin-bottom: 0px !important;
-}</style>
 
 In this step, you will build a native image that that works with the dynamic parts of Java. 
 
@@ -455,14 +391,6 @@ to ensure that all cases of reflection are picked up by the agent.
 The complete documentation on the tracing agent can be found [here](https://www.graalvm.org/reference-manual/native-image/Agent/).
 
 ##  **STEP 5**: Using the Tracing Agent
-<!-- Our custom styles -->
-<style type="text/css" scoped>
-img[src*="#input"] {
-   -webkit-box-shadow: none !important;
-   -moz-box-shadow: none !important;
-   box-shadow: none !important;
-   margin-bottom: 0px !important;
-}</style>
 
 Now you will use the tracing agent to generate the reflection configuration whilst you run your application.
 
