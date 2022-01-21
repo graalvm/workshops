@@ -35,8 +35,8 @@ jobs:
     steps:
       - name: Setup Graalvm
         id: setup-graalvm
-        uses: DeLaGuardo/setup-graalvm@master
-        with:
+        uses: DeLaGuardo/setup-graalvm@5
+      with:
           # GraalVM version, no pattern syntax available atm
           graalvm: ${matrix.graalver}
           # Java version, optional, defaults to 'java8'. Available options are 'java8' and 'java11'.
