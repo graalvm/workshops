@@ -1,22 +1,3 @@
----
-duration: PT0H60M0S
-description: Get Started with GraalVM Native Image
-level: Beginner
-roles: Application Developer;Technology Manager
-lab-id: 
-products: en/graalvm/enterprise/21
-keywords: Java,GraalVM,Cloud Native,Compute
-inject-note: true
----
-<!-- Our custom styles -->
-<style type="text/css" scoped>
-img[src*="#input"] {
-   -webkit-box-shadow: none !important;
-   -moz-box-shadow: none !important;
-   box-shadow: none !important;
-   margin-bottom: 0px !important;
-}</style>
-
 #  Get Started with GraalVM Native Image
 
 ## Introduction
@@ -54,10 +35,10 @@ In this lab you will perform the following tasks:
 
 **NOTE:** Whenever you see the laptop icon, this is somewhere you will need to do something. Watch out for these. 
 
-![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
-   ```shell
-   # This is where we you will need to do something
-   ```
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+```shell
+# This is where we you will need to do something
+```
 
 ## **STEP 1**: Test Out Your Development Environment
 
@@ -74,12 +55,12 @@ can be found here, [Native Image Installation Instructions](https://docs.oracle.
 
 Once you have GraalVM EE installed, with Native Image, you can that everything works by running these commands in the terminal:
 
-![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 java -version
 ``` 
 
-![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 native-image --version
 ```
@@ -111,7 +92,7 @@ Several profiles will be used in this lab, each of which has a particular purpos
 
 You use a particular Maven profile by passing it as a parameter to `mvn`. The name of the profile is appended to the `-P` flag. The example below shows how you could call a `native` profile, when building with Maven:
 
-![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 mvn clean package -Pnative
 ```
@@ -121,19 +102,19 @@ Now that you have a basic understanding of what the application does. You can bu
 1. From the terminal window connected to your remote host, run the list command, `ls`, to verify if the demo folder 
    is present. Change to its directory:
 
-   ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
    ls
    ```
 
-   ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
    cd demo
    ```
 
 2. Build the project and run:
 
-   ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
    mvn clean package exec:exec
    ```
@@ -177,7 +158,7 @@ GraalVM Native Image is pre-installed on the virtual machine.
 2. Generate a native image from the command line. You do not need to use the Maven plugin to use GraalVM Native Image, but 
    it can help. The following should be run from the root folder of the project, `demo`:
 
-   ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
     native-image -jar ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar --no-fallback -H:Class=oracle.App -H:Name=file-count
     ```
@@ -186,19 +167,19 @@ GraalVM Native Image is pre-installed on the virtual machine.
 
 3. Run this executable as follows:
 
-   ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
     ./file-count
     ```
 
 4. Now try timing the application running as a native executable and using the regular `java` command:
 
-   ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
     time ./file-count
     ```
 
-   ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
     time java -cp ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar oracle.App
     ```
@@ -257,7 +238,7 @@ The full documentation on the GraalVM Native Image plugin can be found [here](ht
 
 To build the native image using the Maven profile, run:
 
-![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 mvn clean package -Pnative
 ```
@@ -266,7 +247,7 @@ The Maven build places the native executable, `file-count`, into the `target` di
 
 You can run the native executable as follows:
 
-![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 ./target/file-count
 ```
@@ -292,7 +273,7 @@ a few lines.
 
 1. Open the `ListDir.java` file using Vim:
 
-    ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     vim src/main/java/oracle/ListDir.java
     ```
@@ -301,12 +282,12 @@ a few lines.
 
 3. Go through and uncomment the various lines that add the imports and the logging code. Uncomment the following lines:
 
-   ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```java
     //final static Logger logger = Logger.getLogger(ListDir.class);
     ```
 
-   ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```java
     /*
     // Add some logging
@@ -316,7 +297,7 @@ a few lines.
     */
     ```
 
-   ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```java
     /*
     // Add some logging
@@ -331,7 +312,7 @@ a few lines.
 
    Now that you have added some logging to the demo application, you can check if the changes work by rebuilding and running.
 
-    ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     mvn clean package exec:exec
     ```
@@ -340,14 +321,14 @@ a few lines.
 
 6. Next, build a native executable using the Maven profile:
 
-    ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     mvn clean package -Pnative
     ```
 
 7. Run the native executable you built, that now contains logging:
 
-    ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     ./target/file-count
     ```
@@ -396,7 +377,7 @@ Now you will use the tracing agent to generate the reflection configuration whil
 
 1. Run the application with the tracing agent:
 
-    ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     java -agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image -cp ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar oracle.App
     ```
@@ -417,21 +398,21 @@ Now you will use the tracing agent to generate the reflection configuration whil
    
     **Note**: The project contains a Maven profile that can do this for you. Running the following command will run the tracing agent:
    
-    ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     mvn clean package exec:exec -Pjava_agent
     ```
 
 2. Now re-build the native executable again. This time the configuration files output by the tracing agent will be applied:
 
-    ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     mvn package -Pnative
     ```
 
 3. Finally, execute the generated image:
 
-    ![](imagesMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     time ./target/file-count
     ```

@@ -87,7 +87,7 @@ these can be configured, but the most convenient way is through use of the assis
 ## **STEP 2**:  An Example Using Reflection
 
 Imagine you have the following class, `ReflectionExample.java` (a copy of this cana be found in the directory, 
-`./complete/ReflectionExample.java`):
+`demo/ReflectionExample.java`):
 
 ```java
 import java.lang.reflect.Method;
@@ -122,6 +122,7 @@ First, let's build it. In your shell, run the following command:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
+cd demo
 javac ReflectionExample.java
 ```
 
