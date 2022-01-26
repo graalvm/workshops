@@ -32,5 +32,4 @@ jobs:
     steps:
       - name Build a native Image
         run: |
-          ${{ matrix.gu-binary }} install native-image
           native-image -jar ./graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar --no-fallback -H:Class=oracle.App -H:Name=file-count
