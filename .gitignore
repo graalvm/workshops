@@ -25,6 +25,3 @@ hs_err_pid*
 #
 **/.idea
 **/target
-
-# Exclude the built native images
-**/file-count*
