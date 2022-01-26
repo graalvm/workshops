@@ -30,11 +30,9 @@ jobs:
       image: container-registry.oracle.com/graalvm/native-image:ol7-java11
       options: --entrypoint /bin/sh
     steps:
-      - name: Download a single artifact
+      - name: Build Native Exxecutable
         uses: actions/download-artifact@v2
         with:
           name: jar-file
-      - name Build a native Image
         run: |
-          cd native-image/graalvm-native-image-quick-start/demo/
-          native-image -jar ./graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar --no-fallback -H:Class=oracle.App -H:Name=file-count
+          native-image -jar graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar --no-fallback -H:Class=oracle.App -H:Name=file-count
