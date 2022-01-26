@@ -37,8 +37,6 @@ jobs:
       options: --entrypoint /bin/sh
     steps:
       - uses: actions/download-artifact@v2
-        with:
-          name: class-files
       - name: Build Native Executable
         run: |
           ls -la
