@@ -27,7 +27,7 @@ hs_err_pid*
 target
 
 # Exclude the generated native image reflection config
-**/native-image/*.json
+META-INF/native-image/*.json
 
 # Exclude the built native images
 **/file-count*
