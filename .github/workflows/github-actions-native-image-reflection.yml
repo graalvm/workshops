@@ -20,4 +20,26 @@ jobs:
         with:
           name: class-files
           path: native-image/reflection/demo/*.class
+      - name: Upload Native Image Config Files
+        uses: actions/upload-artifact@v2
+        with:
+          name: config-file
+          path: native-image/reflection/demo/META-INF-WORKING/native-image/reflect-config.json
       - run: echo "👷‍  Build status ${{ job.status }}."
+
+  native:
+    name: Build and Test Native Image
+    needs: build-java
+    runs-on:  ubuntu-latest
+    container:
+      image: container-registry.oracle.com/graalvm/native-image:ol7-java11
+      options: --entrypoint /bin/sh
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: class-files
+      - name: Build Native Executable
+        run: |
+          ls -la
+          native-image --no-fallback -H:ReflectionConfigurationResources=./reflect-config.json ReflectionExample
+      - run: echo "👷‍  Native build status ${{ job.status }}."
