@@ -30,9 +30,9 @@ jobs:
       image: container-registry.oracle.com/graalvm/native-image:ol7-java11
       options: --entrypoint /bin/sh
     steps:
-      - name: Build Native Exxecutable
-        uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v2
         with:
           name: jar-file
+      - name: Build Native Executable
         run: |
           native-image -jar graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar --no-fallback -H:Class=oracle.App -H:Name=file-count
