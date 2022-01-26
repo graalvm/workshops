@@ -14,6 +14,7 @@ jobs:
       - name: Build
         run: |
           cd native-image/reflection/demo/
+          ls -lar
           javac ReflectionExample.java
       - name: Upload Class files
         uses: actions/upload-artifact@v2
