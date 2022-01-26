@@ -40,6 +40,6 @@ jobs:
       - name: Build Native Executable
         run: |
           ls -la ./class-files
-          ls -la ./config-files
-          native-image -cp ./class-files --no-fallback ReflectionExample
+          ls -la ./config-files/reflect-config.json
+          native-image -cp ./class-files --no-fallback -H:ReflectionConfigurationResources=./config-files/reflect-config.json ReflectionExample
       - run: echo "👷‍  Native build status ${{ job.status }}."
