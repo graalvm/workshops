@@ -24,7 +24,7 @@ jobs:
       - name: Upload Native Image Config Files
         uses: actions/upload-artifact@v2
         with:
-          name: config-file
+          name: config-files
           path: native-image/reflection/demo/META-INF-WORKING/native-image/reflect-config.json
       - run: echo "👷‍  Build status ${{ job.status }}."
 
@@ -39,6 +39,6 @@ jobs:
       - uses: actions/download-artifact@v2
       - name: Build Native Executable
         run: |
-          ls -la
-          native-image --no-fallback -H:ReflectionConfigurationResources=./reflect-config.json ReflectionExample
+          ls -lar
+          native-image -cp ./class-files --no-fallback -H:ReflectionConfigurationResources=.config-files/reflect-config.json ReflectionExample
       - run: echo "👷‍  Native build status ${{ job.status }}."
