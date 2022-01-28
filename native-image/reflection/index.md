@@ -40,14 +40,11 @@ In this lab you will:
 
 ## **STEP 1**: The Closed World Assumption
 
-Building standalone executable with the `native-image` tool that comes with GraalVM is a little different from building
-Java applications. Native Image makes use of what is known as the closed World assumption. 
+When you use the `native-image` tool (that comes with GraalVM) to create a native executable from a Java application, the tool relies on
+what is known as the "closed world" assumption. That is, everything that needs to be included must be known when building a native executable.
+If it is not findable by static analysis, it will not be included in the executable file.
 
-All that the Closed World assumption which means is that all the bytecode in the application that can be called at
-runtime, must be known (observed and analysed) at build time (when the `native-image` tool is building the standalone
-executable).
-
-Before we continue it is worthwhile going over the build / run model for applications that are built with GraalVM Native Image.
+Before we continue, let's review the build/run model for applications that are built using GraalVM Native Image.
 
 1. Compile your Java source code into Java byte code classes
 2. Using the `native-image` tool, build those Java byte code classes into a native executable
@@ -55,20 +52,22 @@ Before we continue it is worthwhile going over the build / run model for applica
 
 But, what really happens during step 2?
 
-Firstly, the `native-image` tool performs an analysis to see which classes within your application are reachable.
+Firstly, the `native-image` tool analyses your Java application to determine which classes are reachable.
 We will look at this in more detail shortly.
 
-Secondly, found classes, that are known to be safe to be initialised 
+Secondly, reachable classes that are known to be safe to be initialised 
 ([Automatic Initialization of Safe Classes](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/ClassInitialization/)), 
-are initialised. The class data of the initialised classes is loaded into the image heap which then, in turn, gets saved 
+are initialised. The class data of the initialised classes is loaded into the image heap which is then saved 
 into standalone executable (into the text section). This is one of the features of the GraalVM `native-image` tool that 
 can make for such fast starting applications.
 
-> **NOTE:** : This isn't the same as Object initialisation. Object initialisation happens during the runtime of the native executable.
+<!-- What's an "image heap" or the "text section" ? Do we care? -->
 
-We said we would return to the topic of reachability. As was mentioned earlier, the analysis determines which classes, 
-methods and fields need to be included in the standalone executable. The analysis is static, that is it doesn't  run the code. 
-The analysis can determine some case of dynamic class loading and uses of reflection (see ), but there are cases that it won't be able to pick up.
+> **NOTE:** : Class initialization isn't the same as Object initialization. Object initialization happens at runtime of the native executable.
+
+We said we would return to the topic of reachability: the result of `native-image` analysis determines which classes, 
+methods, and fields must be included in the native executable. The analysis is static, that is, it doesn't run the Java application to determine reachability. 
+The analysis determines some cases of dynamic class loading and uses of reflection (see ), but there are some cases that it fails to identify.
 
 In order to deal with the dynamic features of Java the analysis needs to be told about what classes use reflection, or what classes
 are dynamicaly loaded. 
