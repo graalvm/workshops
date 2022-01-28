@@ -2,25 +2,23 @@
 
 ## Introduction
 
-This lab is for developers looking to understand more about how reflection works within 
-[GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/).
+This lab takes you step by step through the process of using [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/) to build a Java application that contains reflection. 
 
-GraalVM Native Image allows the ahead-of-time compilation of a Java application into a self-contained native executable. 
-With GraalVM Native Image only the code that is required by the application at run time gets added into the native executable.
+GraalVM Native Image technology compiles Java code ahead-of-time into a self-contained executable file. Only the code that is required at run time by the application gets added into the executable file.
 
-These native executables have a number of important advantages, in that they:
+An executable file produced by Native Image has several important advantages, in that it:
 
-- Use a fraction of the resources required by the JVM, so cheaper to run
+- Uses a fraction of the resources required by the JVM, so is cheaper to run
 - Starts in milliseconds
-- Deliver peak performance immediately, no warmup
-- Can be packaged into lightweight container images for faster and more efficient deployments
-- Reduced attack surface (more on this in future labs)
+- Deliver peak performance immediately, with no warmup
+- Can be packaged into a lightweight container image for faster and more efficient deployment
+- Presents a reduced attack surface (more on this in future labs)
 
 Many of the leading microservice frameworks support ahead-of-time compilation with GraalVM Native Image, including
 Micronaut, Spring, Helidon, and Quarkus.
 
-Plus, there are Maven and Gradle plugins for Native Image to make building,
-testing, and running Java applications as native executables easy.
+In addition, there are Maven and Gradle plugins for Native Image so you can easily build,
+test, and run Java applications as executable files.
 
 > **Note:** Oracle Cloud Infrastructure (OCI) provides GraalVM Enterprise at no additional cost.
 
@@ -28,12 +26,12 @@ Estimated lab time: 30 minutes
 
 ### Lab Objectives
 
-In this lab you will perform the following tasks:
+In this lab you will:
 
-- Learn how to build Java coce that uses reflection into standalone executables, using the `native-image` build tool
-- Learn about the assisted configuration tooling available with GraalVM 
+- Use the `native-image` tool to build a Java application that uses reflection into an executable file 
+- Learn about the assisted configuration tooling provided by GraalVM 
 
-**NOTE:** Whenever you see the laptop icon, this is somewhere you will need to do something. Watch out for these.
+**NOTE:** If you see the laptop icon in the lab, you need to do something such as enter a command. Keep an eye out for it.
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```shell
@@ -42,7 +40,7 @@ In this lab you will perform the following tasks:
 
 ## **STEP 1**: The Closed World Assumption
 
-Building standalone executable with the `nativ-image` tool that comes with GraalVM is a little different from building
+Building standalone executable with the `native-image` tool that comes with GraalVM is a little different from building
 Java applications. Native Image makes use of what is known as the closed World assumption. 
 
 All that the Closed World assumption which means is that all the bytecode in the application that can be called at
