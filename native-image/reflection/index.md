@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This lab takes you step by step through the process of using [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/) to build a Java application that contains reflection. 
+This lab takes you step by step through the process of using [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/) to build a Java application that uses reflection. 
 
 GraalVM Native Image technology compiles Java code ahead-of-time into a self-contained executable file. Only the code that is required at run time by the application gets added into the executable file.
 
@@ -53,26 +53,26 @@ Before we continue, let's review the build/run model for applications that are b
 But, what really happens during step 2?
 
 Firstly, the `native-image` tool analyses your Java application to determine which classes are reachable.
-We will look at this in more detail shortly.
+We'll look at this in more detail shortly.
 
-Secondly, reachable classes that are known to be safe to be initialised 
-([Automatic Initialization of Safe Classes](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/ClassInitialization/)), 
-are initialised. The class data of the initialised classes is loaded into the image heap which is then saved 
+Secondly, the tool initialises reachable classes that are safe to be initialised 
+([Automatic Initialization of Safe Classes](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/ClassInitialization/)).
+The class data of the initialised classes is loaded into the image heap which is then saved 
 into standalone executable (into the text section). This is one of the features of the GraalVM `native-image` tool that 
 can make for such fast starting applications.
 
 <!-- What's an "image heap" or the "text section" ? Do we care? -->
 
-> **NOTE:** : Class initialization isn't the same as Object initialization. Object initialization happens at runtime of the native executable.
+> **NOTE:** : Class initialization isn't the same as Object initialization. Object initialization happens at the runtime of the native executable.
 
 We said we would return to the topic of reachability: the result of `native-image` analysis determines which classes, 
 methods, and fields must be included in the native executable. The analysis is static, that is, it doesn't run the Java application to determine reachability. 
-The analysis determines some cases of dynamic class loading and uses of reflection (see ), but there are some cases that it fails to identify.
+The analysis determines many cases of dynamic class loading and uses of reflection (see ), but there are some cases that it fails to identify.
 
-In order to deal with the dynamic features of Java the analysis needs to be told about what classes use reflection, or what classes
+To deal with the dynamic features of Java, the analysis must be explicitly provided with details of the classes that use reflection, or the classes
 are dynamicaly loaded. 
 
-Lets take a look at an example.
+Let's take a look at an example.
 
 ## **STEP 2**:  An Example Using Reflection
 
@@ -116,8 +116,9 @@ cd demo
 javac ReflectionExample.java
 ```
 
-The main method in the class `ReflectionExample` loads a class whose name has been passed in as an argument, a very dynamic use case!
-The second method to the class is the method name on the dynamically loaded class that should be invoked.
+1. The `main` method in class `ReflectionExample` dynamically loads a class whose name has been provided as its first argument.
+2. The second argument to the `main` method is the name of the method to be called on the dynamically loaded class.
+3. The third argument to the `main` method is used as the argument to the method called in (2).
 
 Let's run it and see what it does.
 
@@ -126,19 +127,19 @@ Let's run it and see what it does.
 java ReflectionExample StringReverser reverse "hello"
 ```
 
-As we expected, the method `foo` on the class `StringReverser` was found, via reflection. The method was invoked and it
+As we expected, the method `reverse` on class `StringReverser` was found, via reflection. The method was invoked and it
 reversed our input String of "hello". So far, so good.
 
-OK, but what happens if we try to build a native image out of program? Let's try it. In your shell run the following command:
+OK, but what happens if we use the `native-image` tool to build an executable file from our program? Let's try it. In your shell run the following command:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 native-image --no-fallback ReflectionExample
 ```
 
-> **NOTE:** The `--no-fallback` option to `native-image` causes the build to fail if it can not build a stand-alone native executabale.
+> **NOTE:** The `--no-fallback` option to `native-image` causes the build to fail if it can not build an executabale file.
 
-Now let's run the generated native executable and see what it does:
+Now let's run the executable file and see what it does:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
@@ -150,17 +151,17 @@ Exception in thread "main" java.lang.ClassNotFoundException: StringReverser
 	at ReflectionExample.main(ReflectionExample.java:21)
 ```
 
-What happened here? It seems that our native executable was not able to find the class, `StringReverser`. How did this happen?
-BY now, I think we probably have an idea why. The Closed World assumption.
+What happened here? It seems that our executable was not able to find the class `StringReverser`. How did this happen?
+By now, I think we probably have an idea why. The "closed world" assumption.
 
-During the analysis that the `native-image` tool performed, it was not able to determine that the class `StringReverser`
-was ever used. Therefore it removed the class from the native executable it generated. Note: By removing unwanted classes from the
-standalone executable, the tool to shrink the code that is built by only including classes that are known to be used. 
-As we have just seen, this can casue issues with reflection, but luckily there is a way to deal with this.
+From its static analysis, the `native-image` tool was unable to determine that class `StringReverser`
+was ever used and therefore did not include it in the executable it built. Note: By omitting uneccessary classes from the
+executable file, the tool reduces the size of the executable file that is built. 
+As we have just seen, this can cause issues when used with reflection, but luckily there is a way to deal with this.
 
 ## TODO **STEP 3**: Introducing Native Image Reflection Config
 
-We can tell the `native-image` build tool about instances of reflection through special configuration files. These files are 
+We can tell the `native-image` tool about the use of reflection via configuration files. These files are 
 written in `JSON` and can be passed ot the `native-image` tool through the use of flags. Here is an example of how we
 would do this for our project, if we had created the configuration files, which we haven't done yet:
 
