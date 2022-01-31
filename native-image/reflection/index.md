@@ -10,7 +10,7 @@ An executable file produced by Native Image has several important advantages, in
 
 - Uses a fraction of the resources required by the JVM, so is cheaper to run
 - Starts in milliseconds
-- Deliver peak performance immediately, with no warmup
+- Delivers peak performance immediately, with no warmup
 - Can be packaged into a lightweight container image for faster and more efficient deployment
 - Presents a reduced attack surface (more on this in future labs)
 
@@ -162,7 +162,7 @@ As you have just seen, this can cause issues when used with reflection, but luck
 ## TODO **STEP 3**: Introducing Native Image Configuration
 
 You use configuration files to inform the `native-image` tool about the use of reflection in an application. The files are 
-written in `JSON` and are passed to the `native-image` tool through the use of flags. Here is an example of how you
+written in `JSON` and are passed to the `native-image` tool through the use of a command-line option. Here is an example of how you
 do this for your project, if you had created the configuration files, which you haven't done yet:
 
 ```bash
@@ -179,9 +179,9 @@ supports the following types of configuration:
 * _Dynamic Proxies_
 * _Serialisation_
 
-We are only looking at how to handle reflection in this lab, so we will focus on that.
+However, in this lab we are only looking at how to handle reflection, so we will focus on that.
 
-Here is an example of the contents of a configuration file (taken from [here](https://www.graalvm.org/22.0/reference-manual/native-image/Reflection/)):
+Here is example contents of a configuration file (taken from [here](https://www.graalvm.org/22.0/reference-manual/native-image/Reflection/)):
 
 ```json
 [
@@ -216,9 +216,8 @@ Here is an example of the contents of a configuration file (taken from [here](ht
 ]
 ```
 
-From this we can see that classes and methods accessed through the Reflection API need to be configured. You can do this by 
-hand, but the most convenient way to generate these configuration files is through use of the assisted configuration 
-`javaagent`.
+From this we can see that we declare the classes and methods accessed through the Reflection API. You can create this file by 
+hand, but a more convenient approach is to generate the configuration using the `javaagent` tool.
 
 ## **STEP 4**: Native Image, Assisted Configuration : Enter The Java Agent
 
