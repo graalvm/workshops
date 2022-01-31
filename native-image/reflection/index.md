@@ -35,7 +35,7 @@ In this lab you will:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```shell
-# This is where we you will need to do something
+# This is where you will need to do something
 ```
 
 ## **STEP 1**: The Closed World Assumption
@@ -44,7 +44,7 @@ When you use the `native-image` tool (that comes with GraalVM) to create a nativ
 what is known as the "closed world" assumption. That is, everything that needs to be included must be known when building a native executable.
 If it is not findable by static analysis, it will not be included in the executable file.
 
-Before we continue, let's review the build/run model for applications that are built using GraalVM Native Image.
+Before you continue, let's review the build/run model for applications that are built using GraalVM Native Image.
 
 1. Compile your Java source code into Java byte code classes
 2. Using the `native-image` tool, build those Java byte code classes into a native executable
@@ -117,8 +117,8 @@ javac ReflectionExample.java
 ```
 
 1. The `main` method in class `ReflectionExample` dynamically loads a class whose name has been provided as its first argument.
-2. The second argument to the `main` method is the name of the method to be called on the dynamically loaded class.
-3. The third argument to the `main` method is used as the argument to the method called in (2).
+2. The second argument to the `main` method is the name of the method to be invoked on the dynamically loaded class.
+3. The third argument to the `main` method is used as the argument to the method invoked in (2).
 
 Let's run it and see what it does.
 
@@ -127,10 +127,10 @@ Let's run it and see what it does.
 java ReflectionExample StringReverser reverse "hello"
 ```
 
-As we expected, the method `reverse` on class `StringReverser` was found, via reflection. The method was invoked and it
+As expected, the method `reverse` in class `StringReverser` was found via reflection. The method was invoked and it
 reversed our input String of "hello". So far, so good.
 
-OK, but what happens if we use the `native-image` tool to build an executable file from our program? Let's try it. In your shell run the following command:
+OK, but what happens if you use the `native-image` tool to build an executable file from our program? Let's try it. In your shell run the following command:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
@@ -152,26 +152,26 @@ Exception in thread "main" java.lang.ClassNotFoundException: StringReverser
 ```
 
 What happened here? It seems that our executable was not able to find the class `StringReverser`. How did this happen?
-By now, I think we probably have an idea why. The "closed world" assumption.
+By now, I think we probably have an idea why: the "closed world" assumption.
 
 From its static analysis, the `native-image` tool was unable to determine that class `StringReverser`
 was ever used and therefore did not include it in the executable it built. Note: By omitting uneccessary classes from the
 executable file, the tool reduces the size of the executable file that is built. 
-As we have just seen, this can cause issues when used with reflection, but luckily there is a way to deal with this.
+As you have just seen, this can cause issues when used with reflection, but luckily there is a way to deal with this.
 
-## TODO **STEP 3**: Introducing Native Image Reflection Config
+## TODO **STEP 3**: Introducing Native Image Configuration
 
-We can tell the `native-image` tool about the use of reflection via configuration files. These files are 
-written in `JSON` and can be passed ot the `native-image` tool through the use of flags. Here is an example of how we
-would do this for our project, if we had created the configuration files, which we haven't done yet:
+You use configuration files to inform the `native-image` tool about the use of reflection in an application. The files are 
+written in `JSON` and are passed to the `native-image` tool through the use of flags. Here is an example of how you
+do this for your project, if you had created the configuration files, which you haven't done yet:
 
 ```bash
-# Don't run this yet - as we haven't created the config files yet!
+# Don't run this yet - as you haven't created the config files yet!
 native-image --no-fallback -H:ReflectionConfigurationFiles=config-files/reflect-config.json ReflectionExample
 ```
 
-So, what other types of configuration information can we pass to the `native-image` build tool? The tooling currently
-supports rading files that contain details on:
+You can pass other types of configuration information the `native-image` build tool. It currently
+supports the following types of configuration:
 
 * _Reflection_
 * _Resources_ - resource files that will be required by the application
@@ -179,9 +179,9 @@ supports rading files that contain details on:
 * _Dynamic Proxies_
 * _Serialisation_
 
-We are only looking at hwo to deal with reflection in this lab, so we will focus on that.
+We are only looking at how to handle reflection in this lab, so we will focus on that.
 
-The following is an example o what these files look like (taken from [here](https://www.graalvm.org/22.0/reference-manual/native-image/Reflection/)):
+Here is an example of the contents of a configuration file (taken from [here](https://www.graalvm.org/22.0/reference-manual/native-image/Reflection/)):
 
 ```json
 [
@@ -216,7 +216,7 @@ The following is an example o what these files look like (taken from [here](http
 ]
 ```
 
-From this we can see that classes and methods accessed through the Reflection API need to be configured. we can do this by 
+From this we can see that classes and methods accessed through the Reflection API need to be configured. You can do this by 
 hand, but the most convenient way to generate these configuration files is through use of the assisted configuration 
 `javaagent`.
 
