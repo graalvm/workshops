@@ -31,6 +31,13 @@ In this lab you will:
 - Use the `native-image` tool to build a Java application that uses reflection into an executable file 
 - Learn about the assisted configuration tooling provided by GraalVM 
 
+### Lab Prerequisites
+
+Before starting this lab, you must have installed
+
+- GraalVM (see [Install GraalVM](https://www.graalvm.org/22.0/docs/getting-started/#install-graalvm))
+- The `native-image` tool (see [Native Images](https://www.graalvm.org/22.0/docs/getting-started/#native-images))
+
 **NOTE:** If you see the laptop icon in the lab, you need to do something such as enter a command. Keep an eye out for it.
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
@@ -139,19 +146,19 @@ native-image --no-fallback ReflectionExample
 
 > **NOTE:** The `--no-fallback` option to `native-image` causes the build to fail if it can not build an executabale file.
 
-Now let's run the executable file and see what it does:
+Now, run the executable file and see what it does:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 ./reflectionexample StringReverser reverse "hello"
 
 Exception in thread "main" java.lang.ClassNotFoundException: StringReverser
-	at com.oracle.svm.core.hub.ClassForNameSupport.forName(ClassForNameSupport.java:60)
-	at java.lang.Class.forName(DynamicHub.java:1214)
+	at java.lang.Class.forName(DynamicHub.java:1338)
+	at java.lang.Class.forName(DynamicHub.java:1313)
 	at ReflectionExample.main(ReflectionExample.java:21)
 ```
 
-What happened here? It seems that our executable was not able to find the class `StringReverser`. How did this happen?
+What happened here? It seems that your executable was not able to find the class `StringReverser`. How did this happen?
 By now, I think we probably have an idea why: the "closed world" assumption.
 
 From its static analysis, the `native-image` tool was unable to determine that class `StringReverser`
