@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This lab takes you step by step through the process of using [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/) to build a Java application that uses reflection. 
+This lab takes you step by step through the process of using [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/) to build a Java application that relies on reflection. 
 
 GraalVM Native Image technology compiles Java code ahead-of-time into a self-contained executable file. Only the code that is required at run time by the application gets added into the executable file.
 
@@ -155,22 +155,22 @@ What happened here? It seems that our executable was not able to find the class 
 By now, I think we probably have an idea why: the "closed world" assumption.
 
 From its static analysis, the `native-image` tool was unable to determine that class `StringReverser`
-was ever used and therefore did not include it in the executable it built. Note: By omitting uneccessary classes from the
-executable file, the tool reduces the size of the executable file that is built. 
-As you have just seen, this can cause issues when used with reflection, but luckily there is a way to deal with this.
+was ever used and therefore did not include it in the executable it built. Note: By omitting uneccessary classes,
+the tool reduces the size of the resulting file. 
+However, as you have just seen, this can cause issues when used with reflection. The next section describes how to avoid these issues.
 
 ## TODO **STEP 3**: Introducing Native Image Configuration
 
 You use configuration files to inform the `native-image` tool about the use of reflection in an application. The files are 
-written in `JSON` and are passed to the `native-image` tool through the use of a command-line option. Here is an example of how you
-do this for your project, if you had created the configuration files, which you haven't done yet:
+written in `JSON` and are passed to the `native-image` tool through the use of a command-line option. Here is an example of how you can
+do this for your project (if you had created the configuration files):
 
 ```bash
 # Don't run this yet - as you haven't created the config files yet!
 native-image --no-fallback -H:ReflectionConfigurationFiles=config-files/reflect-config.json ReflectionExample
 ```
 
-You can pass other types of configuration information the `native-image` build tool. It currently
+You can pass other types of configuration information to the `native-image` build tool. It currently
 supports the following types of configuration:
 
 * _Reflection_
@@ -181,7 +181,7 @@ supports the following types of configuration:
 
 However, in this lab we are only looking at how to handle reflection, so we will focus on that.
 
-Here is example contents of a configuration file (taken from [here](https://www.graalvm.org/22.0/reference-manual/native-image/Reflection/)):
+Here is the contents of an example configuration file (taken from [here](https://www.graalvm.org/22.0/reference-manual/native-image/Reflection/)):
 
 ```json
 [
@@ -221,21 +221,22 @@ hand, but a more convenient approach is to generate the configuration using the 
 
 ## **STEP 4**: Native Image, Assisted Configuration : Enter The Java Agent
 
-Writing a complete reflection configuration file from scratch is certainly possible, but the GraalVM Java runtime provides 
-a java tracing agent, the `javaagent`, that will generate this for you automatically when you run your application. 
+Although it's possible to manually create a complete reflection configuration file from scratch, it's not recommended.
+Instead, use `javaagent`--a java tracing agent provided by GraalVM. The agent 
+generates the configuration for you automatically when you run your application. 
 
-Let's try this. First, we will create a directory to save these configuration file into:
+Let's try this. First, create a directory for the configuration files:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 mkdir -p META-INF/native-image
 ```
 
-Then, we run the application with the tracing agent enabled. In our shell run the following:
+Then, run the application with the tracing agent enabled. In your shell run the following:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
-# Note: the tracing agent parameter must come before the classpath and jar params on the command ine
+# Note: the tracing agent option must come before the classpath and jar options on the command ine
 java -agentlib:native-image-agent=config-output-dir=META-INF/native-image ReflectionExample StringReverser reverse "hello"
 ```
 
@@ -257,22 +258,22 @@ cat META-INF/native-image/reflect-config.json
 ]
 ```
 
-You can run this process mutiple times and the runs are merged if you specify `native-image-agent=config-merge-dir`, as i
-s shown in the example below:
+You can run the tracing agent mutiple times. The resulting configuration files are merged if you specify `native-image-agent=config-merge-dir`, 
+as shown below:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 java -agentlib:native-image-agent=config-merge-dir=META-INF/native-image ReflectionExample StringCapitalizer capitalize "hello"
 ```
 
-Building the standalone executable will now make use of the provided configuration. Let's build it:
+Now build the standalone executable to make use of the configuration files.
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 native-image --no-fallback ReflectionExample
 ```
 
-And let's see if it works any better:
+And run the executable file to check that it now works as expected:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
