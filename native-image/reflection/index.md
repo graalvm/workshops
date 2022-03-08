@@ -30,7 +30,7 @@ Estimated lab time: 30 minutes
 
 In this lab you will perform the following tasks:
 
-- Learn how to build Java coce that uses reflection into standalone executables, using the `native-image` build tool
+- Learn how to build Java code that uses reflection into standalone executables, using the `native-image` build tool
 - Learn about the assisted configuration tooling available with GraalVM 
 
 **NOTE:** Whenever you see the laptop icon, this is somewhere you will need to do something. Watch out for these.
