@@ -120,7 +120,7 @@ plugin to your default build configuration.
 </plugin>
 ```
 
-So let's build our application.
+So let's build our application. From the root folder of the repository, run the following commands:
 
 ```shell
 cd native-image/containerisation/lab
@@ -131,7 +131,19 @@ This will generate an "executable" jar, one that contains all of it's dependenci
 file. We can try an run this jar and "ping" the endpoint to see what we get back.
 
 ```shell
-java -jar ./taregt 
+# Run the application in the background
+java -jar ./target/jibber-0.0.1-SNAPSHOT-exec.jar &
+# Call the endpoint
+curl http://localhost:8080/jibber
+```
+
+Did you get the some nonsense verse returned back? OK, so now that we have a built and working aplpication, let's kill
+it nd move on to containerising it.
+
+```shell
+# Bring the application back to the foreground
+fg
+# Kill it with : <ctrl-c>
 ```
 
 ## **STEP 2**: Containerising Our Java Application with Docker
