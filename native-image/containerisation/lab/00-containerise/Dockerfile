@@ -4,6 +4,6 @@ ARG JAR_FILE
 
 EXPOSE 8080
 
-COPY target/${JAR_FILE} app.jar
+COPY ${JAR_FILE} app.jar
 ENTRYPOINT ["java"]
 CMD ["-jar","app.jar"]

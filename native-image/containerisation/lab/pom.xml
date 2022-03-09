@@ -160,54 +160,6 @@
 			</build>
 		</profile>
 		<profile>
-			<id>nativeg1</id>
-			<properties>
-				<repackage.classifier>exec</repackage.classifier>
-				<native-buildtools.version>0.9.9</native-buildtools.version>
-			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>org.junit.platform</groupId>
-					<artifactId>junit-platform-launcher</artifactId>
-					<scope>test</scope>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.graalvm.buildtools</groupId>
-						<artifactId>native-maven-plugin</artifactId>
-						<version>${native-buildtools.version}</version>
-						<extensions>true</extensions>
-						<executions>
-							<execution>
-								<id>build-native</id>
-								<phase>package</phase>
-								<goals>
-									<goal>build</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<imageName>jibber-g1</imageName>
-							<buildArgs>
-								<!-- Add support for G1GC -->
-								<buildArg>--gc=G1</buildArg>
-								<buildArg>-H:+ReportExceptionStackTraces</buildArg>
-							</buildArgs>
-                        </configuration>
-					</plugin>
-					<plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <classifier>exec</classifier>
-                        </configuration>
-                    </plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
 			<id>distroless</id>
 			<properties>
 				<repackage.classifier>exec</repackage.classifier>
@@ -239,8 +191,6 @@
 						<configuration>
 							<imageName>jibber-distroless</imageName>
 							<buildArgs>
-								<!-- Add support for G1GC -->
-								<buildArg>--gc=G1</buildArg>
 								<!-- Mostly static -->
 								<buildArg>-H:+StaticExecutableWithDynamicLibC</buildArg>
 								<buildArg>-H:+ReportExceptionStackTraces</buildArg>
@@ -257,114 +207,6 @@
 				</plugins>
 			</build>
 		</profile>
-
-		<!-- PGO -->	
-		<profile>
-			<id>pgoinst</id>
-			<properties>
-				<repackage.classifier>exec</repackage.classifier>
-				<native-buildtools.version>0.9.9</native-buildtools.version>
-			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>org.junit.platform</groupId>
-					<artifactId>junit-platform-launcher</artifactId>
-					<scope>test</scope>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.graalvm.buildtools</groupId>
-						<artifactId>native-maven-plugin</artifactId>
-						<version>${native-buildtools.version}</version>
-						<extensions>true</extensions>
-						<executions>
-							<execution>
-								<id>build-native</id>
-								<phase>package</phase>
-								<goals>
-									<goal>build</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<imageName>jibber-pgoinst</imageName>
-							<buildArgs>
-								<!-- Add support for G1GC -->
-								<buildArg>--gc=G1</buildArg>
-								<!-- Mostly static -->
-								<buildArg>-H:+StaticExecutableWithDynamicLibC</buildArg>
-								<buildArg>-H:+ReportExceptionStackTraces</buildArg>
-								<!-- Instrument -->
-								<buildArg>--pgo-instrument</buildArg>
-							</buildArgs>
-                        </configuration>
-					</plugin>
-					<plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <classifier>exec</classifier>
-                        </configuration>
-                    </plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>pgo</id>
-			<properties>
-				<repackage.classifier>exec</repackage.classifier>
-				<native-buildtools.version>0.9.9</native-buildtools.version>
-			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>org.junit.platform</groupId>
-					<artifactId>junit-platform-launcher</artifactId>
-					<scope>test</scope>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.graalvm.buildtools</groupId>
-						<artifactId>native-maven-plugin</artifactId>
-						<version>${native-buildtools.version}</version>
-						<extensions>true</extensions>
-						<executions>
-							<execution>
-								<id>build-native</id>
-								<phase>package</phase>
-								<goals>
-									<goal>build</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<imageName>jibber-pgo</imageName>
-							<buildArgs>
-								<!-- Add support for G1GC -->
-								<buildArg>--gc=G1</buildArg>
-								<!-- Mostly static -->
-								<buildArg>-H:+StaticExecutableWithDynamicLibC</buildArg>
-								<buildArg>-H:+ReportExceptionStackTraces</buildArg>
-								<!-- Optimise :
-										Note that you need to use the maven project dir in the path!
-								-->
-								<buildArg>--pgo=${project.basedir}/default.iprof</buildArg>
-							</buildArgs>
-                        </configuration>
-					</plugin>
-					<plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <classifier>exec</classifier>
-                        </configuration>
-                    </plugin>
-				</plugins>
-			</build>
-		</profile>	
 	</profiles>
 
 

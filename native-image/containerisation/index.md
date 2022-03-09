@@ -161,7 +161,7 @@ ARG JAR_FILE                       # Pass in the jar file as an argument to the 
 
 EXPOSE 8080                        # This image will need to expose TCP port 8080, as this is what our app will listen in on
 
-COPY target/${JAR_FILE} app.jar    # Copy the JAR file form the `target` folder into the root of the image 
+COPY ${JAR_FILE} app.jar    # Copy the JAR file form the `target` folder into the root of the image 
 ENTRYPOINT ["java"]                # Run java when starting the container
 CMD ["-jar","app.jar"]             # To the java command pass in the params that make it load and run our executable JAR
 ```
@@ -192,7 +192,20 @@ You can then call the endpoint as we did before:
 curl http://localhost:8080/jibber
 ```
 
-Did you see the nonse verse? OK, let's kill our container and move on:
+Did you see the nonse verse? Let's also look at how long it took our application to startup. We can extract this from the logs
+as Spring Boot applications write to the logs how long it took to startup:
+
+```shell
+docker logs jibber-jdk
+```
+
+We saw the following, showing that our application started up in 3.896s:
+
+```shell
+2022-03-09 19:48:09.511  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 3.896 seconds (JVM running for 4.583)
+```
+
+OK, let's kill our container and move on:
 
 ```shell
 docker kill jibber-jdk
@@ -204,6 +217,8 @@ command line, run the following:
 ```shell
 ./scripts/size.sh jibber:jdk.0.1
 ```
+
+This outputs the size of the image in MBs. I got `606` MB.
 
 ## **STEP 3**: Building a Native Executable
 
@@ -327,7 +342,7 @@ To build run the following from the command line:
 ```shell
 # Build a Docker Image
 docker build -f ./01-native-image/Dockerfile \
-             --build-arg JAR_FILE=./target/jibber \
+             --build-arg APP_FILE=./target/jibber \
              -t jibber:native.01 .
 # List the newly built image
 docker images | head -n2
@@ -340,12 +355,31 @@ docker run --rm -d --name "jibber-native" -p 8080:8080 jibber:native.01
 curl http://localhost:8080/jibber
 ```
 
-Again, you should have seen more nonsense verse in the style of the poem Jabberwocky. Let's kill our container and move onto
-the next step.
+Again, you should have seen more nonsense verse in the style of the poem Jabberwocky.We can take a look at how long the 
+application took to startup, by looking at the logs produced by the application. When a Spring Boot application starts 
+up it outputs the time it took to stand up the applciation.
 
+```shell
+docker logs jibber-native
+```
+We saw the following whihc shows that the app started up in 0.074s
+
+```shell
+2022-03-09 19:44:12.642  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 0.074 seconds (JVM running for 0.081)
+```
+
+Let's kill our container and move onto the next step.
 ```shell
 docker kill jibber-native
 ```
+
+Let's take a look at the size of the container produced:
+
+```shell
+./scripts/size.sh jibber:jdk.0.1
+```
+
+The container size we saw was, `199` MB. Quite a lot smaller.
 
 ## **STEP 5**: Building a Mostly Static Executable & Packaging it in a Distroless Image
 
@@ -356,4 +390,68 @@ Let's recap, again, what we have done:
 3. Built a native executable of our application using the Native Image build Tools for Maven
 4. Containerised our native executable
 
+It would be great if we could shrink our container size even further, as smaller containers are quicker to download and start.
+With GraalVM Native Image we have the ability to statically link system libraries into the native executable that we
+generate. If you did this, you would be able to package the native executable directly into an empty Docker image, also known
+as a `scratch` container.
 
+Another option is to produce what is known as a mostly staticly linked native executable. With this, we staticaly link
+in all system libraries apart from the standard C library, `glibc`. With such a native executable you can a small cotnainer,
+such as Google's Distroless which contains a the `glibc` library, some standard files and SSL security certificates. The
+standard Distroless container is around 20MB in size.
+
+We will build a mostly statically linked executable and then package it into a Distroless contianer.
+
+We have added another Maven profile to build this mostly statically linked native executable. This profile is called, `distroless`.
+The only difference of this profile to the one we used before, `native`, is that we pass a parameter, `-H:+StaticExecutableWithDynamicLibC`.
+As you might guess this tells `native-image` to build one of these mostly staticly linked native executables.
+
+We can build out mostly statically linked native executable as follows:
+
+```shell
+mvn package -Pdistroless
+```
+
+Easy enough. The generated native executable is in the target directory, `jibber-distroless`.
+
+And now to package it into a Distroless container. The Dockerfile to do this can be found at, `native-image/containerisation/lab/02-smaller-containers/Dockerfile`.
+Let's take a look at the contents of the Dockerfile, which has comments to explain what it does:
+
+```text
+FROM gcr.io/distroless/base # Our base image, which is Distroless
+
+ARG APP_FILE                # Everything else is the same :)
+EXPOSE 8080
+
+COPY ${APP_FILE} app
+ENTRYPOINT ["/app"]
+```
+
+To build run the following from the command line:
+
+```shell
+# Build a Docker Image
+docker build -f ./02-smaller-containers/Dockerfile \
+             --build-arg APP_FILE=./target/jibber-distroless \
+             -t jibber:distroless.01 .
+# List the newly built image
+docker images | head -n2
+```
+
+And that is it. We can run this as follows and test it:
+
+```shell
+docker run --rm -d --name "jibber-distroless" -p 8080:8080 jibber:native.01
+curl http://localhost:8080/jibber
+```
+
+Great! It worked. But how small, or large, is our container. We can use our script to check the image size:
+
+```shell
+./scripts/size.sh jibber:distroless.01
+```
+
+We saw a size of around 140MB. So we have shrunk the container by 59MB. Still a long way down from our starting size, for 
+the Java container, of around 600MB.
+
+## Conclusion
