@@ -148,10 +148,212 @@ fg
 
 ## **STEP 2**: Containerising Our Java Application with Docker
 
+Containerising our Java application as a Docker container is, thankfully, relatively straight-forward. We can build
+a Docker image based on another Docker image that contains a JDK distrobution. So for this tutorial we will use,
+`container-registry.oracle.com/java/openjdk:17-oraclelinux8` - this is an Oracle Linux 8 image wth OpenJDK.
 
+The following is a breakdown of the Dockerfile, which is used to describe how to build the Docker Image.
+
+```dockerfile
+FROM container-registry.oracle.com/java/openjdk:17-oraclelinux8 # Base Image
+
+ARG JAR_FILE                       # Pass in the jar file as an argument to the image build
+
+EXPOSE 8080                        # This image will need to expose TCP port 8080, as this is what our app will listen in on
+
+COPY target/${JAR_FILE} app.jar    # Copy the JAR file form the `target` folder into the root of the image 
+ENTRYPOINT ["java"]                # Run java when starting the container
+CMD ["-jar","app.jar"]             # To the java command pass in the params that make it load and run our executable JAR
+```
+
+Our `Dockerfile` for containerising our Java application can be found in, `native-image/containerisation/lab/00-containerise`.
+
+To build a Docker image containing our application, we can use this Dockerfile as follows:
+
+```shell
+# Build a Docker Image
+docker build -f ./00-containerise/Dockerfile \
+             --build-arg JAR_FILE=./target/jibber-0.0.1-SNAPSHOT-exec.jar \
+             -t jibber:jdk.01 .
+# List the newly built image
+docker images | head -n2
+```
+
+You should see your newly built image listed. We can run this image as follows:
+
+```shell
+docker run --rm -d --name "jibber-jdk" -p 8080:8080 jibber:jdk.01
+```
+
+You can then call the endpoint as we did before:
+
+```shell
+# Call the endpoint
+curl http://localhost:8080/jibber
+```
+
+Did you see the nonse verse? OK, let's kill our container and move on:
+
+```shell
+docker kill jibber-jdk
+```
+
+We can also query docker to get the size of the image. We have provided a script that does this for you. From the
+command line, run the following:
+
+```shell
+./scripts/size.sh jibber:jdk.0.1
+```
 
 ## **STEP 3**: Building a Native Executable
 
+Let's recap what we have so far.
+
+1. We have built a Spring Boot application with a HTTP endpoint, `/jibber`
+2. We have successfuly containerised it
+
+Now we will look at how we can create a native executable form our application using GraalVM Native Image. This native executable
+is going to havea number of interesting charecteristics, namely:
+
+1. It is going to start really fast
+2. It will use fewer resources than the corresponding Java application
+
+You can use the native image tooling which can be installed with GraalVM in order ot build a native executable of an
+application form the command line, but as we are using Maven already to build we are going to use the 
+[GraalVM Native Build Toosl for Maven](https://graalvm.github.io/native-build-tools/latest/maven-plugin.html) which will
+conveniently allow us to carry on using maven to build :)
+
+One wya of adding support for building a native executable is to use a Maven [profile](https://maven.apache.org/guides/introduction/introduction-to-profiles.html), 
+this is allows us to decide whether we want to just build the JAR, or the native executable. 
+
+In the Maven `pom.xml` file provided in the lab we have added a profil that allows for building a native executable.
+Let's take a closer look:
+
+First we need to decalre the profile and give it a name.
+
+```xml
+<profiles>
+    <profile>
+        <id>native</id>
+        <!-- Rest of profile hidden, to high-light relevant parts -->
+    </profile>
+</profiles>
+```
+
+Next, within the profile, we include the GraalVM native build tools plugin and attach it to the `package` phase in maven.
+This means it will run as a part fo the package phase. Notice that we can pass configuration to the underlying Native Image
+build using the `<buildArgs>` section. In individual `buildArg` tags you can passin parameters in exactly the same way
+as you do to the `native-image` tool:
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>${native-buildtools.version}</version>
+            <extensions>true</extensions>
+            <executions>
+                <execution>
+                    <id>build-native</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>build</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <imageName>jibber</imageName>
+                <buildArgs>
+                    <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+                </buildArgs>
+            </configuration>
+        </plugin>
+        <!-- Rest of profile hidden, to high-light relevant parts -->
+    </plugins>
+</build>
+```
+
+Now run the Maven build using our profile, as bellow (note that the profile name is specified with the `-P` flag):
+
+```shell
+mvn package -Pnative
+```
+
+This will generate a native executabale for your platform in the `target` directory, called, `jibber`. You can take a 
+look at the size of the file:
+
+```shell
+ls -lh target/jibber
+```
+
+And then to run this native executable and to test it:
+
+```shell
+./target/jibber &
+curl http://localhost:8080/jibber
+```
+
+Now we have a native executable of our application that starts really fast!
+
+Let's shut down te application before we move on.
+
+```shell
+# Bring the application into the foreground
+fg
+# Quit it with <ctrl-c>
+<ctrl-c>
+```
+
 ## **STEP 4**: Containerizing our Native Executable
 
-## **STEP 5**: Building a Mostly Static Executable & Packaging it in a Dostroless Image
+So we have a native executable version of our application and we have seen it working. Let's containerise it. We have
+provided a simple Dockerfile for packaging this native executable, that can be found in 
+`native-image/containerisation/lab/01-native-image/Dockerfile`. The contents are shown below, along with comments to 
+explain what each part of it does.
+
+```shell
+FROM container-registry.oracle.com/os/oraclelinux:8-slim
+
+ARG APP_FILE                 # Pass in the native executable
+EXPOSE 8080                  # This image will need to expose TCP port 8080, as this is what our app will listen in on
+
+COPY target/${APP_FILE} app  # Copy the native executable into the root and call it app
+ENTRYPOINT ["/app"]          # Just run the native executable :)
+```
+
+To build run the following from the command line:
+
+```shell
+# Build a Docker Image
+docker build -f ./01-native-image/Dockerfile \
+             --build-arg JAR_FILE=./target/jibber \
+             -t jibber:native.01 .
+# List the newly built image
+docker images | head -n2
+```
+
+And that is it. We can run this as follows and test it:
+
+```shell
+docker run --rm -d --name "jibber-native" -p 8080:8080 jibber:native.01
+curl http://localhost:8080/jibber
+```
+
+Again, you should have seen more nonsense verse in the style of the poem Jabberwocky. Let's kill our container and move onto
+the next step.
+
+```shell
+docker kill jibber-native
+```
+
+## **STEP 5**: Building a Mostly Static Executable & Packaging it in a Distroless Image
+
+Let's recap, again, what we have done:
+
+1. We have built a Spring Boot application with a HTTP endpoint, `/jibber`
+2. We have successfully containerised it
+3. Built a native executable of our application using the Native Image build Tools for Maven
+4. Containerised our native executable
+
+
