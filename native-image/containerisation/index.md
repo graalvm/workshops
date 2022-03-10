@@ -297,7 +297,7 @@ as you do to the `native-image` tool, so you can use all of the parameters that 
 </build>
 ```
 
-Now run the Maven build using our profile, as bellow (note that the profile name is specified with the `-P` flag):
+Now run the Maven build using our profile, as below (note that the profile name is specified with the `-P` flag):
 
 ```shell
 mvn package -Pnative
@@ -319,7 +319,7 @@ curl http://localhost:8080/jibber
 
 Now we have a native executable of our application that starts really fast!
 
-Let's shut down te application before we move on.
+Let's shut down the application before we move on.
 
 ```shell
 # Bring the application into the foreground
