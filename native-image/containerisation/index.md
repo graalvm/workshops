@@ -455,3 +455,16 @@ We saw a size of around 140MB. So we have shrunk the container by 59MB. Still a 
 the Java container, of around 600MB.
 
 ## Conclusion
+
+We hope you have enjoyed this lab and learnt a few things along the way. We've looked at how you can containerise
+a Java application. Then we've seen how to convert that Java application into a native executable, which starts significantly faster then the
+Java application. We then containerised the native executable and have seen how that the size of the Docker image, with
+our native executable in it, is much smaller than the Java Docker Image.
+
+Finally we looked at how we can build mostly statically linked native executable s with Native Image. These can be
+packaged in smaller containers, such as Distroless and these let us shrink the size of the Docker Image even further.
+
+### Learn More
+
+- Watch a presentation by the Native Image architect Christian Wimmer [GraalVM Native Image: Large-scale static analysis for Java](https://www.youtube.com/embed/rLP-8q3Cb8M)
+- [GraalVM Native Image reference documentation](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/)
