@@ -35,8 +35,9 @@ In this lab you will:
 
 Before starting this lab, you must have installed
 
-- GraalVM (see [Install GraalVM](https://www.graalvm.org/22.0/docs/getting-started/#install-graalvm))
-- The `native-image` tool (see [Native Images](https://www.graalvm.org/22.0/docs/getting-started/#native-images))
+* GraalVM (see [Install GraalVM](https://www.graalvm.org/22.0/docs/getting-started/#install-graalvm))
+* The `native-image` tool (see [Native Images](https://www.graalvm.org/22.0/docs/getting-started/#native-images))
+* Set your `JAVA_HOME` environment variable to point to your GraalVM installation
 
 **NOTE:** If you see the laptop icon in the lab, this means you need to do something such as enter a command. Keep an eye out for it.
 
