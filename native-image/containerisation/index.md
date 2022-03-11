@@ -42,6 +42,27 @@ In this lab you will perform the following tasks:
 # This is where we you will need to do something
 ```
 
+## Prerequisites
+
+For this Lab you will need the following:
+
+* [GraalVM Installation 22 or greater, JDK11 +](https://www.graalvm.org/downloads/) - You can use either the Community or Enterprise Edition 
+* The `native-image` tool (see [Native Images](https://www.graalvm.org/22.0/docs/getting-started/#native-images))
+* Set your `JAVA_HOME` environment variable to point to your GraalVM installation
+* Maven 3.0 or above
+* [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/getting-started/installation)
+
+### Running this on Oracle Luna Labs
+
+intro to Luna (screenshot?)
+link to lab
+
+### Running this on OCI Free-Tier
+
+link to markdown in repo thata exlpains how to spin up instance on OCI (free-tier) and grab code and install depednecies
+
+
+
 ## **STEP 1**: Meet Our Sample Java Application
 
 In this lab we are going to build a simple application, with a very simple REST based API. We are then going to see how
