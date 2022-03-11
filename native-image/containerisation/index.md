@@ -46,6 +46,7 @@ In this lab you will:
 In this lab you are going to build a simple application with a very minimal REST-based API. You are then going to containerise this application, using Docker.
 First, let's take a quick look at our simple application.
 
+
 We have provided the source code and build scripts for this application in:
 
 ```txt
@@ -222,7 +223,7 @@ docker kill jibber-jdk
 You can also query Docker to get the size of the image. We have provided a script that does this for you. Run the following in your shell:
 
 ```shell
-./scripts/size.sh jibber:jdk.0.1
+./scripts/size.sh jibber:jdk.01
 ```
 
 This prints the size of the image in MBs. Ours is `606` MB.
@@ -296,7 +297,7 @@ as you do to the `native-image` tool, so you can use all of the parameters that 
 </build>
 ```
 
-Now run the Maven build using our profile, as bellow (note that the profile name is specified with the `-P` flag):
+Now run the Maven build using our profile, as below (note that the profile name is specified with the `-P` flag):
 
 ```shell
 mvn package -Pnative
@@ -384,7 +385,7 @@ docker kill jibber-native
 But before we do let's take a look at the size of the container produced:
 
 ```shell
-./scripts/size.sh jibber:jdk.0.1
+./scripts/size.sh jibber:native.01
 ```
 
 The container image size we saw, `199` MB. Quite a lot smaller than our original Java container.
@@ -450,7 +451,7 @@ docker images | head -n2
 And that is it. We can run this as follows and test it:
 
 ```shell
-docker run --rm -d --name "jibber-distroless" -p 8080:8080 jibber:native.01
+docker run --rm -d --name "jibber-distroless" -p 8080:8080 jibber:distroless.01
 curl http://localhost:8080/jibber
 ```
 
