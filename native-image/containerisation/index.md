@@ -223,7 +223,7 @@ We can also query Docker to get the size of the image. We have provided a script
 command line, run the following:
 
 ```shell
-./scripts/size.sh jibber:jdk.0.1
+./scripts/size.sh jibber:jdk.01
 ```
 
 This outputs the size of the image in MBs. I got `606` MB.
@@ -371,7 +371,7 @@ run the followung and look for the startup time:
 ```shell
 docker logs jibber-native
 ```
-We saw the following whihc shows that the app started up in 0.074s. A big improvement!
+We saw the following which shows that the app started up in 0.074s. A big improvement!
 
 ```shell
 2022-03-09 19:44:12.642  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 0.074 seconds (JVM running for 0.081)
@@ -385,7 +385,7 @@ docker kill jibber-native
 But before we do let's take a look at the size of the container produced:
 
 ```shell
-./scripts/size.sh jibber:jdk.0.1
+./scripts/size.sh jibber:native.01
 ```
 
 The container image size we saw, `199` MB. Quite a lot smaller than our original Java container.
@@ -451,7 +451,7 @@ docker images | head -n2
 And that is it. We can run this as follows and test it:
 
 ```shell
-docker run --rm -d --name "jibber-distroless" -p 8080:8080 jibber:native.01
+docker run --rm -d --name "jibber-distroless" -p 8080:8080 jibber:distroless.01
 curl http://localhost:8080/jibber
 ```
 
