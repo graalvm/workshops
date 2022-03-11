@@ -2,7 +2,7 @@ Understanding Reflection and GraalVM Native Image
 
 ## Introduction
 
-This lab is for developers looking to understand more about how to contairise 
+This lab is for developers looking to understand more about how to containerise 
 [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/) applications.
 
 GraalVM Native Image allows the ahead-of-time compilation of a Java application into a self-contained native executable.
@@ -10,10 +10,10 @@ With GraalVM Native Image only the code that is required by the application at r
 
 These native executables have a number of important advantages, in that they:
 
-- Use a fraction of the resources required by the JVM, so cheaper to run
-- Starts in milliseconds
-- Deliver peak performance immediately, no warmup
-- Can be packaged into lightweight container images for faster and more efficient deployments
+- Use a fraction of the resources required by the JVM, so they are cheaper to run
+- Start in milliseconds
+- Deliver peak performance immediately, with no warmup
+- Can be packaged into lightweight container images for faster, more efficient and more secure deployments
 - Reduced attack surface (more on this in future labs)
 
 Many of the leading microservice frameworks support ahead-of-time compilation with GraalVM Native Image, including
@@ -30,7 +30,7 @@ Estimated lab time: 90 minutes
 
 In this lab you will perform the following tasks:
 
-- Learn how to add a basic Spring Boot application into a Docker Image and run it
+- Learn how to add a basic Spring Boot application into a Docker image and run it
 - Learn how to build a native executable from this application, using GraalVM Native Image 
 - Learn how to add the native executable to a Docker Image
 - Learn how to shrink your application docker image size with GraalVM Native Image & Distroless containers 
@@ -47,7 +47,7 @@ In this lab you will perform the following tasks:
 In this lab we are going to build a simple application, with a very simple REST based API. We are then going to see how
 we can containerize this application, using Docker, but first we should take a quick look at our simple application.
 
-THe source code and build scripts for this application have been provided for you and can be found in:
+The source code and build scripts for this application have been provided for you and can be found in:
 
 ```txt
 native-image/containerisation/lab/src/
@@ -72,7 +72,7 @@ generate new text that has a similarity to the original text. We are using a lib
 [RiTa](https://rednoise.org/rita/) library supports building and using Markov Chains.
 
 Below we have two snippets form the utility class, `com.example.demo.Jabberwocky`, that builds the model. The `text` variable
-contains the text of the poem. This snippet shows how we create the model and then populate it with the text of the originaal poem This is doen in the constructor
+contains the text of the poem. This snippet shows how we create the model and then populate it with the text of the original poem.  This is done in the constructor
 and we define our class to be a [Singleton](https://docs.spring.io/spring-framework/docs/3.0.0.M3/reference/html/ch04s04.html#beans-factory-scopes-singleton)
 (so only one of them ever gets created).
 
@@ -223,7 +223,7 @@ We can also query Docker to get the size of the image. We have provided a script
 command line, run the following:
 
 ```shell
-./scripts/size.sh jibber:jdk.0.1
+./scripts/size.sh jibber:jdk.01
 ```
 
 This outputs the size of the image in MBs. I got `606` MB.
@@ -297,7 +297,7 @@ as you do to the `native-image` tool, so you can use all of the parameters that 
 </build>
 ```
 
-Now run the Maven build using our profile, as bellow (note that the profile name is specified with the `-P` flag):
+Now run the Maven build using our profile, as below (note that the profile name is specified with the `-P` flag):
 
 ```shell
 mvn package -Pnative
@@ -319,7 +319,7 @@ curl http://localhost:8080/jibber
 
 Now we have a native executable of our application that starts really fast!
 
-Let's shut down te application before we move on.
+Let's shut down the application before we move on.
 
 ```shell
 # Bring the application into the foreground
@@ -371,7 +371,7 @@ run the followung and look for the startup time:
 ```shell
 docker logs jibber-native
 ```
-We saw the following whihc shows that the app started up in 0.074s. A big improvement!
+We saw the following which shows that the app started up in 0.074s. A big improvement!
 
 ```shell
 2022-03-09 19:44:12.642  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 0.074 seconds (JVM running for 0.081)
@@ -385,7 +385,7 @@ docker kill jibber-native
 But before we do let's take a look at the size of the container produced:
 
 ```shell
-./scripts/size.sh jibber:jdk.0.1
+./scripts/size.sh jibber:native.01
 ```
 
 The container image size we saw, `199` MB. Quite a lot smaller than our original Java container.
@@ -451,7 +451,7 @@ docker images | head -n2
 And that is it. We can run this as follows and test it:
 
 ```shell
-docker run --rm -d --name "jibber-distroless" -p 8080:8080 jibber:native.01
+docker run --rm -d --name "jibber-distroless" -p 8080:8080 jibber:distroless.01
 curl http://localhost:8080/jibber
 ```
 
