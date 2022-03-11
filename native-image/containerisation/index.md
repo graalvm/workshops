@@ -214,7 +214,7 @@ For example, our application started up in 3.896s - extract from the logs below:
 2022-03-09 19:48:09.511  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 3.896 seconds (JVM running for 4.583)
 ```
 
-OK, let's terminate your container and move on:
+OK, terminate your container and move on:
 
 ```shell
 docker kill jibber-jdk
@@ -223,7 +223,7 @@ docker kill jibber-jdk
 You can also query Docker to get the size of the image. We have provided a script that does this for you. Run the following in your shell:
 
 ```shell
-./scripts/size.sh jibber:jdk.01
+bash ./scripts/size.sh jibber:jdk.01
 ```
 
 This prints the size of the image in MBs. Ours is `606` MB.
