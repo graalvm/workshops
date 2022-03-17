@@ -27,7 +27,7 @@ git clone https://github.com/graalvm/workshops.git
 Open a terminal, change directory to the lab / tutorial you want to try out. Read the `README.md file `
 The labs are organised into folders as follows:
 
-* `native-image` : Collects all of the labs related to GraalVM Native Image
+* `native-image` : This collects all labs related to GraalVM Native Image
 
 We will add more folders as we add more content - we plan to add more labs relating to `ntive-image`, `polyglot` and
 GraalVM as a Java runtime.
@@ -36,12 +36,14 @@ GraalVM as a Java runtime.
 
 ### First Steps
 
-These are the labs & tutorials you should start out with:
+These are the labs & tutorials you should start out with if you are looking to learn about GraalVM Native IMage:
 
 1. [GraalVM Native Image Quick Start](native-image/graalvm-native-image-quick-start/README.md)
 2. [Understanding Reflection with GraalVM Native Image](native-image/reflection/README.md)
 
 ### Next Steps
+
+With a good grounding in the basics of GraalVM Native Image, these should be your next steps.
 
 1. [GraalVm Native Image, Spring & Containers](native-image/containerisation/README.md)
 
