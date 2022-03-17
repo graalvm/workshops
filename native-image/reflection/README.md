@@ -1,3 +1,7 @@
+<img src="https://www.graalvm.org/resources/img/home/logo_mobile_openmenu.svg"
+alt="GraalVM logo"
+width="200px">
+
 # Using Java Reflection with GraalVM Native Image
 
 ## Introduction
