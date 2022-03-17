@@ -5,9 +5,11 @@ width="200px">
 #  Get Started with GraalVM Native Image
 
 ## Introduction
-This lab is for developers looking to start building cloud native Java applications with [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/).
+This lab is for developers looking to start building cloud native Java applications with 
+[GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/).
 
-GraalVM Native Image allows the ahead-of-time compilation of a Java application into a self-contained native executable. With GraalVM Native Image only the code that is required by the application at run time gets added into the native executable. 
+GraalVM Native Image allows the ahead-of-time compilation of a Java application into a self-contained native executable. 
+With GraalVM Native Image only the code that is required by the application at run time gets added into the native executable. 
 
 These native executables have a number of important advantages, in that they:
 
@@ -94,7 +96,8 @@ Several profiles will be used in this lab, each of which has a particular purpos
 2. `java_agent` : This builds the Java application with the tracing agent, which tracks all usages of the dynamic code
    in your application and captures this information into configuration files. More on this later.
 
-You use a particular Maven profile by passing it as a parameter to `mvn`. The name of the profile is appended to the `-P` flag. The example below shows how you could call a `native` profile, when building with Maven:
+You use a particular Maven profile by passing it as a parameter to `mvn`. The name of the profile is appended to 
+the `-P` flag. The example below shows how you could call a `native` profile, when building with Maven:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
@@ -103,17 +106,11 @@ mvn clean package -Pnative
 
 Now that you have a basic understanding of what the application does. You can build it and run it to see how it works.
 
-1. From the terminal window connected to your remote host, run the list command, `ls`, to verify if the demo folder 
-   is present. Change to its directory:
+1. Open a terminal window and change to `lab` folder:
 
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
-   ls
-   ```
-
-   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-   ```bash
-   cd demo
+   cd native-image/graalvm-native-image-quick-start/lab
    ```
 
 2. Build the project and run:
@@ -148,7 +145,12 @@ GraalVM Native Image is pre-installed on the virtual machine.
 1. To begin, check that you have a compiled uber JAR in your `target` dir:
 
     ```shell
-    ls ./target
+    ls -l ./target
+   ```
+   
+   This is what we saw:
+   
+   ```shell
     drwxrwxr-x 1 krf krf    4096 Mar  4 11:12 archive-tmp
     drwxrwxr-x 1 krf krf    4096 Mar  4 11:12 classes
     drwxrwxr-x 1 krf krf    4096 Mar  4 11:12 generated-sources
@@ -157,6 +159,7 @@ GraalVM Native Image is pre-installed on the virtual machine.
     drwxrwxr-x 1 krf krf    4096 Mar  4 11:12 maven-archiver
     drwxrwxr-x 1 krf krf    4096 Mar  4 11:12 maven-status
     ```
+
     The file you will need is, `graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar`.
 
 2. Generate a native image from the command line. You do not need to use the Maven plugin to use GraalVM Native Image, but 
@@ -275,7 +278,7 @@ testing this type of functionality is the Log4J logging framework. It has been a
 To make our application code use `log4j`, you will need to open the `ListDir.java` file in a code editor and uncomment
 a few lines.
 
-1. Open the `ListDir.java` file using Vim:
+1. Open the `ListDir.java` file using Vim, or your editor of choice:
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
@@ -390,6 +393,11 @@ Now you will use the tracing agent to generate the reflection configuration whil
 
    ```shell
    ls -l src/main/resources/META-INF/native-image/
+   ```
+
+   We saw:
+   
+   ```shell
    total 56
    -rw-r--r--  1 kfoster  staff     4B Dec  2 19:13 jni-config.json
    -rw-r--r--  1 kfoster  staff    86B Nov  9 20:46 native-image.properties
