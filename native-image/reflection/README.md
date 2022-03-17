@@ -42,6 +42,7 @@ Before starting this lab, you must have installed
 * GraalVM (see [Install GraalVM](https://www.graalvm.org/22.0/docs/getting-started/#install-graalvm))
 * The `native-image` tool (see [Native Images](https://www.graalvm.org/22.0/docs/getting-started/#native-images))
 * Set your `JAVA_HOME` environment variable to point to your GraalVM installation
+* Maven 3.0+
 
 **NOTE:** If you see the laptop icon in the lab, this means you need to do something such as enter a command. Keep an eye out for it.
 
@@ -89,7 +90,7 @@ Let's take a look at an example.
 ## **STEP 2**:  An Example Using Reflection
 
 Imagine you have the following class, `ReflectionExample.java` (a copy of this can be found in the directory, 
-`demo/ReflectionExample.java`):
+`native-image/reflection/lab/ReflectionExample.java`):
 
 ```java
 import java.lang.reflect.Method;
@@ -124,7 +125,7 @@ First, let's build the code. In your shell, run the following command:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
-cd demo
+cd native-image/reflection/lab
 javac ReflectionExample.java
 ```
 
@@ -176,11 +177,6 @@ However, as you have just seen, this can cause issues when used with reflection.
 You use configuration files to inform the `native-image` tool about the use of reflection in an application. The files are 
 written in `JSON` and are passed to the `native-image` tool through the use of a command-line option. Here is an example of how you can
 do this for your project (if you had created the configuration files):
-
-```bash
-# Don't run this yet - as you haven't created the config files yet!
-native-image --no-fallback -H:ReflectionConfigurationFiles=config-files/reflect-config.json ReflectionExample
-```
 
 You can pass other types of configuration information to the `native-image` build tool. It currently
 supports the following types of configuration:
