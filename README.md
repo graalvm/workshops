@@ -11,7 +11,7 @@ topics, such as how reflection and Class loading works within GraalVM Native Ima
 This repository is constantly be developed and new labs & tutorials will be added regularly. Please check in regularly
 to keep up-to date with what is going on.
 
-To find out more about GraalVM, check out the projects website at, [GraalVM](https://github.com/graalvm/workshops.git). 
+To find out more about GraalVM, check out the projects website at, [GraalVM](https://www.graalvm.org).
 
 ## Using these Labs & Tutorials
 
@@ -24,7 +24,7 @@ First, clone this repository locally:
 git clone https://github.com/graalvm/workshops.git
 ```
 
-Open a terminal, change directory to the lab / tutorial you want to try out. Read the `README.md file `
+Open a terminal, change directory to the lab / tutorial you want to try out. Read the `README.md` file.
 The labs are organised into folders as follows:
 
 * `native-image` : This collects all labs related to GraalVM Native Image
@@ -36,7 +36,7 @@ GraalVM as a Java runtime.
 
 ### First Steps
 
-These are the labs & tutorials you should start out with if you are looking to learn about GraalVM Native IMage:
+These are the labs & tutorials you should start out with if you are looking to learn about GraalVM Native Image:
 
 1. [GraalVM Native Image Quick Start](native-image/graalvm-native-image-quick-start/)
 2. [Understanding Reflection with GraalVM Native Image](native-image/reflection/)
