@@ -17,9 +17,10 @@ jobs:
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and run HelloWorld.java
+      - name: Build and run
         run: |
           cd native-image/reflection/lab/
+          ls -la
           javac ReflectionExample.java
           native-image -cp . --no-fallback -H:ReflectionConfigurationFiles=META-INF-WORKING/native-image/reflect-config.json ReflectionExample
           ./helloworld
