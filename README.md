@@ -45,5 +45,5 @@ These are the labs & tutorials you should start out with if you are looking to l
 
 With a good grounding in the basics of GraalVM Native Image, these should be your next steps.
 
-1. [GraalVm Native Image, Spring & Containers](native-image/containerisation/README.md)
+1. [GraalVM Native Image, Spring & Containers](native-image/containerisation/README.md)
 
