@@ -23,7 +23,9 @@ jobs:
           javac ReflectionExample.java
           native-image -cp . --no-fallback -H:ReflectionConfigurationFiles=META-INF-WORKING/native-image/reflect-config.json ReflectionExample
           ./reflectionexample StringReverser reverse "hello"
-
+      - name: Test Maven Exists
+        run: |
+          mvn --version
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
