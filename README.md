@@ -38,12 +38,12 @@ GraalVM as a Java runtime.
 
 These are the labs & tutorials you should start out with if you are looking to learn about GraalVM Native IMage:
 
-1. [GraalVM Native Image Quick Start](native-image/graalvm-native-image-quick-start/README.md)
-2. [Understanding Reflection with GraalVM Native Image](native-image/reflection/README.md)
+1. [GraalVM Native Image Quick Start](native-image/graalvm-native-image-quick-start/)
+2. [Understanding Reflection with GraalVM Native Image](native-image/reflection/)
 
 ### Next Steps
 
 With a good grounding in the basics of GraalVM Native Image, these should be your next steps.
 
-1. [GraalVM Native Image, Spring & Containers](native-image/containerisation/README.md)
+1. [GraalVM Native Image, Spring & Containers](native-image/containerisation/)
 
