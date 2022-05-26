@@ -22,7 +22,7 @@ jobs:
           cd native-image/reflection/lab/
           javac ReflectionExample.java
           native-image -cp . --no-fallback -H:ReflectionConfigurationFiles=META-INF-WORKING/native-image/reflect-config.json ReflectionExample
-          ./helloworld
+          ./reflectionexample StringReverser reverse "hello"
 
       - name: Upload binary
         uses: actions/upload-artifact@v2
