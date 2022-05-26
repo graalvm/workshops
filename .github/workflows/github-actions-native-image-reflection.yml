@@ -6,7 +6,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
 
@@ -20,7 +20,6 @@ jobs:
       - name: Build and run
         run: |
           cd native-image/reflection/lab/
-          ls -la
           javac ReflectionExample.java
           native-image -cp . --no-fallback -H:ReflectionConfigurationFiles=META-INF-WORKING/native-image/reflect-config.json ReflectionExample
           ./helloworld
