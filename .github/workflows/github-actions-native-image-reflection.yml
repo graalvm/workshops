@@ -20,7 +20,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: class-files
-          path: native-image/reflection/lab/*.class
+          path: native-image/reflection/lab/target/*.class
       - name: Upload Native Image Config Files
         uses: actions/upload-artifact@v2
         with:
