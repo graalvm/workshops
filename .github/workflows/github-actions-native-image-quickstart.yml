@@ -13,13 +13,13 @@ jobs:
           distribution: 'adopt'
       - name: Build with Maven
         run: |
-          cd native-image/graalvm-native-image-quick-start/demo/
+          cd native-image/graalvm-native-image-quick-start/lab/
           mvn --batch-mode --update-snapshots verify
       - name: Upload JAR
         uses: actions/upload-artifact@v2
         with:
           name: jar-file
-          path: native-image/graalvm-native-image-quick-start/demo/target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar
+          path: native-image/graalvm-native-image-quick-start/lab/target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar
       - run: echo "👷‍  Build status ${{ job.status }}."
 
   native:

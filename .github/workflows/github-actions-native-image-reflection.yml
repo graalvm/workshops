@@ -13,19 +13,19 @@ jobs:
           distribution: 'adopt'
       - name: Build
         run: |
-          cd native-image/reflection/demo/
+          cd native-image/reflection/lab/
           ls -lar
           javac ReflectionExample.java
       - name: Upload Class files
         uses: actions/upload-artifact@v2
         with:
           name: class-files
-          path: native-image/reflection/demo/*.class
+          path: native-image/reflection/lab/*.class
       - name: Upload Native Image Config Files
         uses: actions/upload-artifact@v2
         with:
           name: config-files
-          path: native-image/reflection/demo/META-INF-WORKING/native-image/reflect-config.json
+          path: native-image/reflection/lab/META-INF-WORKING/native-image/reflect-config.json
       - run: echo "👷‍  Build status ${{ job.status }}."
 
   native:
