@@ -48,18 +48,18 @@ In this lab you will perform the following tasks:
 
 ## **STEP 1**: Test Out Your Development Environment
 
-We will use [GraalVM Enterprise 21](https://docs.oracle.com/en/graalvm/enterprise/21/docs/overview/architecture/#graalvm-enterprise-architecture), 
-as the Java enviroment for this lab. GraalVM is a high performance JDK distribution from Oracle built on the trusted and 
+We will use [GraalVM Enterprise 22](https://docs.oracle.com/en/graalvm/enterprise/22/docs/overview/architecture/#graalvm-enterprise-architecture), 
+as the Java environment for this lab. GraalVM is a high performance JDK distribution from Oracle built on the trusted and 
 secure Oracle Java SE.
 
 You can download GraalVM EE from this link, [Download GraalVM EE](https://www.oracle.com/downloads/graalvm-downloads.html?selected_tab=1), 
-and full instalation instructions can be found at, [Installation Instructions](https://docs.oracle.com/en/graalvm/enterprise/21/docs/getting-started/installation-macos/).
+and full installation instructions can be found at, [Installation Instructions](https://docs.oracle.com/en/graalvm/enterprise/22/docs/getting-started).
 
 You will also need to install GraalVM EE Native Image, 
 [Download GraalVM EE Native Image](https://www.oracle.com/downloads/graalvm-downloads.html?selected_tab=1), and instructions 
-can be found here, [Native Image Installation Instructions](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/). 
+can be found here, [Native Image Installation Instructions](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/). 
 
-Once you have GraalVM EE installed, with Native Image, you can that everything works by running these commands in the terminal:
+Once you have GraalVM EE installed, with Native Image, you can check that everything works by running these commands in the terminal:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
@@ -77,7 +77,7 @@ To showcase GraalVM Native Image we are going to need a demo application. For th
 Java application that counts the number of files within the current directory and subdirectories. As a nice extra, it 
 also calculates their total size. 
 
-The source code for the application is available in your VM instance.
+The source code for the application is available in this repository.
 
 ### Note on the Demo Application
 
@@ -97,16 +97,11 @@ Several profiles will be used in this lab, each of which has a particular purpos
    in your application and captures this information into configuration files. More on this later.
 
 You use a particular Maven profile by passing it as a parameter to `mvn`. The name of the profile is appended to 
-the `-P` flag. The example below shows how you could call a `native` profile, when building with Maven:
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-mvn clean package -Pnative
-```
+the `-P` flag.
 
 Now that you have a basic understanding of what the application does. You can build it and run it to see how it works.
 
-1. Open a terminal window and change to `lab` folder:
+1. Open a terminal window and change to `lab` folder, this assumes that you are in the root folder of the repository:
 
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
@@ -278,16 +273,14 @@ testing this type of functionality is the Log4J logging framework. It has been a
 To make our application code use `log4j`, you will need to open the `ListDir.java` file in a code editor and uncomment
 a few lines.
 
-1. Open the `ListDir.java` file using Vim, or your editor of choice:
+1. Open the `ListDir.java` file using your editor of choice:
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     vim src/main/java/oracle/ListDir.java
     ```
 
-2. Type `i` to switch into the insert mode, so that you can start editing the file.
-
-3. Go through and uncomment the various lines that add the imports and the logging code. Uncomment the following lines:
+2Go through and uncomment the various lines that add the imports and the logging code. Uncomment the following lines:
 
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```java
@@ -314,8 +307,7 @@ a few lines.
     */
     ```
 
-4. Once you finish uncommenting the lines that add support for `log4j`, you need to save the file and quit Vim. To do 
-   this, press the Esc key. Then press `:` (colon), type `wq`, and hit Enter. 
+3. Once you finish uncommenting the lines that add support for `log4j`, you need to save the file. 
 
    Now that you have added some logging to the demo application, you can check if the changes work by rebuilding and running.
 
@@ -326,14 +318,14 @@ a few lines.
 
    You should see the same kind of output as previously with the addition of a lot of logging.
 
-6. Next, build a native executable using the Maven profile:
+4. Next, build a native executable using the Maven profile:
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     mvn clean package -Pnative
     ```
 
-7. Run the native executable you built, that now contains logging:
+5. Run the native executable you built, that now contains logging:
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
@@ -361,7 +353,7 @@ This run-time exception is caused by the addition of the Log4J library, that dep
 the `native-image` tool performs an aggressive static analysis to see which classes are used within the application. 
 For anything not used, the builder will assume that it is not needed. This is called the "closed world" assumption - 
 everything that needs to be loaded must be known when building a native executable. If it is not findable by the static analysis, then
-it will not be inclued in the native executable.
+it will not be included in the native executable.
 
 Reflection is a core feature of Java, so how can you use reflection **and** take advantage of the speed-ups offered by 
 GraalVM Native Image? You need a way to let the `native-image` tool know about any uses of reflection. 
@@ -439,7 +431,7 @@ generated executable.
 
 Note that the agent parameters **must** come before any `-jar` or `-classpath` parameters. You should also specify a
 directory into which to write the files. The recommended location is under `src/main/resources/META-INF/native-image`.
-Files placed in this location are picked up automaticatly by the `native-image` tool.
+Files placed in this location are picked up automatically by the `native-image` tool.
 
 ### Note on Configuring the Native Image Generation
 
