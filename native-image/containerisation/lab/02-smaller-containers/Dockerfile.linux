@@ -1,0 +1,11 @@
+# The deployment Image
+FROM gcr.io/distroless/base
+
+# Pass in the JAR file as an argument to the image build
+ARG APP_FILE
+
+EXPOSE 8080
+
+# Copy the native executable into the containers
+COPY ${APP_FILE}  /app
+ENTRYPOINT ["/app"]

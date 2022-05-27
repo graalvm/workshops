@@ -231,7 +231,9 @@ You should see your newly built image listed. Run this image as follows:
 docker run --rm -d --name "jibber-jdk" -p 8080:8080 jibber:jdk.01
 ```
 
-Then call the endpoint as you did before:
+Then call the endpoint as you did before - you may need to wait for a few seconds before doing this in order to allow the
+application to startup. If you get the following error, `curl: (52) Empty reply from server`, this ill be because the
+application is still starting. Wait a few seconds and try again:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```shell
@@ -247,7 +249,8 @@ as Spring Boot applications write the time to startup to the logs:
 docker logs jibber-jdk
 ```
 
-For example, our application started up in 3.896s -- here is the extract from our logs:
+For example, our application started up in 3.896s -- here is the extract from our logs (Note: the time taken to startup 
+will vary from machine to machine):
 
 ```shell
 2022-03-09 19:48:09.511  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 3.896 seconds (JVM running for 4.583)
@@ -393,13 +396,18 @@ second copies the native executable into a smaller container for use.
 
 >    ### NOTE: Why Are We Using a Two-Step Docker Build?
 >
->    When you build a native executable with GraalVM Native Image it builds one for the platform that it is running on.
+>    When you build a native executable with GraalVM Native Image the executable it builds will be for the platform that 
+>    you are running on.
+>    
 >    So, if you are running on OSX on a Mac, then it will generate a mach64 executable. If you are running on Linux, it will
 >    generate an ELF Linux executable (for the architecture of the chip you are running on). If you want to containerise your
 >    application in a Docker Image and you are running on OSX, then you can't simply build the executable locally (as that will
->    be an OSX compatible executable) and package it within your Docker Image (which expects the executable to be a linux
->    compatible one). What you have to do is to build within a Docker container that contains a Linux version of GraalVM 
->    and that is what our two-step Docker based build in fact does. The first step in the build process builds a Linux
+>    be an OSX compatible executable) and package it within your Docker Image which expects the executable to be a linux
+>    compatible executable. 
+> 
+>    Therefore you need to build within a Docker container that contains a Linux version of GraalVM, if you are on an 
+>    OS other than Linux, in order to create an executable that can be packaged into a Docker container.
+>    That is what the multi-stage Docker build we are using here does. The first step in the build process builds a Linux
 >    compatible executable and the second one packages that into a Docker Image for deployment.
 
 
@@ -451,6 +459,16 @@ COPY --from=builder /build/target/jibber .
 ENTRYPOINT ["/jibber"]
 ```
 
+
+> ### Building on Linux
+> If you are suing Linux you don't need to use a multi-stage docker build and your build times will be faster.
+> You can just build the native executable locally and package it in our deployment container `01-native-image/Dockerfile.linux`
+> as follows:
+> ```shell
+> mvn clean package -Pnative
+> docker build -f ./01-native-image/Dockerfile.linux --build-arg APP_FILE=target/jibber -t jibber:native.01 .
+> ```
+
 To build, run the following from your shell:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
@@ -467,6 +485,10 @@ And that is it. You can run this and test it as follows from your shell:
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```shell
 docker run --rm -d --name "jibber-native" -p 8080:8080 jibber:native.01
+```
+
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+```shell
 curl http://localhost:8080/jibber
 ```
 
@@ -534,8 +556,8 @@ te snippet from the `distroless` profile in the `pom.xml` that passes this param
 </buildArgs>
 ```
 
-You can build your mostly statically linked native executable as follows - be aware this will not work on OSX. We will
-build our native executable in adocker container in the next step, so if you are using OSX, don't worry.
+You can build your mostly statically linked native executable as follows - be aware this will only work on Linux. We will
+build our native executable in a docker container in the next step, so if you are using OSX, don't worry.
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```shell
@@ -545,8 +567,8 @@ mvn package -Pdistroless
 Easy enough. The generated native executable is in the target directory `jibber-distroless`.
 
 And now to package it into a Distroless container. The Dockerfile to do this can be found in the directory 
-`native-image/containerisation/lab/02-smaller-containers/Dockerfile`. Again we are going to use a multi-step buid
-in order that you can build a linux executable on Mac as well. Take a look at the contents of the Dockerfile, 
+`native-image/containerisation/lab/02-smaller-containers/Dockerfile`. Again we are going to use a multi-stage build
+in order to build a linux executable on all OSes. Take a look at the contents of the Dockerfile, 
 which has comments to explain each line:
 
 ```dockerfile
@@ -598,6 +620,15 @@ COPY ${APP_FILE} app
 ENTRYPOINT ["/app"]
 ```
 
+> ### Building on Linux
+> If you are suing Linux you don't need to use a multi-stage docker build and your build times will be faster.
+> You can just build the native executable locally and package it in our deployment container `02-smaller-containers/Dockerfile.linux`
+> as follows:
+> ```shell
+> mvn clean package -Pnative
+> docker build -f ./02-smaller-containers/Dockerfile.linux --build-arg APP_FILE=target/jibber-distroless -t jibber:distroless.01 .
+> ```
+
 To build, run the following from your shell:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
@@ -605,16 +636,29 @@ To build, run the following from your shell:
 # Build a Docker Image
 docker build -f ./02-smaller-containers/Dockerfile \
              -t jibber:distroless.01 .
+```
+
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+```shell
 # List the newly built image
 docker images | head -n2
 ```
-
 And that is it. You can run this and test it as follows:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```shell
 docker run --rm -d --name "jibber-distroless" -p 8080:8080 jibber:distroless.01
+```
+
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+```shell
 curl http://localhost:8080/jibber
+```
+And let's clean up after ourselves by killing the running container.
+
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+```shell
+docker kill jibber-distroless
 ```
 
 Great! It worked. But how small, or large, is your container? Use the script to check the image size:

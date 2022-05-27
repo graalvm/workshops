@@ -1,4 +1,4 @@
-name: GraalVM Native Image Quick Start Pipeline
+name: GraalVM Containerisation Pipeline
 on: [push, pull_request]
 jobs:
   build:
