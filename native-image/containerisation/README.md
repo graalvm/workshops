@@ -461,7 +461,7 @@ ENTRYPOINT ["/jibber"]
 
 
 > ### Building on Linux
-> If you are suing Linux you don't need to use a multi-stage docker build and your build times will be faster.
+> If you are using Linux you don't need to use a multi-stage docker build and your build times will be faster.
 > You can just build the native executable locally and package it in our deployment container `01-native-image/Dockerfile.linux`
 > as follows:
 > ```shell
@@ -621,7 +621,7 @@ ENTRYPOINT ["/app"]
 ```
 
 > ### Building on Linux
-> If you are suing Linux you don't need to use a multi-stage docker build and your build times will be faster.
+> If you are using Linux you don't need to use a multi-stage docker build and your build times will be faster.
 > You can just build the native executable locally and package it in our deployment container `02-smaller-containers/Dockerfile.linux`
 > as follows:
 > ```shell
