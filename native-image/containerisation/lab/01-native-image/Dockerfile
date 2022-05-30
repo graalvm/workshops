@@ -33,7 +33,7 @@ WORKDIR /build
 COPY . /build
 
 # Build
-RUN mvn clean package -Pnative
+RUN mvn --no-transfer-progress clean package -Pnative
 
 # The deployment Image
 FROM docker.io/oraclelinux:8-slim

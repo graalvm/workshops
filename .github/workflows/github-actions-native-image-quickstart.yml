@@ -20,7 +20,7 @@ jobs:
       - name: Build and Test Java Code
         run: |
           cd native-image/graalvm-native-image-quick-start/lab/
-          mvn clean package exec:exec
-          mvn clean package exec:exec -Pjava_agent
-          mvn package -Pnative
+          mvn --no-transfer-progress clean package exec:exec
+          mvn --no-transfer-progress clean package exec:exec -Pjava_agent
+          mvn --no-transfer-progress package -Pnative
           ./target/file-count

@@ -20,5 +20,5 @@ jobs:
       - name: Build and Test Java Code
         run: |
           cd native-image/containerisation/lab/
-          mvn clean package
-          mvn package -Pnative
+          mvn --no-transfer-progress clean package
+          mvn --no-transfer-progress package -Pnative

@@ -33,7 +33,7 @@ WORKDIR /build
 COPY . /build
 
 # Build
-RUN mvn clean package -Pdistroless
+RUN mvn --no-transfer-progress clean package -Pdistroless
 
 # Deployment Containers
 FROM gcr.io/distroless/base
