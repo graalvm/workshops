@@ -625,7 +625,7 @@ ENTRYPOINT ["/app"]
 > You can just build the native executable locally and package it in our deployment container `02-smaller-containers/Dockerfile.linux`
 > as follows:
 > ```shell
-> mvn clean package -Pnative
+> mvn clean package -Pdistroless
 > docker build -f ./02-smaller-containers/Dockerfile.linux --build-arg APP_FILE=target/jibber-distroless -t jibber:distroless.01 .
 > ```
 
