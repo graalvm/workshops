@@ -464,8 +464,6 @@ docker build -f ./01-native-image/Dockerfile \
 # List the newly built image
 docker images | head -n2
 ```
-<!-- the first step failed for me -->
-
 
 And that is it. You can run this and test it as follows from your terminal:
 
@@ -622,9 +620,6 @@ docker build -f ./02-smaller-containers/Dockerfile \
              -t jibber:distroless.01 .
 ```
 
-<!-- I can't get this ^^ to build -->
-
-
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```shell
 # List the newly built image
@@ -635,10 +630,6 @@ You can run this and test it as follows:
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```shell
 docker run --rm -d --name "jibber-distroless" -p 8080:8080 jibber:distroless.01
-```
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```shell
 curl http://localhost:8080/jibber
 ```
 
@@ -654,7 +645,7 @@ docker logs jibber-native
 In our experiments, the native executable started up in 0.074s (compared to 3.896s for the Java application). A big improvement!
 
 ```
-2022-03-09 19:44:12.642  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 0.074 seconds (JVM running for 0.081)
+2022-03-09 19:44:12.642  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 0.667 seconds (JVM running for 0.779)
 ```
 
 Clean up by terminating the running container.
