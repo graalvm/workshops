@@ -26,7 +26,7 @@ Micronaut, Spring, Helidon, and Quarkus.
 In addition, there are Maven and Gradle plugins for Native Image, so you can easily build,
 test, and run Java applications as executable files.
 
-> **Note:** Oracle Cloud Infrastructure (OCI) provides GraalVM Enterprise at no additional cost.
+>Note: Oracle Cloud Infrastructure (OCI) provides GraalVM Enterprise at no additional cost.
 
 Estimated lab time: 30 minutes
 
@@ -34,23 +34,23 @@ Estimated lab time: 30 minutes
 
 In this lab you will:
 
-- Use the `native-image` tool to build a Java application that uses reflection into an executable file 
+- Use the `native-image` tool to compile a Java application that uses reflection into a native executable file 
 - Learn about the assisted configuration tooling provided by GraalVM 
 
 ### Lab Prerequisites
 
 Before starting this lab, you must have installed
 
-* GraalVM (see [Install GraalVM](https://www.graalvm.org/22.0/docs/getting-started/#install-graalvm))
+* [GraalVM Installation 22 or greater, JDK11 +](https://www.graalvm.org/downloads/) - You can use either the Community or Enterprise Edition 
 * The `native-image` tool (see [Native Images](https://www.graalvm.org/22.0/docs/getting-started/#native-images))
 * Set your `JAVA_HOME` environment variable to point to your GraalVM installation
-* Maven 3.0+
+* Maven 3.0 or above
 
-**NOTE:** If you see the laptop icon in the lab, this means you need to do something such as enter a command. Keep an 
+>Note: If you see the laptop icon in the lab, this means you need to do something such as enter a command. Keep an 
 eye out for it.
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```shell
+```
 # This is where you will need to do something
 ```
 
@@ -64,7 +64,7 @@ executable file.
 Before you continue, let's review the build/run model for applications that are built using GraalVM Native Image.
 
 1. Compile your Java source code into Java byte code classes
-2. Using the `native-image` tool, build those Java byte code classes into a native executable
+2. Using the `native-image` tool, compile those Java byte code classes into a native executable
 3. Run the native executable
 
 But, what really happens during step 2?
@@ -73,12 +73,12 @@ Firstly, the `native-image` tool analyses your Java application to determine whi
 this in more detail shortly.
 
 Secondly, the tool initializes reachable classes that are safe to be initialized 
-([Automatic Initialization of Safe Classes](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/ClassInitialization/)).
-The class data of the initialized classes is loaded into the image heap which is then saved into standalone executable 
+(see [Automatic Initialization of Safe Classes](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/ClassInitialization/)).
+The class data of the initialized classes is loaded into the heap which is then saved into the executable 
 (into the text section of the binary output file). This is one of the features of the GraalVM `native-image` tool that 
-allows for such fast starting applications.
+enables such fast-starting applications.
 
-> **NOTE:** : Class initialization isn't the same as Object initialization. Object initialization happens at the runtime of the native executable.
+>Note: Class initialization isn't the same as Object initialization. Object initialization happens at the runtime of the native executable.
 
 We said we would return to the topic of reachability: the result of `native-image` analysis determines which classes, 
 methods, and fields must be included in the native executable. The analysis is static, that is, it doesn't run the Java 
@@ -93,7 +93,7 @@ Let's take a look at an example.
 ## **STEP 2**:  An Example Using Reflection
 
 Imagine you have the following class, `ReflectionExample.java` (a copy of this can be found in the directory, 
-`native-image/reflection/lab/ReflectionExample.java`):
+_native-image/reflection/lab_):
 
 ```java
 import java.lang.reflect.Method;
@@ -124,7 +124,7 @@ public class ReflectionExample {
 }
 ```
 
-First, let's build the code. In your shell, run the following command:
+First, build the code. In your terminal, run the following command:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
@@ -136,7 +136,7 @@ javac ReflectionExample.java
 2. The second argument to the `main` method is the name of the method to be invoked on the dynamically loaded class.
 3. The third argument to the `main` method is used as the argument to the method invoked in (2).
 
-Let's run it and see what it does.
+Run it and see what it does.
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
@@ -146,17 +146,17 @@ java ReflectionExample StringReverser reverse "hello"
 As expected, the method `reverse` in class `StringReverser` was found via reflection. The method was invoked and it
 reversed our input String of "hello". So far, so good.
 
-OK, but what happens if you use the `native-image` tool to build an executable file from our program? Let's try it. In 
-your shell run the following command:
+What happens if you use the `native-image` tool to build an executable file from our program? Try it: in 
+your terminal run the following command:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 native-image --no-fallback ReflectionExample
 ```
 
-> **NOTE:** The `--no-fallback` option to `native-image` causes the build to fail if it can not build an executable file.
+>Note: The `--no-fallback` option to the `native-image` command causes the build to fail if it can not produce an executable file.
 
-Now, run the executable file and see what it does:
+Now, run the executable and see what it does:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
@@ -176,11 +176,10 @@ was ever used and therefore did not include it in the executable it built. Note:
 the tool reduces the size of the resulting file. 
 However, as you have just seen, this can cause issues when used with reflection. The next section describes how to resolve this. 
 
-## TODO **STEP 3**: Introducing Native Image Configuration
+## **STEP 3**: Introducing Native Image Configuration
 
 You use configuration files to inform the `native-image` tool about the use of reflection in an application. The files are 
-written in `JSON` and are passed to the `native-image` tool through the use of a command-line option. Here is an example 
-of how you can do this for your project (if you create the configuration files):
+written in `JSON` and are passed to the `native-image` tool through the use of a command-line option. 
 
 You can pass other types of configuration information to the `native-image` build tool. It currently
 supports the following types of configuration:
@@ -228,7 +227,7 @@ Here is the contents of an example configuration file (taken from [here](https:/
 ]
 ```
 
-From this we can see that we declare the classes and methods accessed through the Reflection API. You can create this file by 
+You can create this file by 
 hand, but a more convenient approach is to generate the configuration using the `javaagent` tool.
 
 ## **STEP 4**: Native Image, Assisted Configuration : Enter The Java Agent
@@ -237,14 +236,14 @@ Although it's possible to manually create a complete reflection configuration fi
 Instead, use `javaagent`--a java tracing agent provided by GraalVM. The agent 
 generates the configuration for you automatically when you run your application. 
 
-Let's try this. First, create a directory for the configuration files:
+To demonstrate this, first create a directory for the configuration files:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 mkdir -p META-INF/native-image
 ```
 
-Then, run the application with the tracing agent enabled. In your shell run the following:
+Then, run the application with the tracing agent enabled. In your terminal run the following command:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
@@ -254,7 +253,7 @@ java -agentlib:native-image-agent=config-output-dir=META-INF/native-image Reflec
 
 ![Tracing Agent Config](images/tracing-agent-config.png)
 
-Let's look at the configuration created:
+Inspect the configuration file:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
@@ -294,15 +293,15 @@ And run the executable file to check that it now works as expected:
 
 It does!
 
-## Conclusions
+## Summary
 
-The GraalVM Native Image tool relies on what's known as the "closed world" assumption to create a native executable from 
+The GraalVM Native Image tool relies on what's known as the "closed world" assumption to compile a native executable from 
 a Java application. That is, the tool assumes that it can determine which classes, methods, and fields must be included 
 in the native executable. If it is not findable by static analysis, it will not be included in the executable file.
 To deal with the dynamic features of Java, the analysis must be explicitly provided with details of the classes that use 
 reflection, or the classes are dynamically loaded.
 
-The GraalVM platform provides a way to specify, to the `native-image` build tool, when reflection is used. Note: For
+The GraalVM platform provides a way to specify to the `native-image` build tool when reflection is used. For
 some simple cases, the `native-image` tool can discover these for itself.
 
 The GraalVM platform also provides a way to discover uses of reflection (and other dynamic behaviors) through the Java 
@@ -311,15 +310,14 @@ Tracing agent and can automatically generate the configuration files needed by t
 There are a few things you should bear in mind when using the tracing agent:
 
 * Use your test suites. You need to exercise as many paths in your code as possible.
-* You may need to review & edit your config files.
+* You may need to review and edit your config files by hand.
 
 We hope you have enjoyed this tutorial and have learnt something about how we can deal with reflection when using 
 Native Image.
 
 ### Learn More
-
-- Watch a presentation by the Native Image architect Christian Wimmer [GraalVM Native Image: Large-scale static analysis for Java](https://www.youtube.com/embed/rLP-8q3Cb8M)
-- [GraalVM EE Native Image reference documentation](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/)
-- [Reflection Use in Native Images](https://www.graalvm.org/22.0/reference-manual/native-image/Reflection/)
-- [Class Initialization in Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/ClassInitialization/)
 - [Assisted Configuration with Tracing Agent](https://www.graalvm.org/22.0/reference-manual/native-image/Agent/)
+- [Class Initialization in Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/ClassInitialization/)
+- [GraalVM EE Native Image reference documentation](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/)
+- [Reflection Use in Native Images](https://www.graalvm.org/22.0/reference-manual/native-image/Reflection/)
+- Watch a presentation by the Native Image architect Christian Wimmer [GraalVM Native Image: Large-scale static analysis for Java](https://www.youtube.com/embed/rLP-8q3Cb8M)

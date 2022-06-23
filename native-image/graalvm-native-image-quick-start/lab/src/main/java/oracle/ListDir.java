@@ -113,7 +113,7 @@ public class ListDir {
      * Converts bytes into something fit for non-robots.
      *
      * @param bytes
-     * @return Human readbale string
+     * @return Human readable string
      */
     public static final String humanReadableByteCountBin(final long bytes) {
         long b = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);

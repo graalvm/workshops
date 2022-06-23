@@ -5,27 +5,28 @@ width="200px">
 #  Get Started with GraalVM Native Image
 
 ## Introduction
-This lab is for developers looking to start building cloud native Java applications with 
-[GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/).
+This lab is for developers who want to start building cloud native Java applications using 
+[GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/).
+<!-- do you want to point to the enterprise version here^^? -->
 
-GraalVM Native Image allows the ahead-of-time compilation of a Java application into a self-contained native executable. 
-With GraalVM Native Image only the code that is required by the application at run time gets added into the native executable. 
+GraalVM Native Image technology compiles Java code ahead-of-time into a native executable file. Only the code that is 
+required at run time by the application is included in the executable file.
 
-These native executables have a number of important advantages, in that they:
+An executable file produced by Native Image has several important advantages, in that it:
 
-- Use a fraction of the resources required by the JVM, so cheaper to run
+- Uses a fraction of the resources required by the JVM, so is cheaper to run
 - Starts in milliseconds
-- Deliver peak performance immediately, no warmup
-- Can be packaged into lightweight container images for faster and more efficient deployments
-- Reduced attack surface (more on this in future labs)
+- Delivers peak performance immediately, with no warmup
+- Can be packaged into a lightweight container image for faster and more efficient deployment
+- Presents a reduced attack surface (more on this in future labs)
 
-Many of the leading microservice frameworks support ahead-of-time compilation with GraalVM Native Image, including 
+Many of the leading microservice frameworks support ahead-of-time compilation with GraalVM Native Image, including
 Micronaut, Spring, Helidon, and Quarkus.
 
-Plus, there are Maven and Gradle plugins for Native Image to make building, 
-testing, and running Java applications as native executables easy.
+In addition, there are Maven and Gradle plugins for Native Image, so you can easily build,
+test, and run Java applications as executable files.
 
-> **Note:** Oracle Cloud Infrastructure (OCI) provides GraalVM Enterprise at no additional cost.
+>Note: Oracle Cloud Infrastructure (OCI) provides GraalVM Enterprise at no additional cost.
 
 Estimated lab time: 45 minutes
 
@@ -34,94 +35,80 @@ Estimated lab time: 45 minutes
 In this lab you will perform the following tasks:
 
 - Connect to a remote host in Oracle Cloud - you will do the development on an Oracle Cloud server
+<!-- I don't think this is required^^ -->
 - Build and run a Java application, using GraalVM
 - Turn a Java application into a native executable, using GraalVM Native Image
 - Build a native executable that works with the dynamic features of Java
-- Use the Maven GraalVM plugin to build native executables with GraalVM Native Image
+- Use the Maven GraalVM plugin to build a native executable using GraalVM Native Image
 
-**NOTE:** Whenever you see the laptop icon, this is somewhere you will need to do something. Watch out for these. 
+### Lab Prerequisites
+
+Before starting this lab, you must have installed
+
+* [GraalVM Installation 22 or greater, JDK11 +](https://www.graalvm.org/downloads/) - You can use either the Community or Enterprise Edition 
+* The `native-image` tool (see [Native Images](https://www.graalvm.org/22.0/docs/getting-started/#native-images))
+* Set your `JAVA_HOME` environment variable to point to your GraalVM installation
+* Maven 3.0 or above
+
+>Note: If you see the laptop icon in the lab, this means you need to do something such as enter a command. Keep an 
+eye out for it.
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```shell
-# This is where we you will need to do something
+```
+# This is where you will need to do something
 ```
 
-## **STEP 1**: Test Out Your Development Environment
+## **STEP 1**: Build and Run the Demo Application
 
-We will use [GraalVM Enterprise 22](https://docs.oracle.com/en/graalvm/enterprise/22/docs/overview/architecture/#graalvm-enterprise-architecture), 
-as the Java environment for this lab. GraalVM is a high performance JDK distribution from Oracle built on the trusted and 
-secure Oracle Java SE.
-
-You can download GraalVM EE from this link, [Download GraalVM EE](https://www.oracle.com/downloads/graalvm-downloads.html?selected_tab=1), 
-and full installation instructions can be found at, [Installation Instructions](https://docs.oracle.com/en/graalvm/enterprise/22/docs/getting-started).
-
-You will also need to install GraalVM EE Native Image, 
-[Download GraalVM EE Native Image](https://www.oracle.com/downloads/graalvm-downloads.html?selected_tab=1), and instructions 
-can be found here, [Native Image Installation Instructions](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/). 
-
-Once you have GraalVM EE installed, with Native Image, you can check that everything works by running these commands in the terminal:
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-java -version
-``` 
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-native-image --version
-```
-
-## **STEP 2**: Build and Run a Demo Applicaton
-
-To showcase GraalVM Native Image we are going to need a demo application. For this lab you will use a command line 
-Java application that counts the number of files within the current directory and subdirectories. As a nice extra, it 
+To showcase GraalVM Native Image we are going to use a command line 
+Java application that counts the number of files within the current directory and its subdirectories. As a nice extra, it 
 also calculates their total size. 
 
 The source code for the application is available in this repository.
 
 ### Note on the Demo Application
 
-The application consists of two Java files that can be found in the `src` directory: 
+The application consists of two Java files that can be found in the _src_ directory: 
 
-* `App.java` : a wrapper for the `ListDir` application
-* `ListDir.java` : this does all the work, counting the files and summarising the output
+* _App.java_: a wrapper for the `ListDir` application
+* _ListDir.java_: this does all the work--it counts the files and summarizes the output
 
-The application can be built by hand, or using Maven profiles. Configuration for building with Maven is in 
-the `pom.xml` file. Maven Profiles are a great way to have different build configurations within a single `pom.xml` 
-file. You can find out more about Maven Proflies [here](https://maven.apache.org/guides/introduction/introduction-to-profiles.html).
+You can build the application from the command line, or by using Maven profiles. The configuration to build using Maven is provided in 
+the _pom.xml_ file. Maven Profiles are a great way to have multiple build configurations within a single _pom.xml_ 
+file. For more information about Maven profiles, see [Introduction to Build Profiles](https://maven.apache.org/guides/introduction/introduction-to-profiles.html).
 
-Several profiles will be used in this lab, each of which has a particular purpose: 
+This lab uses two profiles: 
 
-1. `native` : This builds a native executable using GraalVM Native Image
-2. `java_agent` : This builds the Java application with the tracing agent, which tracks all usages of the dynamic code
+1. `native`: builds a native executable using GraalVM Native Image
+2. `java_agent`: builds the Java application with the tracing agent, which tracks all usages of the dynamic code
    in your application and captures this information into configuration files. More on this later.
 
-You use a particular Maven profile by passing it as a parameter to `mvn`. The name of the profile is appended to 
-the `-P` flag.
+To use a particular Maven profile, pass it as a parameter to `mvn`. Append the name of the profile to 
+the `-P` option.
 
-Now that you have a basic understanding of what the application does. You can build it and run it to see how it works.
+Now that you have a basic understanding of what the application does, build it and run it to see how it works.
 
-1. Open a terminal window and change to `lab` folder, this assumes that you are in the root folder of the repository:
+1. Open a terminal window and change to _lab_ directory, this assumes that you are in the root directory of the repository:
 
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
    cd native-image/graalvm-native-image-quick-start/lab
    ```
 
-2. Build the project and run:
+2. Build the application and run it:
 
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
    mvn clean package exec:exec
    ```
-    The command above does the following:
-    1. Cleans the project to get rid of any generated or compiled artifacts.
-    2. Creates a runnable JAR file with the application within it. This JAR will be later used by Native Image.
-    3. Runs the application by running the `exec` plugin.
+    The command above performs the following steps:
+    1. Clean the project to remove existing generated or compiled artifacts.
+    2. Create a JAR file containing the application. The JAR file will be used later by Native Image.
+    3. Run the application using the `exec` plugin.
 
-    You should see the following included in the generated output (the number of files repoerted by the application may vary):
+    You should see the following output (the number of files reported by the application may vary):
 
-    ```shell
+    ```bash
     Counting directory: .
     Total: 25 files, total size = 3.8 MiB
     [INFO] ------------------------------------------------------------------------
@@ -129,23 +116,21 @@ Now that you have a basic understanding of what the application does. You can bu
     [INFO] ------------------------------------------------------------------------
     ```
 
-## **STEP 3**: Turn a Java Application into a Native Executable
+## **STEP 2**: Compile a Java Application into a Native Executable
 
-Next, you are going to build a native version of the application with GraalVM Native Image. As a quick reminder, GraalVM 
-Native Image is an ahead-of-time compilation technology that converts your Java application into a self-contained native 
+Next, build a native version of the application using GraalVM Native Image. As a quick reminder, GraalVM 
+Native Image compiles your Java application to a native 
 executable that does not require a JDK to run, is fast to start and efficient.
 
-GraalVM Native Image is pre-installed on the virtual machine.
+1. To begin, check that you have a compiled JAR file in your _target_ directory:
 
-1. To begin, check that you have a compiled uber JAR in your `target` dir:
-
-    ```shell
+    ```bash
     ls -l ./target
    ```
    
-   This is what we saw:
+   You should see something similar to:
    
-   ```shell
+   ```bash
     drwxrwxr-x 1 krf krf    4096 Mar  4 11:12 archive-tmp
     drwxrwxr-x 1 krf krf    4096 Mar  4 11:12 classes
     drwxrwxr-x 1 krf krf    4096 Mar  4 11:12 generated-sources
@@ -155,53 +140,49 @@ GraalVM Native Image is pre-installed on the virtual machine.
     drwxrwxr-x 1 krf krf    4096 Mar  4 11:12 maven-status
     ```
 
-    The file you will need is, `graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar`.
+    The file you will need is `graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar`.
 
 2. Generate a native image from the command line. You do not need to use the Maven plugin to use GraalVM Native Image, but 
-   it can help. The following should be run from the root folder of the project, `demo`:
+   it can help. The following should be run from the root directory of the project, _lab_:
 
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
     native-image -jar ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar --no-fallback -H:Class=oracle.App -H:Name=file-count
     ```
 
-    This will generate an executable file called `file-count` within the current directory.
+    This will generate an executable file named _file-count_ within the current directory.
 
-3. Run this executable as follows:
+3. Run the executable as follows:
 
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
     ./file-count
     ```
 
-4. Now try timing the application running as a native executable and using the regular `java` command:
+4. Time the application running as a native executable and as a regular Java application:
 
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
     time ./file-count
-    ```
-
-   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-   ```bash
     time java -cp ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar oracle.App
     ```
 
-    The native executable, generated by the `native-image` command, runs significantly faster than the corresponding Java 
-    application does.
+    The native executable runs significantly faster than the corresponding Java 
+    application.
 
-Let's dig a bit deeper into what you just did.
+Let's dig a little deeper.
+What are the various command-line options you passed to the `native-image` command in the step 2. 
 
-What do the various parameters you passed to the `native-image` command in the step 2 do? 
+* `-jar`: specify the location of the JAR file. You can also specify the classpath using `-cp`.
+* `--no-fallback`: do not generate a "fallback" file. A fallback file requires the JVM to run, and you do not need this.
+* `-H:Class`: specify which class contains the "entry point" method (the `main()` method).
+* `-H:Name`: specify the name of the executable file.
 
-* `-jar` : You can specify the location of Java executable Jar. You can also specify the classpath with, `-cp`
-* `--no-fallback`: Do not generate a fallback image. A fallback image requires the JVM to run, and you do not need this.
-* `-H:Class`: Tell the `native-image` builder which class is the entry point method (the `main` method).
-* `-H:Name`: Specify what the output executable file should be called.
-
-The full documentation on these can be found [here](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/BuildConfiguration/).
+For more information about these options, see [Native Image Build Configuration](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/BuildConfiguration/).
+<!-- Are you sure you want to point to the EE docs^^? -->
 
 You can also run the `native-image` tool using the GraalVM Native Image Maven plugin. Look at the provided
-`pom.xml` (Maven configuration) file in the project. You will find the following snippet that demonstrates how to build 
+_pom.xml_ (Maven configuration) file in the directory. You will find the following snippet that demonstrates how to build 
 native executable using the plugin:
 
 ```xml
@@ -233,10 +214,10 @@ native executable using the plugin:
 ```
 
 The Native Image Maven plugin does the heavy lifting of running the native image build. You can disable it 
-using the `<skip>true</skip>` tag. Note also that we can pass parameters to `native-image` through the `<buildArgs/>`
+using the `<skip>true</skip>` tag. Note also that you can pass options and parameters to `native-image` through the `<buildArgs/>`
 tags.
 
-The full documentation on the GraalVM Native Image plugin can be found [here](https://graalvm.github.io/native-build-tools/latest/maven-plugin.html).
+For more information about the GraalVM Native Image plugin, see [Maven plugin for GraalVM Native Image building](https://graalvm.github.io/native-build-tools/latest/maven-plugin.html).
 
 To build the native image using the Maven profile, run:
 
@@ -254,13 +235,11 @@ You can run the native executable as follows:
 ./target/file-count
 ```
 
-## **STEP 4**: Using Reflection - Adding a Dependency to Log4J
-
-In this step, you will build a native image that that works with the dynamic parts of Java. 
+## **STEP 3**: Using Reflection - Adding a Dependency to Log4J
 
 Say you want to add a library, or some code, to your application that relies upon reflection. A good candidate for 
-testing this type of functionality is the Log4J logging framework. It has been already added as a dependency in the 
-`pom.xml` file for the project:
+testing this type of functionality is the [Log4J logging framework](https://logging.apache.org/log4j/2.x/). It is already a dependency in the 
+_pom.xml_ file for the application:
 
 ```xml
 <dependency>
@@ -270,18 +249,18 @@ testing this type of functionality is the Log4J logging framework. It has been a
 </dependency>
 ```
 
-To make our application code use `log4j`, you will need to open the `ListDir.java` file in a code editor and uncomment
+To use `log4j`, open the _ListDir.java_ file in an editor and uncomment
 a few lines.
 
-1. Open the `ListDir.java` file using your editor of choice:
+1. Open the _ListDir.java_ file using your editor of choice.
 
-    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-    ```bash
-    vim src/main/java/oracle/ListDir.java
+2. Remove the comments from the various lines that refer to the logging code. Uncomment the following lines (and remember to save the file when you're done):
+
+   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```java
+    //import org.apache.log4j.Logger;
     ```
-
-2Go through and uncomment the various lines that add the imports and the logging code. Uncomment the following lines:
-
+   
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```java
     //final static Logger logger = Logger.getLogger(ListDir.class);
@@ -307,25 +286,23 @@ a few lines.
     */
     ```
 
-3. Once you finish uncommenting the lines that add support for `log4j`, you need to save the file. 
-
-   Now that you have added some logging to the demo application, you can check if the changes work by rebuilding and running.
+3. Check if your changes work by rebuilding the application and running it.
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     mvn clean package exec:exec
     ```
 
-   You should see the same kind of output as previously with the addition of a lot of logging.
+   You should see the same kind of output as before with the addition of logging statements.
 
-4. Next, build a native executable using the Maven profile:
+4. Next, rebuild the native executable using the Maven profile:
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     mvn clean package -Pnative
     ```
 
-5. Run the native executable you built, that now contains logging:
+5. Run the native executable that now contains logging:
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
@@ -334,62 +311,71 @@ a few lines.
    
     This generates an error:
 
-    ```java
-    Exception in thread "main" java.lang.NoClassDefFoundError
-            at org.apache.log4j.Category.class$(Category.java:118)
-            at org.apache.log4j.Category.<clinit>(Category.java:118)
-            at java.lang.Class.ensureInitialized(DynamicHub.java:552)
-            at oracle.ListDir.<clinit>(ListDir.java:75)
-            at oracle.App.main(App.java:63)
-    Caused by: java.lang.ClassNotFoundException: org.apache.log4j.Category
-            at java.lang.Class.forName(DynamicHub.java:1433)
-            at java.lang.Class.forName(DynamicHub.java:1408)
-            ... 5 more
+    ```
+    log4j:ERROR Could not instantiate class [org.apache.log4j.ConsoleAppender].
+    java.lang.ClassNotFoundException: org.apache.log4j.ConsoleAppender
+        at java.lang.Class.forName(DynamicHub.java:1338)
+        at java.lang.Class.forName(DynamicHub.java:1313)
+        at org.apache.log4j.helpers.Loader.loadClass(Loader.java:198)
+        at org.apache.log4j.helpers.OptionConverter.instantiateByClassName(OptionConverter.java:327)
+        at org.apache.log4j.helpers.OptionConverter.instantiateByKey(OptionConverter.java:124)
+        at org.apache.log4j.PropertyConfigurator.parseAppender(PropertyConfigurator.java:785)
+        at org.apache.log4j.PropertyConfigurator.parseCategory(PropertyConfigurator.java:768)
+        at org.apache.log4j.PropertyConfigurator.configureRootCategory(PropertyConfigurator.java:648)
+        at org.apache.log4j.PropertyConfigurator.doConfigure(PropertyConfigurator.java:514)
+        at org.apache.log4j.PropertyConfigurator.doConfigure(PropertyConfigurator.java:580)
+        at org.apache.log4j.helpers.OptionConverter.selectAndConfigure(OptionConverter.java:526)
+        at org.apache.log4j.LogManager.<clinit>(LogManager.java:127)
+        at org.apache.log4j.Logger.getLogger(Logger.java:117)
+        at oracle.ListDir.<clinit>(ListDir.java:75)
+        at oracle.App.main(App.java:63)
+    log4j:ERROR Could not instantiate appender named "CONSOLE".
+    log4j:WARN No appenders could be found for logger (oracle.ListDir).
+    log4j:WARN Please initialize the log4j system properly.
     ```
    What just happened here?
 
 ### Working with the Dynamic Features of Java
-This run-time exception is caused by the addition of the Log4J library, that depends on reflection. When building 
-the `native-image` tool performs an aggressive static analysis to see which classes are used within the application. 
-For anything not used, the builder will assume that it is not needed. This is called the "closed world" assumption - 
-everything that needs to be loaded must be known when building a native executable. If it is not findable by the static analysis, then
-it will not be included in the native executable.
+This error is caused by the addition of the Log4J library that relies on reflection. 
+The `native-image` tool performs an aggressive static analysis to discover which classes are used within the application: 
+for anything not used, the builder assumes that it is not needed. This is called the "closed world" assumption--everything
+that needs to be loaded must be known when building a native executable. If it is not findable by the static analysis, then
+it is not be included in the native executable.
 
-Reflection is a core feature of Java, so how can you use reflection **and** take advantage of the speed-ups offered by 
-GraalVM Native Image? You need a way to let the `native-image` tool know about any uses of reflection. 
+Reflection is a core feature of Java, so how can you use reflection **and** take advantage of the benefits provided by 
+GraalVM Native Image? You need a way to inform the `native-image` tool about any uses of reflection. This is where **configuration files** come in: 
+theThe `native-image` tool reads configuration files that specify all 
+the classes referenced via reflection.
 
-Luckily, the `native-image` tool is able to read in configuration files that specify all 
-classes that are referenced through reflection.
+You can do this by hand, but the GraalVM Java runtime comes with a Java tracing agent that can do this for you. 
+It generates JSON files that record all occurrences of reflection, JNI, proxies and access to resources that it can locate
+when your application runs.
 
-You can do this by hand, but, the GraalVM Java runtime comes with a Java tracing agent that can do this for you. 
-It generates JSON files that record all instances of reflection, JNI, proxies and resources access that it can locate
-whilst your application is running.
+>Note: It is important to exercise all the code paths in your application when running the tracing agent, in order 
+to ensure that all cases of reflection are discovered.
 
-**Note** : It is important to exercise all the code paths in your application when running the tracing agent, in order 
-to ensure that all cases of reflection are picked up by the agent.
+For more information about the tracing agent, see [Assisted Configuration with Tracing Agent](https://www.graalvm.org/reference-manual/native-image/Agent/).
 
-The complete documentation on the tracing agent can be found [here](https://www.graalvm.org/reference-manual/native-image/Agent/).
+##  **STEP 4**: Using the Tracing Agent
 
-##  **STEP 5**: Using the Tracing Agent
+Use the tracing agent to generate the reflection configuration whilst you run your application.
 
-Now you will use the tracing agent to generate the reflection configuration whilst you run your application.
-
-1. Run the application with the tracing agent:
+1. Run the application with the tracing agent, as follows:
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     java -agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image -cp ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar oracle.App
     ```
    
-    Have a look at the configuration files that the tracing agent created:
+    Inspect the configuration files created by the tracing agent:
 
-   ```shell
+   ```bash
    ls -l src/main/resources/META-INF/native-image/
    ```
 
-   We saw:
+   You should see something similar to:
    
-   ```shell
+   ```bash
    total 56
    -rw-r--r--  1 kfoster  staff     4B Dec  2 19:13 jni-config.json
    -rw-r--r--  1 kfoster  staff    86B Nov  9 20:46 native-image.properties
@@ -400,31 +386,31 @@ Now you will use the tracing agent to generate the reflection configuration whil
    -rw-r--r--  1 kfoster  staff     4B Dec  2 19:13 serialization-config.json
    ```
    
-    **Note**: The project contains a Maven profile that can do this for you. Running the following command will run the tracing agent:
+    >Note: The _pom.xml_ file contains a Maven profile that can do this for you. The following command will run the tracing agent:
    
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     mvn clean package exec:exec -Pjava_agent
     ```
 
-2. Now re-build the native executable again. This time the configuration files output by the tracing agent will be applied:
+2. Rebuild the native executable again. This time the `native-image` tool applies configuration files produced by the tracing agent:
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
     mvn package -Pnative
     ```
 
-3. Finally, execute the generated image:
+3. Finally, run the generated native executable:
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
-    time ./target/file-count
+    ./target/file-count
     ```
    
-   The native executable works and produces log messages to the output, as expected. 
+   The native executable works and prints log messages as expected. 
    
-This works because the files generated by the tracing agent have recorded the classes that are referenced by reflection. 
-The `native-image` tool now knows that they are used within the application and therefore does not exclude them from the 
+This works because the configuration files generated by the tracing agent have recorded the classes that are referenced by reflection. 
+The `native-image` tool reads the files and therefore does not exclude the classes from the 
 generated executable.
 
 ### Note on the position of the `-agentlib` param
@@ -436,10 +422,10 @@ Files placed in this location are picked up automatically by the `native-image` 
 ### Note on Configuring the Native Image Generation
 
 You can also pass parameters to the `native-image` tool using a Java properties files that typically lives 
-in `src/main/resources/META-INF/native-image/native-image.properties`. One such file has been included into the demo 
-folder in order to give you an idea of what you can do with it.
+in _src/main/resources/META-INF/native-image/native-image.properties_. One such file has been included into the _lab_ 
+directory to give you an idea of what you can do with it.
 
-## Conclusions
+## Summary
 
 In this lab, you have tried out several GraalVM Native Image features:
 
@@ -452,4 +438,4 @@ Write efficient, more secure, and instantly scalable cloud native Java applicati
 ### Learn More
 
 - Watch a presentation by the Native Image architect Christian Wimmer [GraalVM Native Image: Large-scale static analysis for Java](https://www.youtube.com/embed/rLP-8q3Cb8M)
-- [GraalVM Native Image reference documentation](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/)
+- [GraalVM Native Image reference documentation](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/)

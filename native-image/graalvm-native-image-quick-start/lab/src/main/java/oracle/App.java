@@ -44,7 +44,7 @@ package oracle;
 
 /**
  * OUr App. This will count the number of files within a directory, and sub dirs,
- * and also calculate the total size of all o fthe files.
+ * and also calculate the total size of all the files.
  */
 public final class App {
 
