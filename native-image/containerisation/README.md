@@ -140,7 +140,7 @@ Build your application: from the root directory of the repository, run the follo
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 cd native-image/containerisation/lab
-mvn clean package
+./mvnw clean package
 ```
 
 This will generate an "executable" JAR file, one that contains all of the application's dependencies as well as a correctly configured `MANIFEST`
@@ -338,7 +338,7 @@ Now run the Maven build using the profile, as below (note that the profile name 
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
-mvn package -Pnative
+./mvnw package -Pnative
 ```
 <!-- Should we tell the user to ignore the warnings here ^^? -->
 
@@ -450,7 +450,7 @@ ENTRYPOINT ["/jibber"]
 > You can just build the native executable locally and package it in the deployment container _01-native-image/Dockerfile.linux_
 > as follows:
 > ```bash
-> mvn clean package -Pnative
+> ./mvnw clean package -Pnative
 > docker build -f ./01-native-image/Dockerfile.linux --build-arg APP_FILE=target/jibber -t jibber:native.01 .
 > ```
 
@@ -543,7 +543,7 @@ build our native executable in a docker container in the next step, so if you ar
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
-mvn package -Pdistroless
+./mvnw package -Pdistroless
 ```
 
 The generated native executable is in the target directory _jibber-distroless_.
@@ -607,7 +607,7 @@ ENTRYPOINT ["/app"]
 > You can just build the native executable locally and package it in our deployment container _02-smaller-containers/Dockerfile.linux_
 > as follows:
 > ```bash
-> mvn clean package -Pdistroless
+> ./mvnw clean package -Pdistroless
 > docker build -f ./02-smaller-containers/Dockerfile.linux --build-arg APP_FILE=target/jibber-distroless -t jibber:distroless.01 .
 > ```
 

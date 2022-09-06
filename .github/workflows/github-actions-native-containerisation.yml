@@ -2,7 +2,7 @@ name: GraalVM Containerisation Pipeline
 on: [push, pull_request]
 jobs:
   build:
-    name: HelloWorld on ${{ matrix.os }}
+    name: Native Image Containerisation on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -12,13 +12,13 @@ jobs:
 
       - uses: graalvm/setup-graalvm@v1
         with:
-          version: '22.1.0'
-          java-version: '11'
+          version: '22.2.0'
+          java-version: '17'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Test Java Code
         run: |
           cd native-image/containerisation/lab/
-          mvn --no-transfer-progress clean package
-          mvn --no-transfer-progress package -Pnative
+          ./mvnw --no-transfer-progress clean package
+          ./mvnw --no-transfer-progress package -Pnative

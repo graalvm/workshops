@@ -2,7 +2,7 @@ name: GraalVM Native Image Quick Start Pipeline
 on: [push, pull_request]
 jobs:
   build:
-    name: HelloWorld on ${{ matrix.os }}
+    name: Native Image Quickstart on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -12,15 +12,15 @@ jobs:
 
       - uses: graalvm/setup-graalvm@v1
         with:
-          version: '22.1.0'
-          java-version: '11'
+          version: '22.2.0'
+          java-version: '17'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Test Java Code
         run: |
           cd native-image/graalvm-native-image-quick-start/lab/
-          mvn --no-transfer-progress clean package exec:exec
-          mvn --no-transfer-progress clean package exec:exec -Pjava_agent
-          mvn --no-transfer-progress package -Pnative
+          ./mvnw --no-transfer-progress clean package exec:exec
+          ./mvnw --no-transfer-progress clean package exec:exec -Pjava_agent
+          ./mvnw --no-transfer-progress package -Pnative
           ./target/file-count
