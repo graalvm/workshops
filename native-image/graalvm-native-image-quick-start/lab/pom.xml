@@ -14,7 +14,7 @@
         <jackson.version>2.10.1</jackson.version>
         <app.main.class>oracle.App</app.main.class>
         <!-- Define the version of the GraalVM Maven Plugin we want to use -->
-        <native.maven.plugin.version>0.9.7.1</native.maven.plugin.version>
+        <native.maven.plugin.version>0.9.13</native.maven.plugin.version>
         <!-- We can use properties to define the name of the executable we produce -->
         <exe.file.name>file-count</exe.file.name>
     </properties>

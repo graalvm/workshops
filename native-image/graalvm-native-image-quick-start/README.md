@@ -2,7 +2,7 @@
 alt="GraalVM logo"
 width="200px">
 
-#  Get Started with GraalVM Native Image
+# Get Started with GraalVM Native Image
 
 ## Introduction
 This lab is for developers who want to start building cloud native Java applications using 
@@ -99,7 +99,7 @@ Now that you have a basic understanding of what the application does, build it a
 
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
-   mvn clean package exec:exec
+   ./mvnw clean package exec:exec
    ```
     The command above performs the following steps:
     1. Clean the project to remove existing generated or compiled artifacts.
@@ -223,7 +223,7 @@ To build the native image using the Maven profile, run:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
-mvn clean package -Pnative
+./mvnw clean package -Pnative
 ```
 
 The Maven build places the native executable, `file-count`, into the `target` directory.
@@ -290,7 +290,7 @@ a few lines.
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
-    mvn clean package exec:exec
+    ./mvnw clean package exec:exec
     ```
 
    You should see the same kind of output as before with the addition of logging statements.
@@ -299,7 +299,7 @@ a few lines.
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
-    mvn clean package -Pnative
+    ./mvnw clean package -Pnative
     ```
 
 5. Run the native executable that now contains logging:
@@ -390,14 +390,14 @@ Use the tracing agent to generate the reflection configuration whilst you run yo
    
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
-    mvn clean package exec:exec -Pjava_agent
+    ./mvnw clean package exec:exec -Pjava_agent
     ```
 
 2. Rebuild the native executable again. This time the `native-image` tool applies configuration files produced by the tracing agent:
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
-    mvn package -Pnative
+    ./mvnw package -Pnative
     ```
 
 3. Finally, run the generated native executable:
