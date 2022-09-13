@@ -2,12 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.6.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>com.example</groupId>
 	<artifactId>ping</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -17,8 +19,20 @@
 	<properties>
 		<java.version>11</java.version>
 		<repackage.classifier/>
+		<!--
+			Version of the Spring Native Tooling
+		-->
 		<spring-native.version>0.12.1</spring-native.version>
+		<!--
+			Version of the Native Image Maven Build Tools
+		-->
 		<native.maven.plugin.version>0.9.13</native.maven.plugin.version>
+		<!--
+			Used to flag that we should skip building a native image. We set to true
+			as a default to turn off native image building and the change to true when
+			building with the native profile
+		-->
+		<skip.native.build>true</skip.native.build>
 	</properties>
 
 	<dependencies>
@@ -31,16 +45,19 @@
 			<artifactId>spring-native</artifactId>
 			<version>${spring-native.version}</version>
 		</dependency>
-
-
-		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
-
+		<!-- TODO : can we loose this? -->
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
+			<version>1.8.2</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -49,6 +66,49 @@
 	</dependencies>
 
 	<build>
+		<pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+			<plugins>
+				<!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+				<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.1.0</version>
+				</plugin>
+				<!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+				<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				</plugin>
+				<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				</plugin>
+				<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.1</version>
+				</plugin>
+				<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
+				</plugin>
+				<plugin>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.5.2</version>
+				</plugin>
+				<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.2</version>
+				</plugin>
+				<!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+				<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.7.1</version>
+				</plugin>
+				<plugin>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.0.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -63,6 +123,10 @@
 					<classifier>exec</classifier>
 				</configuration>
 			</plugin>
+			<!--
+				Spring Native Tooling. Required to build a native binary
+				from a Spring Boot application using Native Image
+			-->
 			<plugin>
 				<groupId>org.springframework.experimental</groupId>
 				<artifactId>spring-aot-maven-plugin</artifactId>
@@ -82,6 +146,53 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!--
+				Build a Jar that can be run
+			-->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<classifier>exec</classifier>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.graalvm.buildtools</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+				<version>${native.maven.plugin.version}</version>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<id>build-native</id>
+						<goals>
+							<goal>build</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+					<execution>
+						<id>test-native</id>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<phase>test</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<imageName>ping</imageName>
+					<skipNativeBuild>true</skipNativeBuild>
+					<buildArgs>
+						<buildArg>-H:+ReportExceptionStackTraces</buildArg>
+					</buildArgs>
+				</configuration>
+			</plugin>
+								<plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <classifier>exec</classifier>
+                        </configuration>
+                    </plugin>
+
 		</plugins>
 	</build>
 	<repositories>
@@ -111,49 +222,9 @@
 			<properties>
 				<repackage.classifier>exec</repackage.classifier>
 				<native-buildtools.version>${native.maven.plugin.version}</native-buildtools.version>
+				<skip.native.build>true</skip.native.build>
 			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>org.junit.platform</groupId>
-					<artifactId>junit-platform-launcher</artifactId>
-					<scope>test</scope>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.graalvm.buildtools</groupId>
-						<artifactId>native-maven-plugin</artifactId>
-						<version>${native-buildtools.version}</version>
-						<extensions>true</extensions>
-						<executions>
-							<execution>
-								<id>build-native</id>
-								<phase>package</phase>
-								<goals>
-									<goal>build</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<imageName>jibber</imageName>
-							<buildArgs>
-								<buildArg>-H:+ReportExceptionStackTraces</buildArg>
-							</buildArgs>
-                        </configuration>
-					</plugin>
-					<plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <classifier>exec</classifier>
-                        </configuration>
-                    </plugin>
-				</plugins>
-			</build>
 		</profile>
-
 	</profiles>
-
 
 </project>

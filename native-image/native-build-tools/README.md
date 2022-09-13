@@ -61,6 +61,31 @@ eye out for it.
 ## **STEP 1**: Build and Run the Demo Application
 
 
+Java
+Look at and build the demo application
+Look at the test suite (single test)
+
+Native
+Then build a Native Image (seen it before, but good recap) -DskipTests
+Run the tests mvn -Pnative test
+Run both : mvn -Pnative package
+
+Tracing Agent
+Run with the tracing agent
+
+Passing in Parameters to Native IMage
+Build a mostly static binary
+turn on quick build mode
+verbose mode
+
+
+
+
+
+
+
+
+
 ## Summary
 
 In this lab, you have tried out several GraalVM Native Image features:
