@@ -1,25 +1,40 @@
 package com.example.demo;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.lang.reflect.Method;
 
+class StringReverser {
+    static String reverse(String input) {
+        return new StringBuilder(input).reverse().toString();
+    }
+}
 
-@SpringBootApplication
-@RestController
+class StringCapitalizer {
+    static String capitalize(String input) {
+        return input.toUpperCase();
+    }
+}
+
 public class DemoApplication {
+    public static void main(String[] args) throws ReflectiveOperationException, IllegalArgumentException {
+        DemoApplication demo = new DemoApplication();
+        System.out.println(demo.doSomething(args));
+    }
 
-	public static void main(String[] args) {
-	    SpringApplication.run(DemoApplication.class, args);
-	}
+    public DemoApplication() {
+    }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/ping")
-    ResponseEntity<Pong> ping() {
-        Pong pong = new Pong("hi!");
-	    return ResponseEntity.ok(pong);
+    public String doSomething(String[] args) throws ReflectiveOperationException, IllegalArgumentException {
+        if (args == null || args.length != 3) {
+            //
+            throw new IllegalArgumentException("Usage : Class Method InputString");
+        }
+        String className = args[0];
+        String methodName = args[1];
+        String input = args[2];
+
+        Class<?> clazz = Class.forName(className);
+        Method method = clazz.getDeclaredMethod(methodName, String.class);
+        String result = (String)method.invoke(null, input);
+        return result;
     }
 }

@@ -3,26 +3,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-
 	<groupId>com.example</groupId>
-	<artifactId>ping</artifactId>
+	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ping</name>
-	<description>Demo project for Spring Boot</description>
+	<name>demo</name>
+	<description>Demo project for Native Build Tools</description>
 
 	<properties>
 		<java.version>11</java.version>
-		<repackage.classifier/>
-		<!--
-			Version of the Spring Native Tooling
-		-->
-		<spring-native.version>0.12.1</spring-native.version>
+        <app.main.class>com.example.demo.DemoApplication</app.main.class>
 		<!--
 			Version of the Native Image Maven Build Tools
 		-->
@@ -37,30 +26,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.experimental</groupId>
-			<artifactId>spring-native</artifactId>
-			<version>${spring-native.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.2</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- TODO : can we loose this? -->
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-launcher</artifactId>
-			<version>1.8.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.8.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -76,7 +44,7 @@
 				<!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
 				<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
+				<version>3.2.0</version>
 				</plugin>
 				<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -84,7 +52,7 @@
 				</plugin>
 				<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.1</version>
+				<version>3.0.0-M7</version>
 				</plugin>
 				<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -110,120 +78,136 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-					<classifier>exec</classifier>
-				</configuration>
-			</plugin>
-			<!--
-				Spring Native Tooling. Required to build a native binary
-				from a Spring Boot application using Native Image
-			-->
-			<plugin>
-				<groupId>org.springframework.experimental</groupId>
-				<artifactId>spring-aot-maven-plugin</artifactId>
-				<version>${spring-native.version}</version>
+            <!-- Compiler -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+            <!-- Package -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                        <archive>
+                        <manifest>
+                            <!-- Specify the main class -->
+                            <mainClass>${app.main.class}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Run the app, quick way of testing the Java version -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
 				<executions>
 					<execution>
-						<id>test-generate</id>
+						<id>java</id>
 						<goals>
-							<goal>test-generate</goal>
+							<goal>exec</goal>
 						</goals>
+						<configuration>
+							<executable>java</executable>
+							<workingDirectory>${project.build.directory}</workingDirectory>
+							<arguments>
+								<argument>-classpath</argument>
+								<classpath/>
+								<argument>${app.main.class}</argument>
+								<argument>com.example.demo.StringReverser</argument>
+								<argument>reverse</argument>
+								<argument>java</argument>
+							</arguments>
+						</configuration>
 					</execution>
-					<execution>
-						<id>generate</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<!--
-				Build a Jar that can be run
-			-->
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<classifier>exec</classifier>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.graalvm.buildtools</groupId>
-				<artifactId>native-maven-plugin</artifactId>
-				<version>${native.maven.plugin.version}</version>
-				<extensions>true</extensions>
-				<executions>
-					<execution>
-						<id>build-native</id>
-						<goals>
-							<goal>build</goal>
-						</goals>
-						<phase>package</phase>
-					</execution>
-					<execution>
-						<id>test-native</id>
-						<goals>
-							<goal>test</goal>
-						</goals>
-						<phase>test</phase>
-					</execution>
-				</executions>
-				<configuration>
-					<imageName>ping</imageName>
-					<skipNativeBuild>true</skipNativeBuild>
-					<buildArgs>
-						<buildArg>-H:+ReportExceptionStackTraces</buildArg>
-					</buildArgs>
-				</configuration>
-			</plugin>
-								<plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <classifier>exec</classifier>
-                        </configuration>
-                    </plugin>
-
+			    </executions>
+            </plugin>
 		</plugins>
 	</build>
-	<repositories>
-		<repository>
-			<id>spring-releases</id>
-			<name>Spring Releases</name>
-			<url>https://repo.spring.io/release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>spring-releases</id>
-			<name>Spring Releases</name>
-			<url>https://repo.spring.io/release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 
 	<profiles>
 		<profile>
 			<id>native</id>
-			<properties>
-				<repackage.classifier>exec</repackage.classifier>
-				<native-buildtools.version>${native.maven.plugin.version}</native-buildtools.version>
-				<skip.native.build>true</skip.native.build>
-			</properties>
+            <build>
+                <plugins>
+					<!--
+						Copy over any tracing agent config generated when we the tracing agent against the tests
+					-->
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.0.2</version>
+						<executions>
+							<execution>
+								<id>copy-agent-config</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<!-- The tracing agent config needs to be placed here to be picked up
+											by the native-image tool -->
+									<outputDirectory>src/main/resources/META-INF/native-image</outputDirectory>
+									<resources>
+										<resource>
+											<!-- The location that the native build tools will write the tracing agent
+													config out to -->
+											<directory>${basedir}/target/native/agent-output/test</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.graalvm.buildtools</groupId>
+						<artifactId>native-maven-plugin</artifactId>
+						<version>${native.maven.plugin.version}</version>
+						<extensions>true</extensions>
+						<executions>
+						<execution>
+							<id>build-native</id>
+							<goals>
+							<goal>build</goal>
+							</goals>
+							<phase>package</phase>
+						</execution>
+						<execution>
+							<id>test-native</id>
+							<goals>
+							<goal>test</goal>
+							</goals>
+							<phase>test</phase>
+						</execution>
+						</executions>
+						<configuration>
+							<agent>
+								<options><!-- shared options -->
+									<option>experimental-class-loader-support</option>
+								</options>
+								<options name="test"><!-- test options -->
+									<option>access-filter-file=${basedir}/src/test/resources/access-filter.json</option>
+								</options>
+							</agent>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 

@@ -1,0 +1,13 @@
+{
+	"rules": [
+		{
+			"excludeClasses": "org.apache.maven.surefire.**"
+		},
+        {
+            "excludeClasses": "java.security.**"
+        },
+        {
+            "excludeClasses": "org.junit.platform.**"
+        }
+	]
+}
