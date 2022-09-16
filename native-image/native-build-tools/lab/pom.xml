@@ -178,32 +178,48 @@
 						<groupId>org.graalvm.buildtools</groupId>
 						<artifactId>native-maven-plugin</artifactId>
 						<version>${native.maven.plugin.version}</version>
+						<!-- Enables Junit Test Support -->
 						<extensions>true</extensions>
 						<executions>
-						<execution>
-							<id>build-native</id>
-							<goals>
-							<goal>build</goal>
-							</goals>
-							<phase>package</phase>
-						</execution>
-						<execution>
-							<id>test-native</id>
-							<goals>
-							<goal>test</goal>
-							</goals>
-							<phase>test</phase>
-						</execution>
+							<!-- Binds to the package phase - causes the native binary to be created
+								when we run, mvn -Pnative package -->
+							<execution>
+								<id>build-native</id>
+								<goals>
+									<goal>build</goal>
+								</goals>
+								<phase>package</phase>
+							</execution>
+							<!-- Binds to the test phase - causes the JUnit tests to be run as native code
+								when we run, mvn -Pnative test -->
+							<execution>
+								<id>test-native</id>
+								<goals>
+									<goal>test</goal>
+								</goals>
+								<phase>test</phase>
+							</execution>
 						</executions>
+	                    <!-- This section is used to configure how the native image build happens -->
 						<configuration>
+							<!-- Tracing Agent Configuration -->
 							<agent>
-								<options><!-- shared options -->
+								<!-- shared options -->
+								<options>
 									<option>experimental-class-loader-support</option>
 								</options>
-								<options name="test"><!-- test options -->
+								<!-- test options -->
+								<options name="test">
+									<!-- Uses an access filter when running the Tracing Agent -->
 									<option>access-filter-file=${basedir}/src/test/resources/access-filter.json</option>
 								</options>
 							</agent>
+							<!--
+							<imageName>DeMo</imageName>
+							<buildArgs>
+								<buildArg>-Ob</buildArg>
+							</buildArgs>
+							-->
 						</configuration>
 					</plugin>
 				</plugins>
