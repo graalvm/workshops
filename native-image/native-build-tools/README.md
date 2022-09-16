@@ -330,7 +330,8 @@ This will run you unit tests, but activating the profile that contains the Graal
 * `-DskipNativeBuild=true` : This stops the plugin from building a native binary of our application. Again we don't want to do that just yet
 * `-Dagent=true` : This will cause the Tracing Agent to be "injected" into the application as it runs the unit tests
 
-We can view the newly created Tracing Agent configuration. 
+We can view the newly created Tracing Agent configuration.
+ 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 ls -l target/native/agent-output/test
@@ -534,7 +535,7 @@ In this lab, you have tried out several GraalVM Native Image features:
 
 Write efficient, more secure, and instantly scalable cloud native Java applications with GraalVM Native Image!
 
-NOTE: The GraalVM Native BUild Tools are also available for `gradle`!
+NOTE: The GraalVM Native Build Tools are also available for `gradle`!
 
 ### Learn More
 
