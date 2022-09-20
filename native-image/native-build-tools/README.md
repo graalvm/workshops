@@ -458,7 +458,7 @@ This is why the location of the generated Tracing Agent configuration is not pas
 
 ## **STEP 6** Building the Native Binary
 
-So far we have seen that by passing in the `-Dagent=true` parameter we can inject the Tracing Agent into our unit tests. We have seen that we can generate a native binary of the unit tests, which we can run independently outside of Maven. Now it is time to build a native binary of our application itself! This time we will run the ame command as before, but we will remove the parameter that was switching off the build of the native binary of the application, `-DskipNativeBuild=true`.
+So far we have seen that by passing in the `-Dagent=true` parameter we can inject the Tracing Agent into our unit tests. We have seen that we can generate a native binary of the unit tests, which we can run independently outside of Maven. Now it is time to build a native binary of our application itself! This time we will run the same command as before, but we will remove the parameter that was switching off the build of the native binary of the application, `-DskipNativeBuild=true`.
 
 Run the following form the shell (note that this time we have also removed the `-DskipNativeBuild=true` parameter):
 
@@ -467,7 +467,7 @@ Run the following form the shell (note that this time we have also removed the `
 ./mvnw -Pnative -Dagent=true package
 ```
 
-This builds our native binary and the generated binary can be found in the `target` directory. The default name for the generated native binary will be the name of the `artefactID` define din the Maven, `pom.xml`, file. Let's run the binary:
+This builds our native binary and the generated binary can be found in the `target` directory. The default name for the generated native binary will be the name of the `artifactID` defined in the Maven `pom.xml` file. Let's run the binary:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
