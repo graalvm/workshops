@@ -55,15 +55,15 @@ eye out for it.
 
 ## **STEP 1**: Build, Test and Run the Demo Application
 
-For this lab we will be using a small, but hopefully interesting demo application. The demo application makes use of reflection so it will be a good use case to show case a number of features of the GraalVM Native Image Build Tools. This is the same application as is used in the workshop on Reflection, so if you have done that workshop already, please feel free to skip over the description that follows of how the code works.
+For this lab we will be using a small, but hopefully interesting, demo application. The demo application makes use of reflection so it will be a good example to showcase a number of features of the GraalVM Native Image Build Tools. This is the same application as is used in the [workshop on Reflection](../reflection/README.md), so if you have done that workshop already, please feel free to skip over the description that follows of how the code works.
 
 > ### The Closed World Assumption & Using Reflection with Native Image
 
 > When you use the `native-image` tool (that comes with GraalVM) to create a native executable from an application, 
 > it relies on knowing , at build time, about everything that can be referenced within the application code. 
 > This is what is known as the "closed world" assumption. That is, everything that needs to be included in the output native
-> binary must be known at the time of building the native executable. If it is not findable by static analysis, or not 
-> explicitly detailed in the configuration supplied to the `native-image` tool it will not be included in the executable file.
+> binary must be known at the time of building the native executable. Anything that is not found by static analysis, or not 
+> explicitly specified in the configuration supplied to the `native-image` tool, will not be included in the executable file.
 >
 > You can learn more about the configuration files that are used [here](https://www.graalvm.org/22.1/reference-manual/native-image/Reflection/#manual-configuration)
 
@@ -73,7 +73,7 @@ Before you continue, let's review the build/run workflow for applications that a
 2. Use the `native-image` tool, compile those Java byte code classes into a native executable
 3. Run the native executable
 
-Let's take a quick recap of what happens during step two before we look at how we can use the GRaalVM Native Build Tools for Maven to integrate this step into our Maven workflow.
+Let's take a quick recap of what happens during step two before we look at how we can use the GraalVM Native Build Tools for Maven to integrate this step into our Maven workflow.
 
 Firstly, the `native-image` tool analyses your Java application to determine which classes are reachable. But, for classes that the `native-image` build tool can't determine are required, but may be required at runtime (as in our example below), then we need to add configuration to detail this - [How to Add Manual Configuration Files for Reflection](https://www.graalvm.org/22.1/reference-manual/native-image/Reflection/#manual-configuration).
 
@@ -136,7 +136,7 @@ In your terminal, run the following command. This will test the demo application
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 cd native-image/native-build-tools/lab
-./mvn test
+./mvnw test
 ```
 
 You should see something like the following, which is telling us that 5 unit test ran successfully:
@@ -180,6 +180,9 @@ We can run the fat jar, which also has a `META-INF/MANIFEST.MF` that defines the
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 java -jar ./target/demo-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.example.demo.StringReverser reverse Java
+```
+It should produce the following output:
+```
 avaJ
 ```
 
@@ -264,9 +267,9 @@ The important things to note here are:
 
 ### Note : Using the GraalVM Native Image Build Tools to Generate Tracing Configuration
 
-Because our application uses reflection we need to be aware that we have to tell the `native-image` tool about this, so that it knows to include the reflectively accessed classes into the output binary. Recall that GraalVM Native Image uses a Closed World assumption, see earlier. If you make use of reflection, which happens at runtime, you need to supply configuration files to the `native-image` build tool that detail this. Typically these are generated using the [Tracing Agent](https://www.graalvm.org/22.1/reference-manual/native-image/Agent/).
+Because our application uses reflection we need to be aware that we have to tell the `native-image` tool about this, so that it knows to include the classes accessed by reflection in the output binary. Recall that GraalVM Native Image uses a "closed world" assumption, as discussed earlier. If you make use of reflection, which happens at runtime, you need to supply configuration files to the `native-image` build tool that detail this. Typically these are generated using the [Tracing Agent](https://www.graalvm.org/22.1/reference-manual/native-image/Agent/).
 
-> To find out more about the Closed World assumption, which GraalVM Native Image uses to ensure only the code that is actually used is included in the output binary, please take a look at the [GraalVM Native Image Quick-start Workshop](native-image/graalvm-native-image-quick-start/README.md).
+> To find out more about the Closed World assumption, which GraalVM Native Image uses to ensure only the code that is actually used is included in the output binary, please take a look at the [GraalVM Native Image Quick-start Workshop](../graalvm-native-image-quick-start/README.md).
 
 As our demo application makes use of reflection we can make use of the tracing agent to generate this configuration for us. 
 
@@ -438,16 +441,24 @@ And, if we look within the `target` directory we can see the native binary that 
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
-target/native-tests
+./target/native-tests
 ```
 
 ### Note on How The Native Unit Tests Locate the Tracing Agent Configuration
 
-When we build the native binary version of the unit tests the tracing configuration is passed into the build through the use of a parameter (`-H:ConfigurationFileDirectories`, which specifies where the configuration files should be looked for). This is done by the GraalVM Native Build Tools plugin automatically. When we build the native version of the application, this flag is not passed in by the tooling. There are good reasons for this. We might not want to include the reflection config generated. We might have already done the tracing, we might have written our own as well, but for this example we would like to use the tracing configuration files generated by running the tests, as we have good test coverage. This is why the location of the generated Tracing Agent configuration is not passed in automatically when building a native binary version of the application.
+When we build the native binary version of the unit tests the location of the tracing configuration is passed to the build via the `-H:ConfigurationFileDirectories` parameter.
+
+This is done by the GraalVM Native Build Tools plugin automatically.
+
+When we build the native version of the application, this parameter is not passed in by the tooling.
+
+There are good reasons for this. We might not want to include the reflection config generated. We might have already done the tracing, we might have written our own as well, but for this example we would like to use the tracing configuration files generated by running the tests, as we have good test coverage.
+
+This is why the location of the generated Tracing Agent configuration is not passed in automatically when building a native binary version of the application.
 
 ## **STEP 6** Building the Native Binary
 
-So far we have seen that by passing in the `-Dagent=true` parameter we can inject the Tracing Agent into our unit tests. We have seen that we can generate a native binary of the unit tests, which we can run independently outside of Maven. Now it is time to build a native binary of our application itself! This time we will run the ame command as before, but we will remove the parameter that was switching off the build of the native binary of the application, `-DskipNativeBuild=true`.
+So far we have seen that by passing in the `-Dagent=true` parameter we can inject the Tracing Agent into our unit tests. We have seen that we can generate a native binary of the unit tests, which we can run independently outside of Maven. Now it is time to build a native binary of our application itself! This time we will run the same command as before, but we will remove the parameter that was switching off the build of the native binary of the application, `-DskipNativeBuild=true`.
 
 Run the following form the shell (note that this time we have also removed the `-DskipNativeBuild=true` parameter):
 
@@ -456,7 +467,7 @@ Run the following form the shell (note that this time we have also removed the `
 ./mvnw -Pnative -Dagent=true package
 ```
 
-This builds our native binary and the generated binary can be found in the `target` directory. The default name for the generated native binary will be the name of the `artefactID` define din the Maven, `pom.xml`, file. Let's run the binary:
+This builds our native binary and the generated binary can be found in the `target` directory. The default name for the generated native binary will be the name of the `artifactID` defined in the Maven `pom.xml` file. Let's run the binary:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
