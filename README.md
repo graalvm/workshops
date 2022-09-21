@@ -40,6 +40,7 @@ Begin with these labs and tutorials if you want to learn about GraalVM Native Im
 
 1. [GraalVM Native Image Quick Start](native-image/graalvm-native-image-quick-start/)
 2. [Understanding Reflection with GraalVM Native Image](native-image/reflection/)
+3. [GraalVM Native Image Build Tools, for Maven](native-image/native-build-tools/)
 
 ### Next Steps
 
