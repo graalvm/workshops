@@ -17,8 +17,8 @@
 		-->
 		<native.maven.plugin.version>0.9.13</native.maven.plugin.version>
 		<!--
-			Used to flag that we should skip building a native image. We set to true
-			as a default to turn off native image building and the change to true when
+			Used to flag that we should skip building a native executable. We set to true
+			as a default to turn off native image executable and the change to true when
 			building with the native profile
 		-->
 		<skip.native.build>true</skip.native.build>
@@ -147,7 +147,7 @@
             <build>
                 <plugins>
 					<!--
-						Copy over any tracing agent config generated when we the tracing agent against the tests
+						Copy over any tracing agent config generated when we run the tracing agent against the tests
 					-->
 					<plugin>
 						<artifactId>maven-resources-plugin</artifactId>
