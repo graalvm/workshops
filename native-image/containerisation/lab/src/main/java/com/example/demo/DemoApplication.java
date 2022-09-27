@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
 @RestController
@@ -22,6 +22,15 @@ public class DemoApplication {
 
     @RequestMapping(method = RequestMethod.GET, path = "/jibber")
     ResponseEntity<String> jibber() {
-	    return ResponseEntity.ok(j.generate());
+        WebClient client = WebClient.create("https://httpbin.org");
+        ResponseEntity<String> response = client.get()
+          .retrieve()
+          .toEntity(String.class)
+          .block();
+
+        String headers = response.getHeaders().toString();
+
+        String nfv = j.generate();
+	    return ResponseEntity.ok(headers);
     }
 }

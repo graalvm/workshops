@@ -49,6 +49,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.rednoise</groupId>
 			<artifactId>rita</artifactId>
 			<version>2.4.501</version>
