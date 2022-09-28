@@ -1,5 +1,10 @@
 # Base Image
-FROM container-registry.oracle.com/java/openjdk:17-oraclelinux8
+FROM container-registry.oracle.com/java/openjdk:17-oraclelinux8 AS base
+
+FROM container-registry.oracle.com/os/oraclelinux:8-slim AS runner
+ENV JAVA_HOME="/usr/java/jdk-17"
+ENV PATH="$JAVA_HOME/bin:$PATH"
+COPY --from=base /usr/java/jdk-17/ $JAVA_HOME
 
 # Pass in the JAR file as an argument to the image build
 ARG JAR_FILE
