@@ -12,7 +12,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.http.MediaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 @SpringBootApplication
@@ -40,6 +42,24 @@ public class DemoApplication {
           .block();
 
 	    return ResponseEntity.ok(response.getBody());
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/read")
+    ResponseEntity<String> read() {
+        var response = getWebClient().get()
+          .retrieve()
+          .toEntity(HashMap.class)
+          .block();
+
+        StringBuilder sb = new StringBuilder();
+        var hm = response.getBody();
+        ArrayList<LinkedHashMap> items = (ArrayList<LinkedHashMap>) hm.get("items");
+        for (LinkedHashMap item : items) {
+            sb.append(item.get("value"))
+              .append("\n");
+        }
+
+	    return ResponseEntity.ok(sb.toString());
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/mint")
