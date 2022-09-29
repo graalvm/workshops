@@ -4,18 +4,20 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.http.MediaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.UUID;
+import org.springframework.util.LinkedMultiValueMap;
 
 @SpringBootApplication
 @RestController
@@ -23,7 +25,6 @@ public class DemoApplication {
 
     @Autowired
     Jabberwocky j;
-    private String put;
 
 	public static void main(String[] args) {
 	    SpringApplication.run(DemoApplication.class, args);
@@ -64,13 +65,20 @@ public class DemoApplication {
 
     @RequestMapping(method = RequestMethod.GET, path = "/mint")
     ResponseEntity<String> mint() {
-	    HashMap<String, String> items = new HashMap<>();
-	    items.put("id", UUID.randomUUID().toString());
-	    items.put("verse", j.generate());
-	    try {
-	            String jsonString = new ObjectMapper()
-		          .writeValueAsString(items);
-	            return ResponseEntity.ok(items.get("id"));
+        MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
+        bodyValues.add("id", UUID.randomUUID().toString());
+        bodyValues.add("verse", j.generate());
+        var response = getWebClient()
+          .post()
+          .contentType(MediaType.APPLICATION_JSON)
+          .accept(MediaType.APPLICATION_JSON)
+          .body(BodyInserters.fromFormData(bodyValues))
+          .retrieve()
+          .bodyToMono(String.class)
+          .block();
+
+        try {
+	        return ResponseEntity.ok(response);
 	    }
 	    catch (Exception e) {
 		    return ResponseEntity
@@ -131,6 +139,5 @@ public class DemoApplication {
     private String getOrdsBaseUrl() {
         return getEnvMap().get("ORDS_BASE_URL");
     }
-
 
 }
