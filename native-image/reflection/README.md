@@ -73,7 +73,7 @@ Firstly, the `native-image` tool analyses your Java application to determine whi
 this in more detail shortly.
 
 Secondly, the tool initializes reachable classes that are safe to be initialized 
-(see [Automatic Initialization of Safe Classes](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/ClassInitialization/)).
+(see [Automatic Initialization of Safe Classes](https://www.graalvm.org/22.1/reference-manual/native-image/ClassInitialization/#automatic-initialization-of-safe-classes)).
 The class data of the initialized classes is loaded into the heap which is then saved into the executable 
 (into the text section of the binary output file). This is one of the features of the GraalVM `native-image` tool that 
 enables such fast-starting applications.
