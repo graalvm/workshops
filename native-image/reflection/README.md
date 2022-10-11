@@ -246,8 +246,8 @@ mkdir -p META-INF/native-image
 Then, run the application with the tracing agent enabled. In your terminal run the following command:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+>Note: the tracing agent option must come before the classpath and jar options on the command line
 ```bash
-# Note: the tracing agent option must come before the classpath and jar options on the command line
 java -agentlib:native-image-agent=config-output-dir=META-INF/native-image ReflectionExample StringReverser reverse "hello"
 ```
 
