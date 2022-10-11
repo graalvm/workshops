@@ -25,3 +25,6 @@ hs_err_pid*
 #
 **/.idea
 **/target
+
+# tenancy specific configuration files (including sensitive information)
+native-image/non-fungible-verses/lab/setenv.sh

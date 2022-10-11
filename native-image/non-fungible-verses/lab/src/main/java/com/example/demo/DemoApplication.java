@@ -1,23 +1,20 @@
 package com.example.demo;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.http.MediaType;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
-import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
 @RestController
@@ -65,14 +62,13 @@ public class DemoApplication {
 
     @RequestMapping(method = RequestMethod.GET, path = "/mint")
     ResponseEntity<String> mint() {
-        MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
-        bodyValues.add("id", UUID.randomUUID().toString());
-        bodyValues.add("verse", j.generate());
+        HashMap<String, String> bodyValues = new HashMap<>();
+        bodyValues.put("id", UUID.randomUUID().toString());
+        bodyValues.put("verse", j.generate());
         var response = getWebClient()
           .post()
           .contentType(MediaType.APPLICATION_JSON)
-          .accept(MediaType.APPLICATION_JSON)
-          .body(BodyInserters.fromFormData(bodyValues))
+          .body(BodyInserters.fromValue(bodyValues))
           .retrieve()
           .bodyToMono(String.class)
           .block();
@@ -122,7 +118,6 @@ public class DemoApplication {
         if (webClient == null) {
             webClient = WebClient.builder()
               .baseUrl(getCollectionUrl())
-              .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
               .defaultHeaders(header -> header.setBasicAuth(getOrdsUser(), getOrdsPassword()))
               .build();
         }
