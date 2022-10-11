@@ -289,6 +289,7 @@ And run the executable file to check that it now works as expected:
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 ./reflectionexample StringReverser reverse "hello"
+./reflectionexample StringCapitalizer capitalize "hello"
 ```
 
 It does!
