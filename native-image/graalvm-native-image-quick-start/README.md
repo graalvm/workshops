@@ -368,7 +368,9 @@ Use the tracing agent to generate the reflection configuration whilst you run yo
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
-    java -agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image -cp ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar oracle.App
+    java -agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image \
+      -cp ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar \
+      oracle.App
     ```
    
     Inspect the configuration files created by the tracing agent:
@@ -426,7 +428,7 @@ Files placed in this location are picked up automatically by the `native-image` 
 ### Note on Configuring the Native Image Generation
 
 You can also pass parameters to the `native-image` tool using a Java properties files that typically lives 
-in _src/main/resources/META-INF/native-image/native-image.properties_. One such file has been included into the _lab_ 
+in `src/main/resources/META-INF/native-image/native-image.properties`. One such file has been included into the _lab_ 
 directory to give you an idea of what you can do with it.
 
 ## Summary
