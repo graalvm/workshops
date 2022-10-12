@@ -16,14 +16,13 @@ public class DBRestClient {
     private Map<String, String> envMap;
     private WebClient webClient;
 
-    // ResponseEntity<HashMap> readItems() {
-    HashMap readItems() {
+    HashMap<String, Object> readItems() {
         var response = getWebClient().get()
           .retrieve()
           .bodyToMono(HashMap.class)
           //.toEntity(HashMap.class)
           .block();
-        return response;
+        return (HashMap<String, Object>) response;
     }
 
     String writeItem(HashMap<String, String> itemData) {

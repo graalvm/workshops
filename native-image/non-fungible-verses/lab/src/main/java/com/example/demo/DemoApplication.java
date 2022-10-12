@@ -34,9 +34,11 @@ public class DemoApplication {
         var hm = dbRest.readItems(); //.getBody();
         ArrayList<Map> items = (ArrayList<Map>) hm.get("items");
         for (Map item : items) {
-            System.out.println(item.keySet().toString());
+            var links = (ArrayList<Map>) item.get("links");
+            sb.append("\n");
+            sb.append(links.get(0).get("href"));
+            sb.append("\n");
             sb.append(item.get("value"))
-            .append(item.get("links").getClass())
             .append("\n");
         }
 
