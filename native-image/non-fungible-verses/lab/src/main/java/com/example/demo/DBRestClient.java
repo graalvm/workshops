@@ -20,7 +20,6 @@ public class DBRestClient {
         var response = getWebClient().get()
           .retrieve()
           .bodyToMono(HashMap.class)
-          //.toEntity(HashMap.class)
           .block();
         return (HashMap<String, Object>) response;
     }

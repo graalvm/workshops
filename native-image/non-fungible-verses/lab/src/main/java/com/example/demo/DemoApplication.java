@@ -27,6 +27,11 @@ public class DemoApplication {
 	    SpringApplication.run(DemoApplication.class, args);
 	}
 
+    @RequestMapping(method = RequestMethod.GET, path = "/jibber")
+    ResponseEntity<String> jibber() {
+        return ResponseEntity.ok(j.generate());
+    }
+
     @RequestMapping(method = RequestMethod.GET, path = "/read")
     ResponseEntity<String> read() {
 
