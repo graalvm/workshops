@@ -16,29 +16,33 @@ public class DBRestClient {
     private Map<String, String> envMap;
     private WebClient webClient;
 
-    HashMap<String, Object> readItems() {
-        var response = getWebClient().get()
+    Map<String, Object> readItems() {
+        return readItems(new HashMap<>());
+    }
+
+    Map<String, Object> readItems(Map<String, Object> queryMap) {
+        var response = getWebClient()
+          .post()
+          .uri(uriBuilder -> uriBuilder.queryParam("action","query").build())
+          .contentType(MediaType.APPLICATION_JSON)
+          .body(BodyInserters.fromValue(queryMap))
           .retrieve()
           .bodyToMono(HashMap.class)
           .block();
-        return (HashMap<String, Object>) response;
+        return (Map<String, Object>) response;
     }
 
-    String writeItem(HashMap<String, String> itemData) {
+    String writeItem(Map<String, Object> itemData) {
         var response = getWebClient()
           .post()
           .contentType(MediaType.APPLICATION_JSON)
           .body(BodyInserters.fromValue(itemData))
           .retrieve()
-          .bodyToMono(HashMap.class)
+          .bodyToMono(Map.class)
           .block();
         
         var items = (ArrayList<Map>) response.get("items");
-        String itemUrl = new StringBuilder(this.getCollectionUrl())
-          .append('/')
-          .append(items.get(0).get("id"))
-          .toString();
-        return itemUrl;
+        return items.get(0).get("id").toString();
     }
 
     private String getOrdsUser() {
