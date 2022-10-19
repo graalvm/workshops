@@ -460,6 +460,9 @@ This builds our native binary--which can be found in the _target_ directory. The
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 ./target/demo com.example.demo.StringReverser reverse hello
+```
+
+```bash
 olleh
 ```
 
