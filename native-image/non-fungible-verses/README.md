@@ -2,12 +2,38 @@
 alt="GraalVM logo"
 width="200px">
 
-# Understanding Containerisation and GraalVM Native Image
+# Non Fungible Verses
+(Because Web3.0 needs procedurally generated poetry as well as monkey GIFs)
 
 ## Introduction
 
-This lab takes you step by step through the process of how to containerise 
-[GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/) applications.
+The aims of this lab are:
+1. To introduce you to some of the capabilities of the Oracle Cloud Infrastructure (OCI) always free tier.
+2. To show you how using [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/) can help you make the most of your free tier allocation.
+
+### OCI "Always Free" Tier
+
+[Oracle Cloud Infrastructure (OCI)](https://www.oracle.com/cloud/) is Oracle's next-generation cloud, designed to run any application, faster and more securely, for less.
+
+OCI has a free tier, which is composed of two parts:
+- A free trial of a broad set of OCI services limited by time (30 day) or consumption ($300) limit.
+- A set of ["always free"](https://www.oracle.com/cloud/free/#always-free) services that you can use for an unlimited time.
+
+This lab is going to use two services from the "always free" tier to develop and deploy an application.
+
+We're going to
+- develop and run the application on an ARM-based [Ampere A1 Compute](https://www.oracle.com/cloud/compute/arm/ VM.
+- use the OCI [Autonomous JSON Database](https://www.oracle.com/autonomous-database/autonomous-json-database/) service to store the application's data.
+
+The application is built using Spring Boot.  It procedually generates "poems", and stores them as JSON documents in the autonomous JSON database (AJD).  We can make each generated poems publicly accessible via a unique URL.
+
+For a full Web3 experince you can let people pay for the privilege of recording a transaction on a blockchain that includes the URL of a "poem", thereby "owning" the "digital collectible" non - fungible verse (NFV).
+
+Implementation of a full blown "Web3" solution with blockchain is beyond the scope of this lab.
+
+Further information on [Web3](https://web3isgoinggreat.com/) may be found here.
+
+### GraalVM Native image
 
 GraalVM Native Image technology compiles Java code ahead-of-time into a native executable file. Only the code that is 
 required at run time by the application is included in the executable file.
