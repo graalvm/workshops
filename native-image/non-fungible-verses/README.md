@@ -60,7 +60,11 @@ Estimated lab time: 90 minutes
 
 In this lab you will:
 
-- Add a basic Spring Boot application to a Docker Image and run it
+- Provision an OCI free tier VM
+- Clone the poetry application
+- Provision an Autonomous JSON Database instance
+- Read to and write from the database using with the application 
+- Add the Spring Boot application to a Docker Image and run it
 - Build a native executable from this application, using GraalVM Native Image 
 - Add the native executable to a Docker Image
 - Shrink your application docker image size with GraalVM Native Image and Distroless containers 
@@ -74,13 +78,76 @@ In this lab you will:
 
 ## Lab Prerequisites
 
-Before starting this lab, you must have installed:
+Before starting this lab, you must have:
 
-* [GraalVM Installation 22 or greater, JDK11 +](https://www.graalvm.org/downloads/) - You can use either the Community or Enterprise Edition 
-* The `native-image` tool (see [Native Images](https://www.graalvm.org/22.0/docs/getting-started/#native-images))
-* Set your `JAVA_HOME` environment variable to point to your GraalVM installation
-* Maven 3.0 or above
-* [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/getting-started/installation)
+* An OCI tenancy - a trial tenancy will do, as the lab can be run using always free services.
+
+## Provisioning OCI services
+
+1. Log into your OCI tenancy
+2. Select or create a compartment to work in (working in the root compartment is a bad idea)
+
+### Compute VM
+
+Create a compute instance
+- shape: VM.Standard.A1.Flex
+- OCPU: 2
+- RAM: 12GB
+- Image: vanilla Oracle Linux 8
+
+Once the VM is up and running, SSH into it and carry out the following steps:
+* Install [GraalVM version 22 or greater, JDK17+](https://www.graalvm.org/downloads/) - You can use either the Community or Enterprise Edition 
+* Install the `native-image` tool (see [Native Images](https://www.graalvm.org/22.0/docs/getting-started/#native-images))
+* In your `.bashrc` file, set `JAVA_HOME` to point to your GraalVM installation
+* stop & disable the firewall of the VM (normally this isn't recommended)
+* In the security list for the VCN Subnet of your VM, add an ingress rule for TCP traffic on port 8080.
+
+### Autonomous JSON Database
+
+Create an AJD instance with the default settings.
+
+Note your admin password.
+
+Once the database is up and running, click on "Database Actions".
+
+In the "Database Actions" tab, click on "Restful Services and SODA".  Copy the base URL.  In the `.bashrc` file of the compute VM, set `$ORDS_BASE_URL` to the base URL.
+
+Click on "Database Users".  Create a new user.  In the `.bashrc` file of the compute VM, set `$ORDS_USER` and `$ORDS_PASSWORD` to the username and password of the user you have created.
+
+Log out of "Database Actions", and back in as the user you just created.
+
+Click on JSON.  Create a collection.  In the `.bashrc` file of the compute VM, set `$JSON_COLLECTION_NAME` to the name of the collection you just created.
+
+The `.bashrc` file of the compute VM should look something like:
+
+```
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
+then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+export JAVA_HOME="/opt/graalvm-ee-java17-22.3.0"
+export PATH=$JAVA_HOME/bin:$PATH
+export ORDS_BASE_URL="https://nglqexb3yfmaqv5-web3db.adb.us-phoenix-1.oraclecloudapps.com/ords/"
+export ORDS_USER="cyberpoet"
+export ORDS_PASSWORD="September_2022"
+export JSON_COLLECTION_NAME="poetry"
+```
+
+In your SSH terminal(s) run `source .bashrc`.
 
 ## **STEP 1**: Meet Our Sample Java Application
 
@@ -93,15 +160,24 @@ The application is built on top of the [Spring Boot](https://spring.io/projects/
 of the [Spring Native Project](https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/) (a Spring incubator
 to generate native executables using GraalVM Native Image).
 
-The application has two classes:
+The application has three classes:
 
 * `com.example.demo.DemoApplication`: The main Spring Boot class that also defines the HTTP endpoint `/jibber`
 * `com.example.demo.Jabberwocky`: A utility class that implements the logic of the application
+* `com.example.demo.DBRestClient`: A class that reads from and writes to the Autonomous JSON Database.
 
-So, what does the application do? If you call the endpoint `/jibber`, it will return some nonsense verse generated
+So, what does the application do?
+
+If you call the endpoint `/jibber`, it will return some nonsense verse generated
 in the style of the [Jabberwocky poem](https://en.wikipedia.org/wiki/Jabberwocky) by Lewis Carroll. The program achieves this
 by using a [Markov Chain](https://en.wikipedia.org/wiki/Markov_chain) to produce a model of the original poem (this is essentially a statistical model). 
 This model is then used to generate new text.
+
+If you call the endpoint `/mint` it will write a new "poem" to the collection in the AJD.
+
+If you call the endpoint `/read` it will retrieve all the poems from the collection.
+
+If you call the endpoint `/read/{uuid}` it will retrieve the poem with the specified `uuid` if it exists.
 
 In the example application, you provide it with the text of the poem, then generate a model of the text which the application then uses to 
 generate a new text that is similar to the original text. We are using the [RiTa](https://rednoise.org/rita/) library to do the heavy lifting for us--it supports building and using Markov Chains.
