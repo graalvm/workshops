@@ -354,7 +354,7 @@ when your application runs.
 >Note: It is important to exercise all the code paths in your application when running the tracing agent, in order 
 to ensure that all cases of reflection are discovered.
 
-For more information about the tracing agent, see [Assisted Configuration with Tracing Agent](https://www.graalvm.org/reference-manual/native-image/Agent/).
+For more information about the tracing agent, see [Assisted Configuration with Tracing Agent](https://www.graalvm.org/reference-manual/native-image/metadata/AutomaticMetadataCollection/#tracing-agent).
 
 ##  **STEP 4**: Using the Tracing Agent
 
