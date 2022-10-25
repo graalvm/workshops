@@ -112,7 +112,7 @@ Once the database is up and running, click *Database Actions*.
 
 In the *Database Actions* tab, click *Restful Services and SODA*.  Copy the base URL.  In the _.bashrc_ file of the compute VM, set `$ORDS_BASE_URL` to the base URL.
 
-Click on "Database Users".  Create a new user.  In the `.bashrc` file of the compute VM, set `$ORDS_USER` and `$ORDS_PASSWORD` to the username and password of the user you have created.
+Click *Database Users*.  Create a new user.  In the _.bashrc_ file of the compute VM, set `$ORDS_USER` and `$ORDS_PASSWORD` to the username and password of the user you have created.
 
 Log out of "Database Actions", and back in as the user you just created.
 
