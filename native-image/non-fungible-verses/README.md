@@ -116,7 +116,7 @@ Click *Database Users*.  Create a new user.  In the _.bashrc_ file of the comput
 
 Log out of *Database Actions*, and then log in as the user you just created.
 
-Click on JSON.  Create a collection.  In the `.bashrc` file of the compute VM, set `$JSON_COLLECTION_NAME` to the name of the collection you just created.
+Click *JSON*.  Create a collection.  In the _.bashrc_ file of the compute VM, set `$JSON_COLLECTION_NAME` to the name of the collection you just created.
 
 The contents of the _.bashrc_ file of the compute VM should look something like:
 
