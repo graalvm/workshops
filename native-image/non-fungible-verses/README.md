@@ -21,7 +21,7 @@ OCI has a free tier, which is composed of two parts:
 
 This lab uses two services from the "always free" tier to develop and deploy an application.
 
-We're going to
+You're going to
 - develop and run the application on an ARM-based [Ampere A1 Compute](https://www.oracle.com/cloud/compute/arm/ VM.
 - use the OCI [Autonomous JSON Database](https://www.oracle.com/autonomous-database/autonomous-json-database/) service to store the application's data.
 
