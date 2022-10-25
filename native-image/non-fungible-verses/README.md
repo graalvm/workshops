@@ -274,7 +274,7 @@ fg
 ## **STEP 2**: Containerising Your Java Application with Docker
 
 Containerising your Java application as a Docker container is straightforward. You can build
-a new Docker image based on one that contains a JDK distribution. So, for this tutorial you will use a container
+a new Docker image based on one that contains a JDK distribution. So, for this lab you will use a container
 that already contains a JDK, `ghcr.io/graalvm/native-image:ol8-java17-22`--this is an Oracle Linux 8 
 image with the GraalVM CE JDK 17 already installed.
 
