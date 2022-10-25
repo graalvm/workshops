@@ -124,8 +124,8 @@ executable that does not require a JDK to run, is fast to start and efficient.
 
 1. To begin, check that you have a compiled JAR file in your _target_ directory:
 
-    ```bash
-    ls -l ./target
+   ```bash
+   ls -l ./target
    ```
    
    You should see something similar to:
@@ -147,8 +147,12 @@ executable that does not require a JDK to run, is fast to start and efficient.
 
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
-    native-image -jar ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar --no-fallback -H:Class=oracle.App -H:Name=file-count
-    ```
+   native-image \
+     -jar ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar \
+     --no-fallback \
+     -H:Class=oracle.App \
+     -H:Name=file-count
+   ```
 
     This will generate an executable file named _file-count_ within the current directory.
 
@@ -156,16 +160,16 @@ executable that does not require a JDK to run, is fast to start and efficient.
 
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
-    ./file-count
-    ```
+   ./file-count
+   ```
 
 4. Time the application running as a native executable and as a regular Java application:
 
    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
    ```bash
-    time ./file-count
-    time java -cp ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar oracle.App
-    ```
+   time ./file-count
+   time java -cp ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar oracle.App
+   ```
 
     The native executable runs significantly faster than the corresponding Java 
     application.
@@ -354,7 +358,7 @@ when your application runs.
 >Note: It is important to exercise all the code paths in your application when running the tracing agent, in order 
 to ensure that all cases of reflection are discovered.
 
-For more information about the tracing agent, see [Assisted Configuration with Tracing Agent](https://www.graalvm.org/reference-manual/native-image/Agent/).
+For more information about the tracing agent, see [Assisted Configuration with Tracing Agent](https://www.graalvm.org/22.0/reference-manual/native-image/Agent/).
 
 ##  **STEP 4**: Using the Tracing Agent
 
@@ -364,7 +368,9 @@ Use the tracing agent to generate the reflection configuration whilst you run yo
 
     ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash
-    java -agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image -cp ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar oracle.App
+    java -agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image \
+      -cp ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar \
+      oracle.App
     ```
    
     Inspect the configuration files created by the tracing agent:
@@ -422,7 +428,7 @@ Files placed in this location are picked up automatically by the `native-image` 
 ### Note on Configuring the Native Image Generation
 
 You can also pass parameters to the `native-image` tool using a Java properties files that typically lives 
-in _src/main/resources/META-INF/native-image/native-image.properties_. One such file has been included into the _lab_ 
+in `src/main/resources/META-INF/native-image/native-image.properties`. One such file has been included into the _lab_ 
 directory to give you an idea of what you can do with it.
 
 ## Summary
