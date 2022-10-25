@@ -325,7 +325,7 @@ You should see your newly built image listed. Run this image as follows:
 docker run --rm -d --name "jibber-jdk" -p 8080:8080 jibber:jdk.01
 ```
 
-Then call the endpoint as you did before--you may need to wait for a few seconds before doing to allow the
+Then call the endpoint as you did before--you may need to wait for a few seconds before doing so to allow the
 application to startup. If you get the following error, `curl: (52) Empty reply from server`, this is because the
 application is still starting. Wait a few seconds and try again:
 
