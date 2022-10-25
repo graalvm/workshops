@@ -27,7 +27,7 @@ You're going to
 
 The application is built using Spring Boot.  It procedurally generates "poems", and stores them as JSON documents in the autonomous JSON database (AJD).  Each generated poem is publicly accessible via a unique URL.
 
-For a full Web3 experince you can let people pay for the privilege of recording a transaction on a blockchain that includes the URL of a "poem", thereby "owning" the "digital collectible" non - fungible verse (NFV).
+For a full Web3 experince you can let people pay for the privilege of recording a transaction on a blockchain that includes the URL of a "poem", thereby "owning" the "digital collectible" non-fungible verse (NFV).
 
 Implementation of a full blown "Web3" solution with blockchain is beyond the scope of this lab.
 
