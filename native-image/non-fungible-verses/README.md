@@ -185,7 +185,7 @@ generate a new text that is similar to the original text. The [RiTa](https://red
 Below are two snippets from the utility class `com.example.demo.Jabberwocky` that builds the model. The `text` variable
 contains the text of the original poem. This snippet shows how to create the model and then populate it with `text`.
 This is called from the class constructor
-and we define the class to be a [Singleton](https://docs.spring.io/spring-framework/docs/3.0.0.M3/reference/html/ch04s04.html#beans-factory-scopes-singleton)
+and the class is defined to be a [Singleton](https://docs.spring.io/spring-framework/docs/3.0.0.M3/reference/html/ch04s04.html#beans-factory-scopes-singleton)
 (so only one instance of the class ever gets created).
 
 ```java
