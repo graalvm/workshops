@@ -179,7 +179,7 @@ If you call the endpoint `/read` it will retrieve all the poems from the collect
 
 If you call the endpoint `/read/{uuid}` it will retrieve the poem with the specified `uuid` if it exists.
 
-In the example application, you provide it with the text of the poem, then generate a model of the text which the application then uses to 
+In the example application, you provide it with the text of the poem, then it generates a model of the text which the application then uses to 
 generate a new text that is similar to the original text. We are using the [RiTa](https://rednoise.org/rita/) library to do the heavy lifting for us--it supports building and using Markov Chains.
 
 Below are two snippets from the utility class `com.example.demo.Jabberwocky` that builds the model. The `text` variable
