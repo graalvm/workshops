@@ -771,7 +771,7 @@ the Java container, of almost 600MB.
 
 ## Summary
 
-We hope you have enjoyed this lab and learnt a few things along the way. We've looked at how you can containerise
+We hope you have enjoyed this lab and learnt a few things along the way. You've seen how to containerise
 a Java application. Then we've seen how to convert that Java application into a native executable, which starts significantly 
 faster than the Java application. You then containerised the native executable and have seen how the size of the 
 Docker image, with your native executable in it, is much smaller than the Java Docker Image.
