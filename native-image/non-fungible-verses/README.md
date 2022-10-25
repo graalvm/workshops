@@ -114,7 +114,7 @@ In the *Database Actions* tab, click *Restful Services and SODA*.  Copy the base
 
 Click *Database Users*.  Create a new user.  In the _.bashrc_ file of the compute VM, set `$ORDS_USER` and `$ORDS_PASSWORD` to the username and password of the user you have created.
 
-Log out of "Database Actions", and back in as the user you just created.
+Log out of *Database Actions*, and then log in as the user you just created.
 
 Click on JSON.  Create a collection.  In the `.bashrc` file of the compute VM, set `$JSON_COLLECTION_NAME` to the name of the collection you just created.
 
