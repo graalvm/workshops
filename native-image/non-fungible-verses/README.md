@@ -152,7 +152,7 @@ In your SSH terminal(s) run `source .bashrc`.
 ## **STEP 1**: Meet Our Sample Java Application
 
 This lab describes how to build a simple application with a very minimal REST-based API.  
-containerise the application, using Docker. First, take a quick look at your simple application.
+The lab then shows how to containerise the application, using Docker. First, take a quick look at your simple application.
 
 We have provided the source code and build scripts for this application in _native-image/containerisation/lab/src_.
 
