@@ -25,7 +25,7 @@ You're going to
 - develop and run the application on an ARM-based [Ampere A1 Compute](https://www.oracle.com/cloud/compute/arm/ VM.
 - use the OCI [Autonomous JSON Database](https://www.oracle.com/autonomous-database/autonomous-json-database/) service to store the application's data.
 
-The application is built using Spring Boot.  It procedually generates "poems", and stores them as JSON documents in the autonomous JSON database (AJD).  We can make each generated poems publicly accessible via a unique URL.
+The application is built using Spring Boot.  It procedurally generates "poems", and stores them as JSON documents in the autonomous JSON database (AJD).  Each generated poem is publicly accessible via a unique URL.
 
 For a full Web3 experince you can let people pay for the privilege of recording a transaction on a blockchain that includes the URL of a "poem", thereby "owning" the "digital collectible" non - fungible verse (NFV).
 
