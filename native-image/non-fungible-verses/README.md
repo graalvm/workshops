@@ -19,7 +19,7 @@ OCI has a free tier, which is composed of two parts:
 - A free trial of a broad set of OCI services limited by time (30 days) or consumption ($300) limit.
 - A set of ["always free"](https://www.oracle.com/cloud/free/#always-free) services that you can use for an unlimited time.
 
-This lab is going to use two services from the "always free" tier to develop and deploy an application.
+This lab uses two services from the "always free" tier to develop and deploy an application.
 
 We're going to
 - develop and run the application on an ARM-based [Ampere A1 Compute](https://www.oracle.com/cloud/compute/arm/ VM.
