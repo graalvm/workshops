@@ -375,7 +375,7 @@ So far you have:
 2. Successfully containerised it
 
 Now you can create a native executable from your application using GraalVM Native Image. The native executable
-is going to two interesting characteristics, namely:
+is going to exhibit two interesting characteristics, namely:
 
 1. It is going to start really fast
 2. It will use fewer resources than its corresponding Java application
