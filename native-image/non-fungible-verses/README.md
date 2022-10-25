@@ -777,7 +777,7 @@ faster than the Java application. You then containerised the native executable a
 Docker image, with your native executable in it, is much smaller than the Java Docker Image.
 
 Finally, you saw how to build a mostly-statically linked native executable with Native Image. These can be
-packaged in smaller containers, such as Distroless and these let us shrink the size of the Docker Image even further.
+packaged in smaller containers, such as Distroless and these let you shrink the size of the Docker Image even further.
 
 ### Learn More
 
