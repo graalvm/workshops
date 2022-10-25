@@ -31,7 +31,7 @@ For a full Web3 experince you can let people pay for the privilege of recording 
 
 Implementation of a full blown "Web3" solution with blockchain is beyond the scope of this lab.
 
-Further information on [Web3](https://web3isgoinggreat.com/) may be found here.
+For further information, see [Web3](https://web3isgoinggreat.com/).
 
 ### GraalVM Native image
 
