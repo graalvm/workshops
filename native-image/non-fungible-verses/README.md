@@ -108,7 +108,7 @@ Create an AJD instance with the default settings.
 
 Note your admin password.
 
-Once the database is up and running, click on "Database Actions".
+Once the database is up and running, click *Database Actions*.
 
 In the "Database Actions" tab, click on "Restful Services and SODA".  Copy the base URL.  In the `.bashrc` file of the compute VM, set `$ORDS_BASE_URL` to the base URL.
 
