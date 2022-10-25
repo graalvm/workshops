@@ -154,7 +154,7 @@ In your SSH terminal(s) run `source .bashrc`.
 This lab describes how to build a simple application with a very minimal REST-based API.  
 The lab then shows how to containerise the application, using Docker. First, take a quick look at your simple application.
 
-We have provided the source code and build scripts for this application in _native-image/containerisation/lab/src_.
+The source code and build scripts for this application are in _native-image/containerisation/lab/src_.
 
 The application is built on top of the [Spring Boot](https://spring.io/projects/spring-boot) framework and makes use
 of the [Spring Native Project](https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/) (a Spring incubator
