@@ -97,7 +97,7 @@ Create a compute instance
 
 Once the VM is up and running, SSH into it and carry out the following steps:
 * Install [GraalVM version 22 or greater, JDK17+](https://www.graalvm.org/downloads/) - You can use either the Community or Enterprise Edition 
-* Install the `native-image` tool (see [Native Images](https://www.graalvm.org/22.0/docs/getting-started/#native-images))
+* Install the `native-image` tool (see [Native Image](https://www.graalvm.org/22.0/docs/getting-started/#native-image))
 * In your `.bashrc` file, set `JAVA_HOME` to point to your GraalVM installation
 * stop & disable the firewall of the VM (normally this isn't recommended)
 * In the security list for the VCN Subnet of your VM, add an ingress rule for TCP traffic on port 8080.
