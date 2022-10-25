@@ -16,7 +16,7 @@ The aims of this lab are:
 [Oracle Cloud Infrastructure (OCI)](https://www.oracle.com/cloud/) is Oracle's next-generation cloud, designed to run any application, faster and more securely, for less.
 
 OCI has a free tier, which is composed of two parts:
-- A free trial of a broad set of OCI services limited by time (30 day) or consumption ($300) limit.
+- A free trial of a broad set of OCI services limited by time (30 days) or consumption ($300) limit.
 - A set of ["always free"](https://www.oracle.com/cloud/free/#always-free) services that you can use for an unlimited time.
 
 This lab is going to use two services from the "always free" tier to develop and deploy an application.
