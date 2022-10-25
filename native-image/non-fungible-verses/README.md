@@ -183,7 +183,7 @@ In the example application, you provide it with the text of the poem, then it ge
 generate a new text that is similar to the original text. The [RiTa](https://rednoise.org/rita/) library performs the heavy lifting for us--it supports building and using Markov Chains.
 
 Below are two snippets from the utility class `com.example.demo.Jabberwocky` that builds the model. The `text` variable
-contains the text of the original poem. This snippet shows how we create the model and then populate it with `text`.
+contains the text of the original poem. This snippet shows how to create the model and then populate it with `text`.
 This is called from the class constructor
 and we define the class to be a [Singleton](https://docs.spring.io/spring-framework/docs/3.0.0.M3/reference/html/ch04s04.html#beans-factory-scopes-singleton)
 (so only one instance of the class ever gets created).
