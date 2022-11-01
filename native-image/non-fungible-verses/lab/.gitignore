@@ -1,3 +1,5 @@
+target
+
 # Compiled class file
 *.class
 
@@ -22,9 +24,6 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-#
-**/.idea
-**/target
-
-# tenancy specific configuration files (including sensitive information)
-native-image/non-fungible-verses/lab/setenv.sh
+# Exclude data files
+*_99.txt
+*_95.txt
