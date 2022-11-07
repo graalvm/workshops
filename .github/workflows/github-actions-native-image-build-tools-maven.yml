@@ -1,0 +1,27 @@
+name: GraalVM Native Image Build Tools Maven Pipeline
+on:
+  push:
+    paths:
+      - 'native-image/graalvm-native-image-build-tools/lab/**'
+      - '.github/workflows/github-actions-native-image-build-tools-maven.yml'
+jobs:
+  build:
+    name: Native Image Build Tools Maven on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: 'latest'
+          java-version: '17'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Test Java Code
+        run: |
+          cd native-image/graalvm-native-image-build-tools/lab/
+          ./mvnw --no-transfer-progress clean test
