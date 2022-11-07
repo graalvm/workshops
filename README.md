@@ -2,22 +2,22 @@
     alt="GraalVM logo" 
     width="200px">
 
-# ![Lab Flask](./images/lab-flask.png) GraalVM Labs and Tutorials
+# ![Lab Flask](./images/lab-flask.png) GraalVM Workshops and Tutorials
 
-This repository contains several labs and tutorials
-that will guide you through getting started with and using GraalVM. It also provides labs that deep-dive into particular 
-topics, such as how reflection and Class loading works within GraalVM Native Image.
+This repository contains several workshops and tutorials that will guide you through getting started with 
+and using GraalVM. It also provides workshops that deep-dive into particular topics, such as how reflection 
+and Class loading works within GraalVM Native Image.
 
-This repository is continually updated with new labs and tutorials added frequently. Please check in regularly
+This repository is continually updated with new workshops and tutorials added frequently. Please check in regularly
 to keep up to date.
 
 To find out more about GraalVM, take a look at our website: [GraalVM](https://www.graalvm.org).
 
-[Oracle's Luna Labs - Search GraalVM](https://luna.oracle.com), to try these labs out online. Search for **graalvm**
+[Oracle's Luna Labs - Search GraalVM](https://luna.oracle.com), to try these workshops out online. Search for **graalvm**
 
-## Using the Labs and Tutorials
+## Using the Workshops and Tutorials
 
-All of the labs are written so that they will work on your own device (laptop, server). Each lab begins with
+All of the workshops are written so that they will work on your own device (laptop, server). Each workshop begins with
 prerequisites that you need to have installed. Please make sure you read these.
 
 First, clone this repository:
@@ -26,19 +26,19 @@ First, clone this repository:
 git clone https://github.com/graalvm/workshops.git
 ```
 
-Open a terminal, change directory to the lab / tutorial you want to try out. Read the `README.md` file.
-The labs are organized into directories as follows:
+Open a terminal, change directory to the workshop / tutorial you want to try out. Read the `README.md` file.
+The workshops are organized into directories as follows:
 
-* `native-image` : This collects all labs related to GraalVM Native Image
+* `native-image` : This collects all workshops related to GraalVM Native Image
 
 We will add more directories as we add more content including ones relating to `native-image`, `polyglot` and using
 GraalVM as a Java runtime.
 
-## Native Image Labs and Tutorials
+## Native Image Workshops and Tutorials
 
 ### First Steps
 
-Begin with these labs and tutorials if you want to learn about GraalVM Native Image:
+Begin with these workshops and tutorials if you want to learn about GraalVM Native Image:
 
 #### ![Lab Flask](./images/lab-flask.png) [GraalVM Native Image Quick Start](native-image/graalvm-native-image-quick-start/)
 <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-quickstart.yml">
