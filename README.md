@@ -2,7 +2,7 @@
     alt="GraalVM logo" 
     width="200px">
 
-# ![Lab Flask](./images/lab-flask.png) GraalVM Labs and Tutorials ![Lab Flask](./images/lab-flask.png)
+# ![Lab Flask](./images/lab-flask.png) GraalVM Labs and Tutorials
 
 This repository contains several labs and tutorials
 that will guide you through getting started with and using GraalVM. It also provides labs that deep-dive into particular 
@@ -50,7 +50,7 @@ Begin with these labs and tutorials if you want to learn about GraalVM Native Im
 >  - Build a native executable that works with the dynamic features of Java
 >  - Use the Maven GraalVM plugin to build a native executable using GraalVM Native Image2.
 
-#### [Understanding Reflection with GraalVM Native Image](native-image/reflection/)
+#### ![Lab Flask](./images/lab-flask.png) [Understanding Reflection with GraalVM Native Image](native-image/reflection/)
 <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-reflection.yml">
    <img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-reflection.yml/badge.svg" /></a>
 
@@ -58,7 +58,7 @@ Begin with these labs and tutorials if you want to learn about GraalVM Native Im
 >  - Use the `native-image` tool to compile a Java application that uses reflection into a native executable file
 >  - Learn about the assisted configuration tooling provided by GraalVM
 
-#### [GraalVM Native Image Build Tools, for Maven](native-image/native-build-tools/)
+#### ![Lab Flask](./images/lab-flask.png) [GraalVM Native Image Build Tools, for Maven](native-image/native-build-tools/)
 
 >  Workshop where you will:
 >  - Learn about the _GraalVM Native Image Build Tools for Maven_
@@ -67,7 +67,7 @@ Begin with these labs and tutorials if you want to learn about GraalVM Native Im
 
 With a good grounding in the basics of GraalVM Native Image, try out these:
 
-#### [GraalVM Native Image, Spring & Containers](native-image/containerisation/)
+#### ![Lab Flask](./images/lab-flask.png) [GraalVM Native Image, Spring & Containers](native-image/containerisation/)
 <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-containerisation.yml">
    <img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-containerisation.yml/badge.svg" /></a>
 
@@ -77,7 +77,7 @@ With a good grounding in the basics of GraalVM Native Image, try out these:
 >  - Add the native executable to a Docker Image
 >  - Shrink your application docker image size with GraalVM Native Image and Distroless containers 
 
-#### [Non-Fungible Verses](native-image/non-fungible-verses/)
+#### ![Lab Flask](./images/lab-flask.png) [Non-Fungible Verses](native-image/non-fungible-verses/)
 
 >  Workshop that builds upon the containerisation workshop. It adds:  
 > 
