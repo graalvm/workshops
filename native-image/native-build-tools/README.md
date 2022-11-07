@@ -82,7 +82,7 @@ Our demo application will need this and we will see how the GraalVM Native Image
 ## **STEP 2**:  An Example Using Reflection
 
 Imagine you have the following file, _ReflectionExample.java_ (a copy of this can be found in the directory, 
-_native-image/reflection/lab_):
+_native-image/native-build-tools/lab_):
 
 ```java
 package com.example.demo;
@@ -129,7 +129,9 @@ public class DemoApplication {
 
 The above code will reflectively load one of the classes, `StringReverser`, `StringCapitalizer`, and use their methods to convert a String argument. 
 
-We have also provided unit tests that cover the various test cases and these can be found in _src/test/java/DemoApplicationTests.java_. To help you understand how the application works, take a look at the unit tests defined in this file. These unit tests will be important later when you generate the extra configuration needed to build a working native binary.
+We have also provided unit tests that cover the various test cases and these can be found in _src/test/java/DemoApplicationTests.java_. 
+To help you understand how the application works, take a look at the unit tests defined in this file. These unit tests 
+will be important later when you generate the extra configuration needed to build a working native binary.
 
 In your terminal, run the following command. This will test the demo application by running the bundled unit tests:
 
