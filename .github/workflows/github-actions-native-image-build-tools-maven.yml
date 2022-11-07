@@ -23,5 +23,5 @@ jobs:
 
       - name: Build and Test Java Code
         run: |
-          cd native-image/graalvm-native-image-build-tools/lab/
+          cd native-image/native-build-tools/lab/
           ./mvnw --no-transfer-progress clean test
