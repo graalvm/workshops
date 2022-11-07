@@ -38,7 +38,8 @@ GraalVM as a Java runtime.
 
 Begin with these labs and tutorials if you want to learn about GraalVM Native Image:
 
-1. [GraalVM Native Image Quick Start](native-image/graalvm-native-image-quick-start/)
+1. [GraalVM Native Image Quick Start](native-image/graalvm-native-image-quick-start/) &nbsp; <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-quickstart.yml">
+<img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-quickstart.yml/badge.svg" /></a>
 
 >  Workshop to gently introduce you to working with GraalVM Native Image. In the workshop you will:
 >  - Build and run a Java application, using GraalVM
@@ -46,7 +47,8 @@ Begin with these labs and tutorials if you want to learn about GraalVM Native Im
 >  - Build a native executable that works with the dynamic features of Java
 >  - Use the Maven GraalVM plugin to build a native executable using GraalVM Native Image2.
 
-2. [Understanding Reflection with GraalVM Native Image](native-image/reflection/)
+2. [Understanding Reflection with GraalVM Native Image](native-image/reflection/) &nbsp; <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-reflection.yml">
+   <img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-reflection.yml/badge.svg" /></a>
 
 >  Workshop that will help you understand how reflection works within GraalVM Native Image. In the workshop you will: 
 >  - Use the `native-image` tool to compile a Java application that uses reflection into a native executable file
@@ -57,12 +59,12 @@ Begin with these labs and tutorials if you want to learn about GraalVM Native Im
 >  Workshop where you will:
 >  - Learn about the _GraalVM Native Image Build Tools for Maven_
 
-
 ### Next Steps
 
 With a good grounding in the basics of GraalVM Native Image, try out these:
 
-1. [GraalVM Native Image, Spring & Containers](native-image/containerisation/)
+1. [GraalVM Native Image, Spring & Containers](native-image/containerisation/) &nbsp; <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-containerisation.yml">
+   <img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-containerisation.yml/badge.svg" /></a>
 
 >  Workshop introducing using GraalVM Native Image in containers. In this workshop you will:
 >  - Add a basic Spring Boot application to a Docker Image and run it
