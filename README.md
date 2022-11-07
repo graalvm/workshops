@@ -2,7 +2,7 @@
     alt="GraalVM logo" 
     width="200px">
 
-# GraalVM Labs and Tutorials
+# ![Lab Flask](./images/lab-flask.png) GraalVM Labs and Tutorials ![Lab Flask](./images/lab-flask.png)
 
 This repository contains several labs and tutorials
 that will guide you through getting started with and using GraalVM. It also provides labs that deep-dive into particular 
@@ -40,7 +40,7 @@ GraalVM as a Java runtime.
 
 Begin with these labs and tutorials if you want to learn about GraalVM Native Image:
 
-#### [GraalVM Native Image Quick Start](native-image/graalvm-native-image-quick-start/)
+#### ![Lab Flask](./images/lab-flask.png) [GraalVM Native Image Quick Start](native-image/graalvm-native-image-quick-start/)
 <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-quickstart.yml">
 <img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-quickstart.yml/badge.svg" /></a>
 
