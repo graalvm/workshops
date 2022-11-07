@@ -1,5 +1,9 @@
 name: GraalVM Native Reflection Tutorial Pipeline
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'native-image/graalvm-native-image-reflection/lab/**'
+      - '.github/workflows/github-actions-native-image-reflection.yml'
 jobs:
   build:
     name: HelloWorld on ${{ matrix.os }}
@@ -12,7 +16,7 @@ jobs:
 
       - uses: graalvm/setup-graalvm@v1
         with:
-          version: '22.1.0'
+          version: 'latest'
           java-version: '17'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}

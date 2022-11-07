@@ -3,7 +3,7 @@ on:
   push:
     paths:
       - 'native-image/containerisation/lab/**'
-      - '.github/workflows/github-actions-native-containerisation.yml'
+      - '.github/workflows/github-actions-native-image-containerisation.yml'
 permissions:
   contents: read
 jobs:

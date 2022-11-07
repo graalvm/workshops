@@ -63,8 +63,8 @@ Begin with these labs and tutorials if you want to learn about GraalVM Native Im
 
 With a good grounding in the basics of GraalVM Native Image, try out these:
 
-1. [GraalVM Native Image, Spring & Containers](native-image/containerisation/) &nbsp; <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-containerisation.yml">
-   <img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-containerisation.yml/badge.svg" /></a>
+1. [GraalVM Native Image, Spring & Containers](native-image/containerisation/) &nbsp; <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-containerisation.yml">
+   <img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-containerisation.yml/badge.svg" /></a>
 
 >  Workshop introducing using GraalVM Native Image in containers. In this workshop you will:
 >  - Add a basic Spring Boot application to a Docker Image and run it
@@ -76,7 +76,7 @@ With a good grounding in the basics of GraalVM Native Image, try out these:
 
 >  Workshop that builds upon the containerisation workshop. It adds:  
 > 
->  - An introduce you to some of the capabilities of the Oracle Cloud Infrastructure (OCI) always free tier.
+>  - An introduction to some of the capabilities of the Oracle Cloud Infrastructure (OCI) always free tier.
 >  - Showw how using [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/) can help you make the most of your free tier allocation
 
 
