@@ -59,6 +59,8 @@ Begin with these workshops and tutorials if you want to learn about GraalVM Nati
 >  - Learn about the assisted configuration tooling provided by GraalVM
 
 #### ![Lab Flask](./images/lab-flask.png) [GraalVM Native Image Build Tools, for Maven](native-image/native-build-tools/)
+<a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-build-tools-maven.yml">
+   <img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-build-tools-maven.yml/badge.svg" /></a>
 
 >  Workshop where you will:
 >  - Learn about the _GraalVM Native Image Build Tools for Maven_
