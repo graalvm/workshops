@@ -6,7 +6,7 @@ on:
       - '.github/workflows/github-actions-native-image-reflection.yml'
 jobs:
   build:
-    name: HelloWorld on ${{ matrix.os }}
+    name:  Native Image Reflection on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

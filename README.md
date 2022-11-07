@@ -13,6 +13,8 @@ to keep up to date.
 
 To find out more about GraalVM, take a look at our website: [GraalVM](https://www.graalvm.org).
 
+[Oracle's Luna Labs - Search GraalVM](https://luna.oracle.com), to try these labs out online. Search for **graalvm**
+
 ## Using the Labs and Tutorials
 
 All of the labs are written so that they will work on your own device (laptop, server). Each lab begins with
@@ -38,7 +40,8 @@ GraalVM as a Java runtime.
 
 Begin with these labs and tutorials if you want to learn about GraalVM Native Image:
 
-1. [GraalVM Native Image Quick Start](native-image/graalvm-native-image-quick-start/) &nbsp; <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-quickstart.yml">
+#### [GraalVM Native Image Quick Start](native-image/graalvm-native-image-quick-start/)
+<a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-quickstart.yml">
 <img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-quickstart.yml/badge.svg" /></a>
 
 >  Workshop to gently introduce you to working with GraalVM Native Image. In the workshop you will:
@@ -47,14 +50,15 @@ Begin with these labs and tutorials if you want to learn about GraalVM Native Im
 >  - Build a native executable that works with the dynamic features of Java
 >  - Use the Maven GraalVM plugin to build a native executable using GraalVM Native Image2.
 
-2. [Understanding Reflection with GraalVM Native Image](native-image/reflection/) &nbsp; <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-reflection.yml">
+#### [Understanding Reflection with GraalVM Native Image](native-image/reflection/)
+<a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-reflection.yml">
    <img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-reflection.yml/badge.svg" /></a>
 
 >  Workshop that will help you understand how reflection works within GraalVM Native Image. In the workshop you will: 
 >  - Use the `native-image` tool to compile a Java application that uses reflection into a native executable file
 >  - Learn about the assisted configuration tooling provided by GraalVM
 
-3. [GraalVM Native Image Build Tools, for Maven](native-image/native-build-tools/)
+#### [GraalVM Native Image Build Tools, for Maven](native-image/native-build-tools/)
 
 >  Workshop where you will:
 >  - Learn about the _GraalVM Native Image Build Tools for Maven_
@@ -63,7 +67,8 @@ Begin with these labs and tutorials if you want to learn about GraalVM Native Im
 
 With a good grounding in the basics of GraalVM Native Image, try out these:
 
-1. [GraalVM Native Image, Spring & Containers](native-image/containerisation/) &nbsp; <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-containerisation.yml">
+#### [GraalVM Native Image, Spring & Containers](native-image/containerisation/)
+<a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-containerisation.yml">
    <img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-containerisation.yml/badge.svg" /></a>
 
 >  Workshop introducing using GraalVM Native Image in containers. In this workshop you will:
@@ -72,7 +77,7 @@ With a good grounding in the basics of GraalVM Native Image, try out these:
 >  - Add the native executable to a Docker Image
 >  - Shrink your application docker image size with GraalVM Native Image and Distroless containers 
 
-2. [Non-Fungible Verses](native-image/non-fungible-verses/)
+#### [Non-Fungible Verses](native-image/non-fungible-verses/)
 
 >  Workshop that builds upon the containerisation workshop. It adds:  
 > 
