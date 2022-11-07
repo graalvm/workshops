@@ -34,8 +34,6 @@ Estimated lab time: 45 minutes
 
 In this lab you will perform the following tasks:
 
-- Connect to a remote host in Oracle Cloud - you will do the development on an Oracle Cloud server
-<!-- I don't think this is required^^ -->
 - Build and run a Java application, using GraalVM
 - Turn a Java application into a native executable, using GraalVM Native Image
 - Build a native executable that works with the dynamic features of Java
