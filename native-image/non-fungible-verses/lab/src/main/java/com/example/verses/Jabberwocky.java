@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.verses;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -48,14 +48,18 @@ public class Jabberwocky {
         this.r = new RiMarkov(3);
         this.r.addText(text);
     }
-    public String generate() {
-        String[] lines = this.r.generate(10);
-        StringBuilder b = new StringBuilder();
-        for (String line: lines) {
-            b.append(line);
-            b.append("<br/>\n");
-        }
-        return b.toString();
+
+    public String[] verseLines(int nLines) {
+        return this.r.generate(nLines);
     }
 
+    public String[] verseLines() {
+        return verseLines(diceTen());
+    }
+
+    private int diceTen() {
+        int max = 10;
+        int min = 1;
+        return (int) Math.floor(Math.random() *(max - min + 1) + min);
+    }
 }
