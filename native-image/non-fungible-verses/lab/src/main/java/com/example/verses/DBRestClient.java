@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.verses;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +58,7 @@ public class DBRestClient {
     }
 
     private String getCollectionName() {
-        return getEnvMap().get("JSON_COLLECTION_NAME");
+        return getEnvMap().get("ORDS_JSON_COLLECTION_NAME");
     }
 
     private String collectionUrl;
