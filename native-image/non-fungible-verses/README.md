@@ -33,7 +33,7 @@ Implementation of a full blown "Web3" solution with blockchain is beyond the sco
 
 For further information, see [Web3](https://web3isgoinggreat.com/).
 
-### GraalVM Native image
+## GraalVM Native Image
 
 GraalVM Native Image technology compiles Java code ahead-of-time into a native executable file. Only the code that is 
 required at run time by the application is included in the executable file.
@@ -52,11 +52,11 @@ Micronaut, Spring, Helidon, and Quarkus.
 In addition, there are Maven and Gradle plugins for Native Image so you can easily build,
 test, and run Java applications as executable files.
 
->Note: Oracle Cloud Infrastructure (OCI) provides GraalVM Enterprise at no additional cost.
+> Note: Oracle Cloud Infrastructure (OCI) provides GraalVM Enterprise at no additional cost.
 
 Estimated lab time: 90 minutes
 
-### Lab Objectives
+## Lab Objectives
 
 In this lab you will:
 
@@ -769,7 +769,7 @@ In our experiments, we saw a size of around 82MB, compared to 171MB for an Oracl
 image. So we have shrunk the container by a lot. A long way down from our starting size, for 
 the Java container, of almost 600MB.
 
-## Summary
+### Summary
 
 We hope you have enjoyed this lab and learnt a few things along the way. You've seen how to containerise
 a Java application. Then you've converted that Java application into a native executable, which starts significantly 
