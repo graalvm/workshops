@@ -49,9 +49,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import rita.RiMarkov;
 
+/**
+ * Utility class, that is a Singleton, that generates nonsense prose in the style of
+ * Charles Dickens. It does this using a Markov Chain to model
+ * the text of the original novels.
+ */
+@Service
+@Scope("singleton")
 public class WhatTheDickens {
 
     private final static String COMMENT = "***";
@@ -59,7 +68,7 @@ public class WhatTheDickens {
     private final static String END_MARKER = "END";
     private final static Set<String> BOOKS = new HashSet<>();
     private final static RiMarkov MARKOV_MODEL = new RiMarkov(5);
-    private final static Map GEN_MAP;
+    private final static Map<String, Object> GEN_MAP;
 
     static {
         GEN_MAP = Map.of(

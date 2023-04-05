@@ -139,7 +139,7 @@ Build your application: from the root directory of the repository, run the follo
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
-cd native-image/containerisation/lab
+cd native-image/what-the-dickens/lab
 ./mvnw clean package
 ```
 
@@ -149,7 +149,7 @@ file. You can run this JAR file and then use `curl` to call the application's en
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 # Run the application in the background
-java -jar ./target/jibber-0.0.1-SNAPSHOT-exec.jar &
+java -jar ./target/What_the_Dickens-0.0.1-SNAPSHOT.jar &
 ```
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
