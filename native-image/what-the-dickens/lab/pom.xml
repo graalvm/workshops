@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.4</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.oracle.graalvm</groupId>
+	<artifactId>What_the_Dickens</artifactId>
+	<version>0.0.3-SNAPSHOT</version>
+	<name>what_the_dickens</name>
+	<description>Generates random Dickens prose</description>
+
+	<properties>
+		<!-- JDK version -->
+		<java.version>17</java.version>
+		<repackage.classifier/>
+		<!-- Spring Boot Native Version -->
+		<spring-native.version>0.12.1</spring-native.version>
+		<!-- The name of the output binary -->
+		<binary-name>jibber</binary-name>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.experimental</groupId>
+			<artifactId>spring-native</artifactId>
+			<version>${spring-native.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<!-- Add support for Actuator and metrics -->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- Our Markov model library -->
+		<dependency>
+			<groupId>org.rednoise</groupId>
+			<artifactId>rita</artifactId>
+			<version>2.4.501</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<classifier>${repackage.classifier}</classifier>
+					<image>
+						<builder>paketobuildpacks/builder:tiny</builder>
+						<env>
+							<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+						</env>
+					</image>
+				</configuration>
+			</plugin>
+			<!-- Spring Native Plugin -->
+			<plugin>
+				<groupId>org.springframework.experimental</groupId>
+				<artifactId>spring-aot-maven-plugin</artifactId>
+				<version>${spring-native.version}</version>
+				<executions>
+					<execution>
+						<id>test-generate</id>
+						<goals>
+							<goal>test-generate</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- Required to use the Spring Native Plugins -->
+	<repositories>
+		<repository>
+			<id>spring-releases</id>
+			<name>Spring Releases</name>
+			<url>https://repo.spring.io/release</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-releases</id>
+			<name>Spring Releases</name>
+			<url>https://repo.spring.io/release</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<profiles>
+		<!-- Profile to build the native binary -->
+		<profile>
+			<id>native</id>
+			<properties>
+				<repackage.classifier>exec</repackage.classifier>
+				<!-- Version of Native Build tools to use -->
+				<native-buildtools.version>0.9.13</native-buildtools.version>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.junit.platform</groupId>
+					<artifactId>junit-platform-launcher</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+			<!-- GraalVM Native Image Build Plugin
+				https://github.com/graalvm/native-build-tools -->
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.graalvm.buildtools</groupId>
+						<artifactId>native-maven-plugin</artifactId>
+						<version>${native-buildtools.version}</version>
+						<extensions>true</extensions>
+						<executions>
+							<!-- Run the plugin in durring testing, allows for native compilation of the tests -->
+							<execution>
+								<id>test-native</id>
+								<phase>test</phase>
+								<goals>
+									<goal>test</goal>
+								</goals>
+							</execution>
+							<!-- Run the plugin during packaging, allows for native compilation of the application -->
+							<execution>
+								<id>build-native</id>
+								<phase>package</phase>
+								<goals>
+									<goal>build</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<!-- Set a custom name for the output binary file -->
+							<imageName>${binary-name}</imageName>
+							<buildArgs>
+								<!-- Quick build mode, for the impatient, or those giving talks -->
+								<buildArg>-Ob</buildArg>
+								<!-- Add support for exit handlers : these are not the default. You want for
+								 applications, such as this, but not for shared libs -->
+								<buildArg>--install-exit-handlers</buildArg>
+								<buildArg>-H:+ReportExceptionStackTraces</buildArg>
+								<!-- Turn on JFR Support -->
+								<buildArg>-H:+AllowVMInspection</buildArg>
+							</buildArgs>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!-- Profile to build the native binary -->
+		<profile>
+			<id>static</id>
+			<properties>
+				<repackage.classifier>exec</repackage.classifier>
+				<!-- Version of Native Build tools to use -->
+				<native-buildtools.version>0.9.13</native-buildtools.version>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.junit.platform</groupId>
+					<artifactId>junit-platform-launcher</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+			<!-- GraalVM Native Image Build Plugin
+				https://github.com/graalvm/native-build-tools -->
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.graalvm.buildtools</groupId>
+						<artifactId>native-maven-plugin</artifactId>
+						<version>${native-buildtools.version}</version>
+						<extensions>true</extensions>
+						<executions>
+							<!-- Run the plugin in durring testing, allows for native compilation of the tests -->
+							<execution>
+								<id>test-native</id>
+								<phase>test</phase>
+								<goals>
+									<goal>test</goal>
+								</goals>
+							</execution>
+							<!-- Run the plugin during packaging, allows for native compilation of the application -->
+							<execution>
+								<id>build-native</id>
+								<phase>package</phase>
+								<goals>
+									<goal>build</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<!-- Set a custom name for the output binary file -->
+							<imageName>${binary-name}</imageName>
+							<buildArgs>
+								<!-- Quick build mode, for the impatient, or those giving talks -->
+								<buildArg>-Ob</buildArg>
+								<!-- Add support for exit handlers : these are not the default. You want for
+								 applications, such as this, but not for shared libs -->
+								<buildArg>--install-exit-handlers</buildArg>
+								<buildArg>-H:+ReportExceptionStackTraces</buildArg>
+								<!-- Turn on JFR Support -->
+								<buildArg>-H:+AllowVMInspection</buildArg>
+								<!-- Static exe -->
+								<buildArg>--static --libc=musl </buildArg>
+							</buildArgs>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
