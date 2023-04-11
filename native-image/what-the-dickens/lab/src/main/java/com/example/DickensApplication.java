@@ -42,26 +42,11 @@ package com.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
-
 
 @SpringBootApplication
-@RestController
 public class DickensApplication {
 
-    @Autowired
-    WhatTheDickens wtd;
-
-	public static void main(String[] args) {
-	  SpringApplication.run(DemoApplication.class, args);
-	}
-
-  @RequestMapping(method = RequestMethod.GET, path = "/whatTheDickens")
-  ResponseEntity<String> whatTheDickens() {
-    return ResponseEntity.ok(wtd.generate());
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(DickensApplication.class, args);
+    }
 }
