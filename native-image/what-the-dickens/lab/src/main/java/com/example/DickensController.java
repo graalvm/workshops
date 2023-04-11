@@ -54,7 +54,8 @@ import org.springframework.web.bind.annotation.*;
 import rita.RiMarkov;
 
 /**
- * REST Controller which serves as an entry-point for requests for Dickens nonsense prose.
+ * REST Controller which serves as an entry-point for requests for Dickens
+ * nonsense prose.
  *
  */
 @RestController
@@ -70,9 +71,9 @@ public class DickensController {
 
     static {
         GEN_MAP = Map.of(
-            "minLength", 15,
-             "temperature", 100f,
-             "allowDuplicates", false
+                "minLength", 15,
+                "temperature", 100f,
+                "allowDuplicates", false
         );
         BOOKS.add("Christmas_Carol.txt");
         BOOKS.add("Bleak_House.txt");
@@ -95,14 +96,14 @@ public class DickensController {
                 LOG.log(Level.SEVERE, null, ex);
             }
         }
-        LOG.log(Level.INFO, "Time taken: {0}ms", System.currentTimeMillis() - startTime);
+        LOG.log(Level.INFO, "Time taken to ingest books: {0}ms", System.currentTimeMillis() - startTime);
     }
-    
+
     private static final void ingestBook(String book) throws IOException {
         StringBuilder out = new StringBuilder();
         String readLine;
         boolean inStory = false;
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(DickensController.class.getClassLoader().getResourceAsStream(book), StandardCharsets.UTF_8))) {
+        try ( BufferedReader in = new BufferedReader(new InputStreamReader(DickensController.class.getClassLoader().getResourceAsStream(book), StandardCharsets.UTF_8))) {
             while (true) {
                 readLine = in.readLine();
                 if (readLine.startsWith(COMMENT)) {
@@ -126,7 +127,7 @@ public class DickensController {
         String sentences = out.toString();
         MARKOV_MODEL.addText(sentences);
     }
-    
+
     public String generate() {
         return generate(10);
     }
@@ -152,4 +153,3 @@ public class DickensController {
         return ResponseEntity.ok(generate(number));
     }
 }
-
