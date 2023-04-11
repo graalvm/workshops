@@ -51,17 +51,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringBootApplication
 @RestController
-public class DemoApplication {
+public class DickensApplication {
 
     @Autowired
     WhatTheDickens wtd;
 
 	public static void main(String[] args) {
-	    SpringApplication.run(DemoApplication.class, args);
+	  SpringApplication.run(DemoApplication.class, args);
 	}
 
-    @RequestMapping(method = RequestMethod.GET, path = "/whatTheDickens")
-    ResponseEntity<String> whatTheDickens() {
-	    return ResponseEntity.ok(wtd.generate());
-    }
+  @RequestMapping(method = RequestMethod.GET, path = "/whatTheDickens")
+  ResponseEntity<String> whatTheDickens() {
+    return ResponseEntity.ok(wtd.generate());
+  }
 }

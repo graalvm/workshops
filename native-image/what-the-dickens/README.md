@@ -2,11 +2,36 @@
 alt="GraalVM logo"
 width="200px">
 
+What do Micronaut, Spring Native, Quarkus and Helidon have in common? They all support GraalVM Native Image ahead-of-time (AOT) compilation to transform an application into a native machine executable that starts almost instantaneously, provides peak performance with no warmup, and requires less memory and less CPU.
+
+
+
+It's perfect for your containerised workloads and microservices where it's critical to minimise your startup time and reduce your resource consumption. In this workshop we'll provide a practical introduction to GraalVM Native Image AOT covering how it works, what it can do, and when to use it.
+
+
+
+Topics include: building with Maven and Gradle, static and dynamic linking, containerisation, configuration, working with resources, profile guided optimisation, garbage collection options and JUnit testing.
+
+
+
+By the end of the lab, you will have:
+
+
+
+Built, run and converted a Java application into a native executable (using GraalVM Native Image)
+Built, run and converted a basic Spring Boot application into a native executable
+Added the native Spring Boot application to a container image, deployed it and run it
+Shrunk the size of the container image using Distroless containers
+Seen how to use GraalVM Native Build tools as part of your CI/CD pipeline
+
+
+
+
 # Understanding Containerisation and GraalVM Native Image
 
 ## Introduction
 
-This workshop takes you step by step through the process of how to containerise 
+This lab takes you step by step through the process of how to containerise 
 [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/) applications.
 
 GraalVM Native Image technology compiles Java code ahead-of-time into a native executable file. Only the code that is 
