@@ -90,8 +90,8 @@
                         <configuration>
                             <imageName>What_the_Dickens-static</imageName>
                             <buildArgs>
-                                <buildArg>-J-Xmx32G</buildArg>
-                                <buildArg>--initialize-at-build-time=rita.RiMarkov,com.example.DickensController</buildArg>
+                                <buildArg>-J-Xmx48G</buildArg>
+                                <buildArg>--initialize-at-build-time=rita.RiMarkov,rita.Util,rita.Tokenizer,rita.RiTa,com.example.DickensController</buildArg>
                             </buildArgs>
                             <!--<quickBuild>true</quickBuild>-->
                             <verbose>true</verbose>
