@@ -16,7 +16,7 @@ WORKDIR /build
 COPY . /build
 
 # Build
-RUN ./mvnw --no-transfer-progress clean package -Pdistroless -DskipTests=true
+RUN ./mvnw --no-transfer-progress -Pdistroless -DskipTests=true clean package
 
 # Deployment Container
 # This time we use the distroless image - which is around 20 MB in size. Even smaller versions are available.
@@ -26,7 +26,7 @@ FROM gcr.io/distroless/base
 EXPOSE 8080
 
 # Copy the native executable into the container
-COPY --from=builder /build/target/What_the_Dickens-distroless .
+COPY --from=builder /build/target/What_the_Dickens .
 
-# Run What_the_Dickens-distroless when starting the container
-ENTRYPOINT ["/What_the_Dickens-distroless"]
+# Run What_the_Dickens when starting the container
+ENTRYPOINT ["/What_the_Dickens"]

@@ -16,7 +16,7 @@ WORKDIR /build
 COPY . /build
 
 # Build
-RUN ./mvnw --no-transfer-progress clean package -Pnative -DskipTests=true
+RUN ./mvnw --no-transfer-progress -Pnative -DskipTests=true clean package
 
 # The deployment container image
 FROM docker.io/oraclelinux:8-slim
