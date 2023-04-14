@@ -18,7 +18,7 @@ By the end of the lab you will have:
 
 Estimated lab time: 60 minutes
 
-# Understanding Containerisation and GraalVM Native Image
+# Understanding GraalVM Native Image and Containerisation
 
 ## Introduction
 
@@ -79,19 +79,19 @@ in the style of [Charles Dickens' novels](https://en.wikipedia.org/wiki/Charles_
 The application achieves this by using a [Markov Chain](https://en.wikipedia.org/wiki/Markov_chain) to produce a statistical model of Dickens' original prose. 
 This model is then used to generate new text.
 
-The example application ingests the text of 12 of Dickens' novels (in _main/resources/_), from which it creates a model.
+The example application ingests the text of six of Dickens' novels (in _main/resources/_), from which it creates a model.
 The application then uses the model to generate new text that is similar to the original text. 
 The [RiTa](https://rednoise.org/rita/) library does the heavy lifting for you--it provides the functionality to build and use Markov Chains.
 
 Below are two snippets from class `com.example.DickensController`. 
 
-1. The first snippet shows how the model is created and then populated with `sentences` ingested from some of Dickens' novels.
-The model is created and populated from the class initializer.
+1. The first snippet shows how the model is created and then populated with `prose` ingested from some of Dickens' novels.
+The model is created and populated in the class initializer.
 
     ```java
     private final static RiMarkov MARKOV_MODEL = new RiMarkov(5);
     ...
-    MARKOV_MODEL.addText(sentences);
+    MARKOV_MODEL.addText(prose);
     ```
 
 2. In the second snippet you can see the method that generates new lines of prose from the model.
@@ -195,6 +195,7 @@ This means it will run as a part of the `package` phase.
           </goals>
         </execution>
       </executions>
+      <!-- Rest of profile hidden, to highlight relevant parts -->
     </plugin>
   </plugins>
 </build>
@@ -219,24 +220,26 @@ java -Dpring.aot.enabled=true \
 
 Stop the application with Ctrl-C.
 On application shutdown the tracing agent writes the configuration files to the specified output directory. 
-In this case, it's the directory that Native Image reads when it runs.
+In this case, it's the default directory that Native Image expects to find configuration files.
 
 Now run the Maven build using the profile, as below (note that the profile name is specified with the `-P` option, and you can skip the tests this time):
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
-./mvnw -Pnative -DskipTests=true package 
+./mvnw -Pnative -DskipTests=true clean package 
 ```
 
-This will generate a native executable in the _target_ directory, named _What\_the\_Dickens_. Take a 
-look at the size of the file:
+This will generate a native executable in the _target_ directory, named _What\_the\_Dickens_. 
+Take a look at the size of the file:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 ls -lh ./target/What_the_Dickens
 ```
 
- ls -lh target/What_the_Dickens                             -rwxr-xr-x  1 bhoran  staff    70M Apr 12 12:57 target/What_the_Dickens*
+```
+-rwxr-xr-x  1 bhoran  staff    70M Apr 12 12:57 target/What_the_Dickens*
+```
 
 
 Run this native executable from your terminal:
@@ -264,8 +267,6 @@ Now you have a native executable of your application--however, it starts no fast
 This is mainly because the performance is constrained by the amount of time the application takes to ingest the Dickens' novels. 
 
 Stop the application before you move on, using Ctrl-C.
-
-OK TO HERE
 
 ## **STEP 3**: Reducing the Startup Time of Your Native Executable
 
@@ -275,31 +276,33 @@ In individual `buildArg` elements you can pass in options in exactly the same wa
 as you do to Native Image, so you can use all of the options that Native Image accepts. 
 One of those is the option to [Specify Class Initialization Explicitly](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/guides/specify-class-initialization/) using the `initialize-at-build-time` option.
 
-The Maven _pom.xml_ file contains a profile named `native-static` that passes in the `initialize-at-build-time` argument as shown below:
+Edit the `native` profile of the _pom.xml_ file so that passes in the `initialize-at-build-time` option as shown below:
 
 ```xml
 <configuration>
     <buildArgs>
-        <buildArg>--initialize-at-build-time=rita.RiMarkov,com.example.DickensController</buildArg>
+        <buildArg>--initialize-at-build-time=com.example.DickensController,rita.RiMarkov,rita.Util,rita.Tokenizer,rita.RiTa</buildArg>
     </buildArgs>
+    <!-- Rest of profile hidden, to highlight relevant parts -->
 </configuration>
 ```
 
-This causes the static initializer of classes `rita.RiMarkov` and `com.example.DickensController` to be run when Native Image builds the native executable.
+This causes the static initializer of classes `com.example.DickensController` and several of the classes in the `rita` package to be run when Native Image builds the native executable.
 
-Now run the Maven build using the profile, as below:
+You no longer need the Native Image configuration files you created in the first step, so go ahead and remove the _src/main/resources/META-INF/native-image/_ directory.
+
+Now run the Maven build using the profile again, as below:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
-./mvnw -Pnative-static -DskipTests=true package 
+./mvnw -Pnative -DskipTests=true clean package
 ```
-<!-- Should we tell the user to ignore the warnings here ^^? -->
 
-This will generate a native executable in the _target_ directory, named _What\_the\_Dickens_. The build output should contain something similar to :
+This will generate a new native executable in the _target_ directory, named _What\_the\_Dickens_. The build output should contain something similar to :
 
 ```
 Apr 12, 2023 4:23:17 PM com.example.DickensController <clinit>
-INFO: Time taken to ingest books: 23,380ms
+INFO: Time taken to ingest novels: 23,380ms
 ```
 
 Take a look at the size of the file:
@@ -307,6 +310,10 @@ Take a look at the size of the file:
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```bash
 ls -lh ./target/What_the_Dickens
+```
+
+```
+-rwxr-xr-x  1 bhoran  staff    70M Apr 12 12:57 target/What_the_Dickens*
 ```
 
 Run this native executable from your terminal:
@@ -330,8 +337,7 @@ curl http://localhost:8080/What_the_Dickens
 curl http://localhost:8080/What_the_Dickens/30
 ```
 
-Now you have a native executable of your application--however, it starts no faster than the original Java version.
-This is mainly because the performance is constrained by the amount of time the application takes to ingest the Dickens' novels. 
+Now you have a native executable of your application that starts much faster than your original Java version. 
 
 Stop the application before you move on, using Ctrl-C.
 
@@ -339,27 +345,26 @@ Stop the application before you move on, using Ctrl-C.
 
 So you have a native executable version of your application, and you have seen it working. Now to containerise it.
 
-A simple Dockerfile for packaging this native executable is in the directory
+A Dockerfile for packaging this native executable is in the directory
 _native-image/what-the-dickens/lab/01-native-image/Dockerfile_.
 The contents are shown below, along with explanatory comments.
 This is a two-step build: the first part builds the native executable, using GraalVM Native Image; the 
-second step copies the native executable into a smaller container for use.
+second step copies the native executable into a container.
 
 >    ### Note: Why Are We Using a Two-Step Build?
 >
->    The native executable produced GraalVM Native Image is for the platform that on which you run Native Image.
+>    The native executable that GraalVM Native Image produced is for the platform on which you run Native Image.
 >    
 >    So, if you are running on macOS, it will generate a mach64 executable. 
 >    If you are running on Linux, it will generate an ELF Linux executable (for the architecture of the chip you are running on). 
->    If you want to containerise your application in a container image and you are running on macOS, 
+>    If you want to containerise your application in a container and you are running on macOS, 
 >    then you can't simply build the executable locally (as that will be a macOS-compatible executable) and package it 
->    within your container image which expects the executable to be a Linux-compatible executable. 
+>    within your container which expects the executable to be Linux-compatible. 
 > 
->    Therefore, if you are developing on an OS other than Linux, you need to first build within a container with a 
+>    Therefore, if you are developing on any OS other than Linux, you need to first build within a container with a 
 >    Linux version of GraalVM to create an executable that can then be packaged into another container.
->    That is what the multi-stage build here achieves. The first step in the process builds a Linux
->    compatible executable and the second step packages that into a container image for deployment.
-
+>    That is what the multi-stage build here achieves. 
+>    The first step in the process builds a Linux-compatible executable and the second step packages that into a container image for deployment.
 
 ```dockerfile
 # Base Container Image
@@ -380,7 +385,7 @@ WORKDIR /build
 COPY . /build
 
 # Build
-RUN ./mvnw --no-transfer-progress clean package -Pnative -DskipTests=true
+RUN ./mvnw --no-transfer-progress -Pnative -DskipTests=true clean package
 
 # The deployment container image
 FROM docker.io/oraclelinux:8-slim
@@ -389,15 +394,17 @@ EXPOSE 8080
 
 # Copy the native executable into the container
 COPY --from=builder /build/target/What_the_Dickens .
+
+# Run What_the_Dickens when starting the container
 ENTRYPOINT ["/What_the_Dickens"]
 ```
 
 > ### Note: Building on Linux
-> If you are using Linux you don't need to use a multi-stage build and your build times will be faster.
+> If you are using Linux, you don't need to use a multi-stage build and your build times will be faster.
 > You can just build the native executable locally and package it in the deployment container _01-native-image/Dockerfile.linux_
 > as follows:
 > ```bash
-> ./mvnw clean package -Pnative
+> ./mvnw -Pnative -DskipTests=true clean package
 > docker build -f ./01-native-image/Dockerfile.linux --build-arg APP_FILE=target/What_the_Dickens -t What_the_Dickens:native.01 .
 > ```
 
@@ -469,33 +476,11 @@ standard Distroless container is around 20MB in size.
 
 You will build a mostly-statically linked executable and then package it into a Distroless container.
 
-The _pom.xml_ tile contains a Maven profile (named `distroless`) to build this mostly-statically linked native executable.
-The only difference between this profile and the one you used before, `native`, is that it includes the option `-H:+StaticExecutableWithDynamicLibC`.
-This instructs Native Image to build a mostly-statically linked native executable. The following is
-a snippet from the `distroless` profile in the _pom.xml_ file that includes this option:
-
-```xml
-<buildArgs>
-  ...
-  <!-- Mostly static -->
-  <buildArg>-H:+StaticExecutableWithDynamicLibC</buildArg>
-</buildArgs>
-```
-
-You can build your mostly-statically linked native executable as follows--be aware this will only work on Linux. We will
-build our native executable in a container in the next step, so if you are using macOS, don't worry.
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-./mvnw package -Pdistroless -DskipTests=true
-```
-
-The generated native executable is in the _target_ directory, named __What\_the\_Dickens-distroless_.
-
-Now to package it into a Distroless container. The Dockerfile to do this can be found in the directory 
-_native-image/what-the-dickens/lab/02-smaller-containers/Dockerfile_. Again you are going to use a multi-stage build
-in order to build a Linux executable on all OSes. Take a look at the contents of the Dockerfile, 
-which has explanatory comments:
+A Dockerfile for packaging this native executable is in the directory
+_native-image/what-the-dickens/lab/02-smaller-containers/Dockerfile_.
+The contents are shown below, along with explanatory comments.
+As earlier, this is a two-step build: the first part builds the native executable, using GraalVM Native Image; 
+the second step copies the native executable into a container.
 
 ```dockerfile
 # Base Container Image
@@ -516,7 +501,7 @@ WORKDIR /build
 COPY . /build
 
 # Build
-RUN ./mvnw --no-transfer-progress clean package -Pdistroless -DskipTests=true
+RUN ./mvnw --no-transfer-progress -Pdistroless -DskipTests=true clean package
 
 # Deployment Container
 # This time we use the distroless image - which is around 20 MB in size. Even smaller versions are available.
@@ -526,10 +511,24 @@ FROM gcr.io/distroless/base
 EXPOSE 8080
 
 # Copy the native executable into the container
-COPY --from=builder /build/target/What_the_Dickens-distroless .
+COPY --from=builder /build/target/What_the_Dickens .
 
-# Run What_the_Dickens-distroless when starting the container
-ENTRYPOINT ["/What_the_Dickens-distroless"]
+# Run What_the_Dickens when starting the container
+ENTRYPOINT ["/What_the_Dickens"]
+```
+
+Edit the `native` profile of the _pom.xml_ file so that also passes in the `StaticExecutableWithDynamicLibC` option as shown below:
+
+This instructs Native Image to build a mostly-statically linked native executable.
+
+```xml
+<configuration>
+    <buildArgs>
+        <buildArg>--initialize-at-build-time=com.example.DickensController,rita.RiMarkov,rita.Util,rita.Tokenizer,rita.RiTa</buildArg>
+        <buildArg>-H:+StaticExecutableWithDynamicLibC</buildArg>
+        <!-- Rest of profile hidden, to highlight relevant parts -->
+    </buildArgs>
+</configuration>
 ```
 
 > ### Note: Building on Linux
@@ -537,7 +536,7 @@ ENTRYPOINT ["/What_the_Dickens-distroless"]
 > You can just build the native executable locally and package it in our deployment container _02-smaller-containers/Dockerfile.linux_
 > as follows:
 > ```bash
-> ./mvnw clean package -Pdistroless
+> /mvnw -Pnative -DskipTests=true clean package
 > docker build -f ./02-smaller-containers/Dockerfile.linux --build-arg APP_FILE=target/What_the_Dickens -t What_the_Dickens:distroless.01 .
 > ```
 
@@ -580,7 +579,7 @@ Great! It worked. But how small, or large, is your container? Use the following 
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```shell
-size_in_bytes=`docker inspect -f "{{ .Size }}" jibber:distroless.01`
+size_in_bytes=`docker inspect -f "{{ .Size }}" what_the_dickens:distroless.01`
 echo $((size_in_bytes/1024/1024))
 ```
 
@@ -590,13 +589,11 @@ the original container, of almost 600MB.
 
 ## Summary
 
-We hope you have enjoyed this lab and learnt a few things along the way. We've looked at how you can containerise
-a Java application. Then we've seen how to convert that Java application into a native executable, which starts significantly 
-faster than the Java application. You then containerised the native executable and have seen how the size of the 
-container image, with your native executable in it, is much smaller than the Java container Image.
+We hope you have enjoyed this lab and learnt a few things along the way. We've looked at how you can convert a Java application into a native executable, which starts significantly 
+faster than the Java application. You then containerised the native executable.
 
-Finally, we looked at how we can build a mostly-statically linked native executable with Native Image. These can be
-packaged in smaller containers, such as Distroless and these let us shrink the size of the container Image even further.
+Finally, we looked at how we can build a mostly-statically linked native executable with Native Image. 
+These can be packaged in smaller containers, such as Distroless and these let us shrink the size of the container Image even further.
 
 ### Learn More
 
