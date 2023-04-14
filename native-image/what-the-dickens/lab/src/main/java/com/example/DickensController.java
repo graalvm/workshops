@@ -76,17 +76,18 @@ public class DickensController {
                 "allowDuplicates", false
         );
         BOOKS.add("Christmas_Carol.txt");
-        BOOKS.add("Bleak_House.txt");
-        BOOKS.add("David_Copperfield.txt");
         BOOKS.add("Great_Expectations.txt");
         BOOKS.add("Hard_Times.txt");
-        BOOKS.add("Little_Dorrit.txt");
-        BOOKS.add("Martin_Chuzzlewit.txt");
-        BOOKS.add("Nicholas_Nickleby.txt");
         BOOKS.add("Oliver_Twist.txt");
         BOOKS.add("A_Tale_of_Two_Cities.txt");
         BOOKS.add("The_Old_Curiosity_Shop.txt");
-        BOOKS.add("The_Pickwick_Papers.txt");
+        /* Uncomment the following lines to add more novels */
+        //BOOKS.add("Little_Dorrit.txt");
+        //BOOKS.add("Martin_Chuzzlewit.txt");
+        //BOOKS.add("Nicholas_Nickleby.txt");
+        //BOOKS.add("Bleak_House.txt");
+        //BOOKS.add("David_Copperfield.txt");
+        //BOOKS.add("The_Pickwick_Papers.txt");
         long startTime = System.currentTimeMillis();
         for (String book : BOOKS) {
             try {
