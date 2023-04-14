@@ -76,12 +76,12 @@ public class DickensController {
                 "allowDuplicates", false
         );
         NOVELS.add("Christmas_Carol.txt");
-        NOVELS.add("Great_Expectations.txt");
         NOVELS.add("Hard_Times.txt");
-        NOVELS.add("Oliver_Twist.txt");
         NOVELS.add("A_Tale_of_Two_Cities.txt");
-        NOVELS.add("The_Old_Curiosity_Shop.txt");
+        NOVELS.add("Oliver_Twist.txt");
         /* Uncomment the following lines to add more novels */
+        //NOVELS.add("Great_Expectations.txt");
+        //NOVELS.add("The_Old_Curiosity_Shop.txt");
         //NOVELS.add("Little_Dorrit.txt");
         //NOVELS.add("Martin_Chuzzlewit.txt");
         //NOVELS.add("Nicholas_Nickleby.txt");
@@ -97,7 +97,7 @@ public class DickensController {
                 LOG.log(Level.SEVERE, null, ex);
             }
         }
-        LOG.log(Level.INFO, "Time taken to ingest novel: {0}ms", System.currentTimeMillis() - startTime);
+        LOG.log(Level.INFO, "Time taken to ingest novels: {0}ms", System.currentTimeMillis() - startTime);
     }
 
     private static final void ingestNovel(String novel) throws IOException {
