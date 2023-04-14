@@ -16,7 +16,7 @@ WORKDIR /build
 COPY . /build
 
 # Build
-RUN ./mvnw --no-transfer-progress -Pdistroless -DskipTests=true clean package
+RUN ./mvnw --no-transfer-progress -Pnative -DskipTests=true clean package
 
 # Deployment Container
 # This time we use the distroless image - which is around 20 MB in size. Even smaller versions are available.
