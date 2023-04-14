@@ -73,12 +73,18 @@
 
                                 <!-- Uncomment the next line to reduce the startup time of your native executable -->
                                 <!-- <buildArg>--initialize-at-build-time=rita.RiMarkov,rita.Util,rita.Tokenizer,rita.RiTa,com.example.DickensController</buildArg> -->
+
+                                <!-- Uncomment the next line to produce a mostly static native executable -->
+                                <buildArg>-H:+StaticExecutableWithDynamicLibC</buildArg>
+
                             </buildArgs>
-                            <!-- Uncomment the next line for development builds -->
+
+                            <!-- Uncomment the next line for Native Image development builds -->
                             <!-- <quickBuild>true</quickBuild> -->
 
                             <!-- Uncomment the next line for verbose output from Native Image -->
                             <!-- <verbose>true</verbose> -->
+
                         </configuration>
                     </plugin>
                 </plugins>
