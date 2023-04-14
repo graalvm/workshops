@@ -65,7 +65,7 @@ public class DickensController {
     private final static String COMMENT = "***";
     private final static String START_MARKER = "START";
     private final static String END_MARKER = "END";
-    private final static Set<String> BOOKS = new HashSet<>();
+    private final static Set<String> NOVELS = new HashSet<>();
     private final static RiMarkov MARKOV_MODEL = new RiMarkov(5);
     private final static Map<String, Object> GEN_MAP;
 
@@ -75,36 +75,36 @@ public class DickensController {
                 "temperature", 100f,
                 "allowDuplicates", false
         );
-        BOOKS.add("Christmas_Carol.txt");
-        BOOKS.add("Great_Expectations.txt");
-        BOOKS.add("Hard_Times.txt");
-        BOOKS.add("Oliver_Twist.txt");
-        BOOKS.add("A_Tale_of_Two_Cities.txt");
-        BOOKS.add("The_Old_Curiosity_Shop.txt");
+        NOVELS.add("Christmas_Carol.txt");
+        NOVELS.add("Great_Expectations.txt");
+        NOVELS.add("Hard_Times.txt");
+        NOVELS.add("Oliver_Twist.txt");
+        NOVELS.add("A_Tale_of_Two_Cities.txt");
+        NOVELS.add("The_Old_Curiosity_Shop.txt");
         /* Uncomment the following lines to add more novels */
-        //BOOKS.add("Little_Dorrit.txt");
-        //BOOKS.add("Martin_Chuzzlewit.txt");
-        //BOOKS.add("Nicholas_Nickleby.txt");
-        //BOOKS.add("Bleak_House.txt");
-        //BOOKS.add("David_Copperfield.txt");
-        //BOOKS.add("The_Pickwick_Papers.txt");
+        //NOVELS.add("Little_Dorrit.txt");
+        //NOVELS.add("Martin_Chuzzlewit.txt");
+        //NOVELS.add("Nicholas_Nickleby.txt");
+        //NOVELS.add("Bleak_House.txt");
+        //NOVELS.add("David_Copperfield.txt");
+        //NOVELS.add("The_Pickwick_Papers.txt");
         long startTime = System.currentTimeMillis();
-        for (String book : BOOKS) {
+        for (String novel : NOVELS) {
             try {
-                ingestBook(book);
-                LOG.log(Level.INFO, "Ingested book: {0}", book);
+                ingestNovel(novel);
+                LOG.log(Level.INFO, "Ingested novel: {0}", novel);
             } catch (IOException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
         }
-        LOG.log(Level.INFO, "Time taken to ingest books: {0}ms", System.currentTimeMillis() - startTime);
+        LOG.log(Level.INFO, "Time taken to ingest novel: {0}ms", System.currentTimeMillis() - startTime);
     }
 
-    private static final void ingestBook(String book) throws IOException {
+    private static final void ingestNovel(String novel) throws IOException {
         StringBuilder out = new StringBuilder();
         String readLine;
         boolean inStory = false;
-        try ( BufferedReader in = new BufferedReader(new InputStreamReader(DickensController.class.getClassLoader().getResourceAsStream(book), StandardCharsets.UTF_8))) {
+        try ( BufferedReader in = new BufferedReader(new InputStreamReader(DickensController.class.getClassLoader().getResourceAsStream(novel), StandardCharsets.UTF_8))) {
             while (true) {
                 readLine = in.readLine();
                 if (readLine.startsWith(COMMENT)) {
@@ -125,8 +125,8 @@ public class DickensController {
                 }
             }
         }
-        String sentences = out.toString();
-        MARKOV_MODEL.addText(sentences);
+        String prose = out.toString();
+        MARKOV_MODEL.addText(prose);
     }
 
     public String generate() {
