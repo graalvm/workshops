@@ -71,11 +71,9 @@
                                 <!-- Provide more memory to Native Image -->
                                 <buildArg>-J-Xmx8G</buildArg>
 
-                                <!-- Uncomment the next line to reduce the startup time of your native executable -->
-                                <!-- <buildArg>--initialize-at-build-time=rita.RiMarkov,rita.Util,rita.Tokenizer,rita.RiTa,com.example.DickensController</buildArg> -->
+                                <!-- Replace with line to reduce the startup time of your native executable -->
 
-                                <!-- Uncomment the next line to produce a mostly static native executable -->
-                                <buildArg>-H:+StaticExecutableWithDynamicLibC</buildArg>
+                                <!-- Replace with line to produce a mostly static native executable -->
 
                             </buildArgs>
 
