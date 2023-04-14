@@ -30,6 +30,9 @@
   "name":"[Ljava.lang.String;"
 },
 {
+  "name":"[Ljava.lang.annotation.Annotation;"
+},
+{
   "name":"[Ljava.lang.constant.Constable;"
 },
 {
@@ -113,7 +116,10 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"whatTheDickensN","parameterTypes":["int"] }
+  ]
 },
 {
   "name":"com.fasterxml.jackson.core.JsonGenerator"
@@ -125,6 +131,7 @@
   "methods":[
     {"name":"getJsonFactory","parameterTypes":[] }, 
     {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.ResolvedType"] }, 
+    {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.TypeReference"] }, 
     {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","java.lang.Class"] }
   ]
 },
@@ -438,6 +445,10 @@
 },
 {
   "name":"java.util.PropertyPermission"
+},
+{
+  "name":"java.util.concurrent.Callable",
+  "methods":[{"name":"call","parameterTypes":[] }]
 },
 {
   "name":"java.util.concurrent.Executor"
@@ -2506,6 +2517,10 @@
 },
 {
   "name":"org.springframework.web.bind.annotation.Mapping",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.springframework.web.bind.annotation.PathVariable",
   "queryAllDeclaredMethods":true
 },
 {

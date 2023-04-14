@@ -5,22 +5,13 @@
       "pattern":"\\QA_Tale_of_Two_Cities.txt\\E"
     }, 
     {
-      "pattern":"\\QBleak_House.txt\\E"
-    }, 
-    {
       "pattern":"\\QChristmas_Carol.txt\\E"
-    }, 
-    {
-      "pattern":"\\QDavid_Copperfield.txt\\E"
     }, 
     {
       "pattern":"\\QGreat_Expectations.txt\\E"
     }, 
     {
       "pattern":"\\QHard_Times.txt\\E"
-    }, 
-    {
-      "pattern":"\\QLittle_Dorrit.txt\\E"
     }, 
     {
       "pattern":"\\QMETA-INF/services/ch.qos.logback.classic.spi.Configurator\\E"
@@ -38,19 +29,10 @@
       "pattern":"\\QMETA-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports\\E"
     }, 
     {
-      "pattern":"\\QMartin_Chuzzlewit.txt\\E"
-    }, 
-    {
-      "pattern":"\\QNicholas_Nickleby.txt\\E"
-    }, 
-    {
       "pattern":"\\QOliver_Twist.txt\\E"
     }, 
     {
       "pattern":"\\QThe_Old_Curiosity_Shop.txt\\E"
-    }, 
-    {
-      "pattern":"\\QThe_Pickwick_Papers.txt\\E"
     }, 
     {
       "pattern":"\\Qapplication.properties\\E"
@@ -472,11 +454,19 @@
   ]},
   "bundles":[
     {
+      "name":"jakarta.servlet.LocalStrings",
+      "locales":[""]
+    }, 
+    {
       "name":"jakarta.servlet.http.LocalStrings",
       "locales":[""]
     }, 
     {
       "name":"org.apache.catalina.authenticator.LocalStrings",
+      "locales":[""]
+    }, 
+    {
+      "name":"org.apache.catalina.authenticator.jaspic.LocalStrings",
       "locales":[""]
     }, 
     {
@@ -540,6 +530,10 @@
       "locales":[""]
     }, 
     {
+      "name":"org.apache.coyote.http11.filters.LocalStrings",
+      "locales":[""]
+    }, 
+    {
       "name":"org.apache.naming.LocalStrings",
       "locales":[""]
     }, 
@@ -561,6 +555,10 @@
     }, 
     {
       "name":"org.apache.tomcat.util.http.LocalStrings",
+      "locales":[""]
+    }, 
+    {
+      "name":"org.apache.tomcat.util.http.parser.LocalStrings",
       "locales":[""]
     }, 
     {

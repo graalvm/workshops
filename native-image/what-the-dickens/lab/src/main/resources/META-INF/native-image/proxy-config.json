@@ -12,6 +12,9 @@
     "interfaces":["org.springframework.boot.context.properties.ConfigurationProperties"]
   },
   {
+    "interfaces":["org.springframework.web.bind.annotation.PathVariable"]
+  },
+  {
     "interfaces":["org.springframework.web.bind.annotation.RequestMapping"]
   }
 ]
