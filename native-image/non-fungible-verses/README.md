@@ -5,8 +5,6 @@ width="200px">
 # Non Fungible Verses
 (Because Web3.0 needs procedurally generated poetry as well as monkey GIFs)
 
-## Introduction
-
 The aims of this lab are:
 1. To introduce you to some of the capabilities of the Oracle Cloud Infrastructure (OCI) always free tier.
 2. To show you how using [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/) can help you make the most of your free tier allocation.
@@ -33,7 +31,7 @@ Implementation of a full blown "Web3" solution with blockchain is beyond the sco
 
 For further information, see [Web3](https://web3isgoinggreat.com/).
 
-### GraalVM Native image
+### GraalVM Native Image
 
 GraalVM Native Image technology compiles Java code ahead-of-time into a native executable file. Only the code that is 
 required at run time by the application is included in the executable file.
@@ -52,11 +50,11 @@ Micronaut, Spring, Helidon, and Quarkus.
 In addition, there are Maven and Gradle plugins for Native Image so you can easily build,
 test, and run Java applications as executable files.
 
->Note: Oracle Cloud Infrastructure (OCI) provides GraalVM Enterprise at no additional cost.
+> Note: Oracle Cloud Infrastructure (OCI) provides GraalVM Enterprise at no additional cost.
 
 Estimated lab time: 90 minutes
 
-### Lab Objectives
+## Lab Objectives
 
 In this lab you will:
 
@@ -82,7 +80,7 @@ Before starting this lab, you must have:
 
 * An OCI tenancy - a trial tenancy will do, as the lab can be run using always free services.
 
-## Provisioning OCI services
+### Provisioning OCI services
 
 1. Log into your OCI tenancy
 2. Select or create a compartment to work in (working in the root compartment is a bad idea)
@@ -102,7 +100,7 @@ Once the VM is up and running, SSH into it and carry out the following steps:
 * stop & disable the firewall of the VM (normally this isn't recommended)
 * In the security list for the VCN Subnet of your VM, add an ingress rule for TCP traffic on port 8080
 
-### Autonomous JSON Database
+### Autonomous JSON Database
 
 Create an AJD instance with the default settings.
 
@@ -769,7 +767,7 @@ In our experiments, we saw a size of around 82MB, compared to 171MB for an Oracl
 image. So we have shrunk the container by a lot. A long way down from our starting size, for 
 the Java container, of almost 600MB.
 
-## Summary
+### Summary
 
 We hope you have enjoyed this lab and learnt a few things along the way. You've seen how to containerise
 a Java application. Then you've converted that Java application into a native executable, which starts significantly 
