@@ -1,12 +1,10 @@
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/GraalVM-rgb.png">
+  <source media="(prefers-color-scheme: dark)" srcset="images/GraalVM-rgbrev.png">
   <source media="(prefers-color-scheme: light)" srcset="images/GraalVM-rgb.png">
-  <img alt="GraalVM logo" src="images/GraalVM-rgb.png" width="50%">
+  <img alt="GraalVM logo" src="images/GraalVM-rgb.png" width="50%" style="1px solid red;">
 </picture>
 
-
-!["GraalVM logo"](images/GraalVM-rgb.png#logo)
 
 # VS Code Tools for Micronaut
 
