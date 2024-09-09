@@ -56,7 +56,8 @@ Before starting this lab, you must have:
 
 * A recent install of VS Code. If you don't have it, you can [download it here](https://code.visualstudio.com/download).
 * An install of the most recent version of Oracle GraalVM. Please read the GraalVM documentation for more details: [Download Oracle GraalVM](https://www.graalvm.org/downloads/).
-* An Oracle ATP instance with the HR schema installed. If you can not create an ATP instance and install the schema then we can provide you with a pre-configured instance.
+* An Oracle [Autonomous Transaction Processing](https://www.oracle.com/uk/autonomous-database/autonomous-transaction-processing/) (ATP) instance with the HR schema installed. If you can not create an ATP instance and install the schema then we can provide you with a pre-configured instance.
+* The Oracle sample [HR schema can be found here](https://github.com/oracle-samples/db-sample-schemas). This link also contains instructions for installing. 
 
 ## Install the Tools for Micronaut Extension
 
@@ -69,9 +70,30 @@ You can either install directly from within the VS Code marketplace, links above
 
 ## Create a Micronaut Application
 
-We start this lab by creating a simple Micronaut application and seeing how our tooling can progressively support us in adding features to it. We will also see how easy it is to run and interact with our application using our tools, but the first step is to create an application. Let's do that now.
+We start this lab by creating a simple Micronaut application and seeing how our tooling can progressively support us in adding features to it. We will also see how easy it is to run and interact with our application using the Tools for Micronaut, but the first step is to create an application. Let's do that now.
 
-An application can be created using the 
+An application can be created using the, `Micronaut Launch: Create Micronaut Project`, action within the VS Code Command Pallet. The Command Pallet can be opened with:
+
+### Mac
+
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+```
+⌘ + Shift + P
+```
+
+### Linux
+
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+```
+Ctrl + Shift + P
+```
+
+###  
+
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+```
+Ctrl + Shift + P
+```
 
 ## Navigate Around your Application
 
