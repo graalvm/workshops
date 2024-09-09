@@ -1,6 +1,11 @@
-<style type="text/css" scoped>
-img[src*="#logo"] {with: "100px"; border: "1px dotted red";}
-</style>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/GraalVM-rgb.png">
+  <source media="(prefers-color-scheme: light)" srcset="images/GraalVM-rgb.png">
+  <img alt="GraalVM logo" src="images/GraalVM-rgb.png" width="50%">
+</picture>
+
+
 !["GraalVM logo"](images/GraalVM-rgb.png#logo)
 
 # VS Code Tools for Micronaut
