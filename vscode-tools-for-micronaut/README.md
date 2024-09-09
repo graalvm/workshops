@@ -54,15 +54,13 @@ During this lab, we will introduce you to the Tools for Micronaut extension for 
 
 Before starting this lab, you must have:
 
-* A recent install of VS Code, if you don't you can [download if here](https://code.visualstudio.com/download).
-* Install of most recent version of Oracle GraalVM. This can be done using the command line tool, `sdkman`. Please ateka  look at thsi for more details: [Download Oracle GraalVM](https://www.graalvm.org/downloads/).
-* An Oracle ATP instance with the HR schema installed. for this labe we will provide you with a pre-configured instance that you can use. We will supply the details later on in the lab.
+* A recent install of VS Code. If you don't have it, you can [download it here](https://code.visualstudio.com/download).
+* An install of the most recent version of Oracle GraalVM. Please read the GraalVM documentation for more details: [Download Oracle GraalVM](https://www.graalvm.org/downloads/).
+* An Oracle ATP instance with the HR schema installed. If you can not create an ATP instance and install the schema then we can provide you with a pre-configured instance.
 
 ## Install the Tools for Micronaut Extension
 
-In order to get all of the Micronaut features within VS Code, that we will look at in this lab, you first need to install the extension. 
-
-You will need to install the following extensions into VS Code:
+For this lab you will need to install the following extensions into VS Code:
 
 * [MS Extension Pack for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack).
 * [tools for Micronaut® Framework](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools).
