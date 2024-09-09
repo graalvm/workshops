@@ -15,42 +15,35 @@ In this lab we will introduce you to the Micronaut&reg; tooling available within
 
 ## Lab Objectives
 
-In this lab you we will introduce you to the Tools for Micronaut extension for VS Code. This extension supports working and building Micronaut application. You will:
+During this lab, we will introduce you to the Tools for Micronaut extension for VS Code. This extension supports working and building Micronaut applications. You will:
 
-- Install VS Code and the Tools for Micronaut extension
-- Create a Micronaut application within VS Code
+- Install VS Code and the Tools for Micronaut extension.
+- Create a Micronaut application within VS Code.
+- Navigate around your application.
+- Use the code creation automation:
+  - Create a REST controller.
+  - Use autocomplete within properties files.
+- Discover what the Micronaut Activity view can do:
+  - Use the Micronaut Activity View to run the application.
+  - Navigate around the application's endpoints and beans.
+  - Make a REST call.
+  - Add the Micronaut Control Panel to your application.
+  - Monitor & manage your application in real-time.
+- Use the Micronaut Expression Language.
+- Work with an Oracle Database:
+  - Connect to a database.
+  - Create Micronaut Data entities, repositories from an existing database schema, and then REST controllers using the tooling.
+  - Run your application using the attached database.
+  - Generate tests for your controllers.
+- Use Visual VM from within VS Code:
+  - Install Visual VM from within VS Code.
+  - Use the integrated Visual VM support to solve performance issues in your application.
+- Work with cloud resources in Oracle Cloud Infrastructure (OCI):
+  - Learn how to work with Oracle Cloud (OCI) resources within your application.
+  - Add an Object Storage bucket to your application.
+  - Run the application using the attached Object Storage Bucket.
 
-- Naviagte around your application
-
-- Code creation Automation
-  - Create a REST controller
-  - Autocomplete within properties files
-
-- Discover what the Micronaut Activity view can do
-  - Use the Micronaut Activity View to run the application 
-  - Naviagte around the end points and beans
-  - Make a REST call
-  - Add the Micronaut Control Panel to your application
-  - Monitor & manage your application in realtime
-
-- Use the Micronaut Expression Language
-
-- Work with an Oracle Database
-  - Connect to a database
-  - Create Micronaut Data entities, repositories from and REST controllers to expose an existing database schema
-  - Run youe application using the attached database
-  - Generate tests for your controllers
-
-- Use Visual VM from within VS Code
-  - Install Visual VM from within VS Code
-  - Use the integrated Visual VM support to solve performance issues in your application
-
-- Work with cloud resources in Oracle Cloud Infrastructure (OCI)
-  - Learn how to work with Oracle Cloud (OCI) resources within your application
-  - Add an Object Storage bucket to your application
-  - Run the application using the attached Object Storage Bucket
-
->Note: If you see the laptop icon in the lab, this means you need to do something such as enter a command. Keep an eye out for it.
+>Note: If you see the laptop icon in the lab, this means you need to do something, such as enter a command. Keep an eye out for it.
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```
