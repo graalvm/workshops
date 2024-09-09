@@ -88,12 +88,28 @@ An application can be created using the, `Micronaut Launch: Create Micronaut Pro
 Ctrl + Shift + P
 ```
 
-###  
+###  Windows
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```
 Ctrl + Shift + P
 ```
+
+Then search for and run, `Micronaut Launch: Create Micronaut Project`.
+
+The wizard will walk you through the proces of creating a Micronuat application. You will need to create an application with the following properties:
+
+* Version 4.6.1
+* Application Type: Micronaut Application
+* Java runtime: GraalVM JDK17
+* Project name: demo
+* Base package: com.example
+* Language: Java (our tools focus on Java support)
+* Project features: don't select any
+* Build tool: You choose
+* Test framework: JUnit
+
+save the project and open it in VS Code. You can choose to add it the current workspace, which will allow you to keep this guide open, if you have opened it within VS Code.
 
 ## Navigate Around your Application
 
