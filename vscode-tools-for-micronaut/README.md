@@ -1,6 +1,7 @@
-<img src="https://www.graalvm.org/resources/img/home/logo_mobile_openmenu.svg"
-alt="GraalVM logo"
-width="200px">
+<style type="text/css" scoped>
+img[src*="#logo"] {with: "100px"; border: "1px dotted red";}
+</style>
+!["GraalVM logo"](images/GraalVM-rgb.png#logo)
 
 # VS Code Tools for Micronaut
 
@@ -53,7 +54,7 @@ In this lab you we will introduce you to the Tools for Micronaut extension for V
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```
-# This is where you will need to do something
+# This is where you will need to do something.
 ```
 
 ## Lab Prerequisites
@@ -64,23 +65,22 @@ Before starting this lab, you must have:
 * Install of most recent version of Oracle GraalVM. This can be done using the command line tool, `sdkman`. Please ateka  look at thsi for more details: [Download Oracle GraalVM](https://www.graalvm.org/downloads/).
 * An Oracle ATP instance with the HR schema installed. for this labe we will provide you with a pre-configured instance that you can use. We will supply the details later on in the lab.
 
-### Installing Oracle GraalVM
-
-1. Install sdkman.
-2. install graalvm and make it the default.
-
 ## Install the Tools for Micronaut Extension
 
-In order to get all of the Micronaut features within VS Code, that we will look at in th is lab, you first need to install the extension. 
+In order to get all of the Micronaut features within VS Code, that we will look at in this lab, you first need to install the extension. 
 
-TODO: Install MS Java Extension Pack
-TODO: Copy from the GDK install page - actual install is different, but 
+You will need to install the following extensions into VS Code:
 
-Discuss that it can be installed directly from within the MS Java extension New Project Wizard.
+* [MS Extension Pack for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack).
+* [tools for Micronaut® Framework](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools).
+
+You can either install directly from within the VS Code marketplace, links above, or through the extensions activity view within VS Code.
 
 ## Create a Micronaut Application
 
-In this lab we will start out with a simple Micronaut application and see how our tooling can progressively support us in adding features to this. We will see how easy it is to run and interact with our application using our tool, but the first step is top  create an application. Let's do that now.
+We start this lab by creating a simple Micronaut application and seeing how our tooling can progressively support us in adding features to it. We will also see how easy it is to run and interact with our application using our tools, but the first step is to create an application. Let's do that now.
+
+An application can be created using the 
 
 ## Navigate Around your Application
 
