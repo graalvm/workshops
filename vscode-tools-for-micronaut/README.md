@@ -19,10 +19,10 @@ During this lab, we will introduce you to the Tools for Micronaut extension for 
 
 - Install VS Code and the Tools for Micronaut extension.
 - Create a Micronaut application within VS Code.
-- Navigate around your application.
 - Use the code creation automation:
   - Create a REST controller.
   - Use autocomplete within properties files.
+- Navigate around your application.
 - Discover what the Micronaut Activity view can do:
   - Use the Micronaut Activity View to run the application.
   - Navigate around the application's endpoints and beans.
@@ -56,6 +56,7 @@ Before starting this lab, you must have:
 
 * A recent install of VS Code. If you don't have it, you can [download it here](https://code.visualstudio.com/download).
 * An install of the most recent version of Oracle GraalVM. Please read the GraalVM documentation for more details: [Download Oracle GraalVM](https://www.graalvm.org/downloads/).
+* An install of the [Oracle Cloud CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm).
 * An Oracle [Autonomous Transaction Processing](https://www.oracle.com/uk/autonomous-database/autonomous-transaction-processing/) (ATP) instance with the HR schema installed. If you can not create an ATP instance and install the schema then we can provide you with a pre-configured instance.
 * The Oracle sample [HR schema can be found here](https://github.com/oracle-samples/db-sample-schemas). This link also contains instructions for installing. 
 
@@ -101,23 +102,66 @@ The wizard will walk you through the process of creating a Micronuat application
 
 * Version 4.6.1
 * Application Type: Micronaut Application
-* Java runtime: GraalVM JDK17
+* Java runtime: GraalVM JDK21
 * Project name: demo
 * Base package: com.example
 * Language: Java (our tools focus on Java support)
-* Project features: don't select any
+* Project features: Micronaut Data JDBC, Oracle Cloud Autonomous Transaction Processing (ATP), HTTP Client
 * Build tool: You choose
 * Test framework: JUnit
 
 Save the project and open it in VS Code. You can choose to add it to the current workspace, which will allow you to keep this guide open if you have opened it within VS Code.
 
-## Navigate Around your Application
+Initially we won't be using the Micronaut Data and Oracle ATP modules, but creating them now will mean that adding database functionality to our application will be easier later on.
 
-## Code Creation Automation
+Before we do anything else, we will need to comment out all of the `datasources.*` properties in the application's `src/main/resources/application.properties`.
+
+```properties
+#Mon Sep 09 15:24:38 UTC 2024
+#datasources.default.dialect=ORACLE
+#datasources.default.dialect=UTC
+micronaut.application.name=demo
+#datasources.default.ocid=
+#datasources.default.schema-generate=CREATE_DROP
+#datasources.default.walletPassword=
+oci.config.profile=DEFAULT
+```
+
+## Code Creation
+
+Tools for Micronaut has support for creating Micronaut classes from templates. Within the right click context menu, also launched by `CTRL + Mouse-Click`, you can see a submenu that groups all of the Micronuat context specific actions.
+
+![Micronaut context actions menu](./images/vscode-context-menu-micronaut-menu.png)
+
+We will be using the items in this menu to easily create classes for us.
 
 ### Create a REST controller
 
+Let's start by creating a REST based controller. We will first create a new Java package, within our base package, to hold our controller. A new package can be easily created with the VS Code context action menu, as shown below.
+
+![Create a new Java package](./images/vscode-context-menu-new-package.png)
+
+Once you have created the package for holding the controllers, create a new controller with the nam, `PingController`. You should see the following, or similar if you changed the name.
+
+```java
+@Controller("/ping")
+public class PingController {
+
+    @Get(produces = "text/plain")
+    public String get() {
+        // TODO: review the generated method skeleton and provide a meaningful implementation.
+        return "Example Response";
+    }
+
+}
+```
+
+
 ### Autocomplete within properties files
+
+Named datasources will be coming in a future release.
+
+## Navigate Around your Application
 
 ## Discover what the Micronaut Activity View Can Do
 
