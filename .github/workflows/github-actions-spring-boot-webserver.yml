@@ -1,0 +1,67 @@
+name: Multi-Cloud Apps with GraalVM - Up and Running
+on:
+  push:
+    paths:
+      - 'native-image/spring-boot-webserver/**'
+      - '.github/workflows/github-actions-spring-boot-webserver.yml'
+jobs:
+  build:
+    name: Run Jwebserver
+    runs-on: ubuntu-20.04 # Docker changed its behavior on Ubuntu 22.04
+    timeout-minutes: 30    
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up GraalVM
+      uses: graalvm/setup-graalvm@v1
+      with:
+        java-version: '23-ea'
+        distribution: 'graalvm'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run Spring Boot Web Server
+      run: |
+        # Build JAR (Debian Slim)
+        ./build-jar.sh
+        #
+
+        # Build Jlink custom runtime (Distroless Java Base)
+        ./build-jlink.sh
+        #
+
+        # Build dynamic image (Distroless Java Base)
+        ./build-dynamic-image.sh
+        #
+
+        # Build dynamic image, optimized for size (Distroless Java Base)
+        ./build-dynamic-image-optimized.sh
+        #
+        
+        # Setup musl toolchain
+        ./setup-musl.sh
+        export PATH="$PWD/musl-toolchain/bin:$PATH"
+        #
+
+        # Build mostly static image (Distroless Base)
+        ./build-mostly-static-image.sh
+        #
+
+        # Build fully static image (Scratch)
+        ./build-static-image.sh
+        #
+
+        # Download upx
+        ./setup-upx.sh
+        #
+
+        # Build fully static compressed image (Scratch UPX)
+        ./build-static-upx-image.sh
+        #
+
+        # Compare file sizes
+        ls -lh target/webserver*
+        docker images webserver
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v4
+      with:
+          name: native-binaries-${{ matrix.os }}
+          path: |
+            target/webserver*

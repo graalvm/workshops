@@ -44,7 +44,19 @@ GraalVM as a Java runtime.
 >  - Build and run a Java application, using GraalVM
 >  - Turn a Java application into a native executable, using GraalVM Native Image
 >  - Build a native executable that works with the dynamic features of Java
->  - Use the Maven GraalVM plugin to build a native executable using GraalVM Native Image2.
+>  - Use the Maven GraalVM plugin to build a native executable using GraalVM Native Image.
+
+### ![Lab Flask](./images/lab-flask.png) [Multi-Cloud Apps with GraalVM - Up and Running](native-image/spring-boot-webserver/)
+<a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-spring-boot-webserver.yml">
+   <img alt="native-image-quickstart" src="https://github.com/graalvm/workshops/actions/workflows/github-actions-spring-boot-webserver.yml/badge.svg" /></a>
+
+> Workshop is for developers looking to understand better how to build **size-optimized** Java applications using [GraalVM Native Image](https://www.graalvm.org/reference-manual/native-image/). In the workshop you will:
+> Compile a Spring Boot web server, hosting GraalVM documentation pages, ahead of time into a native executable and optimize it for file size
+> See how to use the [GraalVM Native Image Maven Plugin](https://graalvm.github.io/native-build-tools/latest/maven-plugin.html)
+> Create native executables and run them inside different base containers, including Paketo Buildpacks
+> Shrink a container image size by taking advantage of different Native Image containerisation and linking options
+
+> Run on an Oracle-owned tenancy (Luna Labs): [https://luna.oracle.com/lab/b644a03a-8238-4293-a586-55e5b0ec6186](https://luna.oracle.com/lab/b644a03a-8238-4293-a586-55e5b0ec6186)
 
 ### ![Lab Flask](./images/lab-flask.png) [Understanding Reflection with GraalVM Native Image](native-image/reflection/)
 <a href="https://github.com/graalvm/workshops/actions/workflows/github-actions-native-image-reflection.yml">
@@ -76,6 +88,4 @@ GraalVM as a Java runtime.
 >  Workshop that builds upon the containerisation workshop. It adds:  
 > 
 >  - An introduction to some of the capabilities of the Oracle Cloud Infrastructure (OCI) always free tier.
->  - Showw how using [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/) can help you make the most of your free tier allocation
-
-
+>  - Show how using [GraalVM Native Image](https://www.graalvm.org/reference-manual/native-image/) can help you make the most of your free tier allocation
