@@ -2,13 +2,13 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="images/GraalVM-rgbrev.png">
   <source media="(prefers-color-scheme: light)" srcset="images/GraalVM-rgb.png">
-  <img alt="GraalVM logo" src="images/GraalVM-rgb.png" width="50%" style="1px solid red;">
+  <img alt="GraalVM logo" src="images/GraalVM-rgb.png" width="50%">
 </picture>
 
 
-# VS Code Tools for Micronaut
+# ![Lab Flask](../images/lab-flask.png) VS Code Tools for Micronaut
 
-In this lab we will introduce you to the Micronaut tooling available within VS Code. This tooling is very feature rich and makes building and working with Micronaut applciations easy.
+In this lab we will introduce you to the Micronaut&reg; tooling available within VS Code. This tooling is very feature rich and makes building and working with Micronaut applciations easy.
 
 
 ### blab intro
@@ -134,3 +134,5 @@ We hope you have enjoyed this lab and learnt a few things along the way. You hav
 
 - Watch a presentation by the Native Image architect Christian Wimmer [GraalVM Native Image: Large-scale static analysis for Java](https://www.youtube.com/embed/rLP-8q3Cb8M)
 - [GraalVM Native Image reference documentation](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/)
+
+Micronaut® is a registered trademark of Object Computing, Inc. Use is for referential purposes and does not imply any endorsement or affiliation with any third-party product.
