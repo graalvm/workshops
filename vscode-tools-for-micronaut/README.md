@@ -72,7 +72,7 @@ You can either install directly from within the VS Code marketplace, links above
 
 We start this lab by creating a simple Micronaut application and seeing how our tooling can progressively support us in adding features to it. We will also see how easy it is to run and interact with our application using the Tools for Micronaut, but the first step is to create an application. Let's do that now.
 
-An application can be created using the, `Micronaut Launch: Create Micronaut Project`, action within the VS Code Command Pallet. The Command Pallet can be opened with:
+An application can be created using the `Micronaut Launch: Create Micronaut Project` action within the VS Code Command Pallette. The Command Pallette can be opened with:
 
 ### Mac
 
@@ -97,7 +97,7 @@ Ctrl + Shift + P
 
 Then search for and run, `Micronaut Launch: Create Micronaut Project`.
 
-The wizard will walk you through the proces of creating a Micronuat application. You will need to create an application with the following properties:
+The wizard will walk you through the process of creating a Micronuat application. You will need to create an application with the following properties:
 
 * Version 4.6.1
 * Application Type: Micronaut Application
@@ -109,7 +109,7 @@ The wizard will walk you through the proces of creating a Micronuat application.
 * Build tool: You choose
 * Test framework: JUnit
 
-save the project and open it in VS Code. You can choose to add it the current workspace, which will allow you to keep this guide open, if you have opened it within VS Code.
+Save the project and open it in VS Code. You can choose to add it to the current workspace, which will allow you to keep this guide open if you have opened it within VS Code.
 
 ## Navigate Around your Application
 
