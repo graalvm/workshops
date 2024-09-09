@@ -8,13 +8,10 @@
 
 # ![Lab Flask](../images/lab-flask.png) VS Code Tools for Micronaut
 
-In this lab we will introduce you to the Micronaut&reg; tooling available within VS Code. This tooling is very feature rich and makes building and working with Micronaut applciations easy.
+In this lab we will introduce you to the Micronaut&reg; tooling available within VS Code. This tooling is very feature rich and makes building and working with Micronaut applciations easy. Let's get started.
 
 
-### blab intro
-
-
-Estimated lab time: 60 minutes
+**Estimated lab time: 90 minutes**
 
 ## Lab Objectives
 
