@@ -31,7 +31,6 @@ During this lab, we will introduce you to the Tools for Micronaut extension for 
 - Work with an Oracle Database:
   - Connect to a database.
   - Create Micronaut Data entities, repositories from an existing database schema, and then REST controllers using the tooling.
-  - Run your application using the attached database.
   - Generate tests for your controllers.
 - Use Visual VM from within VS Code:
   - Install Visual VM from within VS Code.
@@ -361,16 +360,31 @@ You can use the same menu to create a Micronaut Data repositiory class to wrap a
 
 Over to you:
 * Create new packages within your project: `com.example.entity`, `com.example.repository`
-* Create a Micronaut Data entity class for the `COUNTRIES` table within the `com.example.entity`.
-* Use the same context menu to create a Micronaut Data repository class for wrapping around the Country entity. Do this within the `com.example.repository` package.
+* Create a Micronaut Data entity class for the `COUNTRIES` table within the `com.example.entity`. This will generate an entity class, `Country`.
+* Use the same context menu to create a Micronaut Data repository class for wrapping around the Country entity. Do this within the `com.example.repository` package. This will create a `CountryRepository` class.
 
+Now that we have our repository and entity created we will want to wrap that in a controller so that we can expose this tbale form the schema through a REST API.
 
+<img alt="Create a controller to wrap the repository" src="./images/create-data-controller.png" width="60%" >
 
+![keyboard](./images/keyboard.jpg)
 
+Over to you:
+* Create a data controller to wrap around the repository. This will create a controller called, `CountryController`.
+* Start your application and use the Micronaut Activity View. Use the `ENDPOINTS` to call the `GET` method of your controller. You should see data returned from the database.
 
-### Run your application using the attached database
+We can use source code completion, Intellisense, to add [`findby` methods.](https://micronaut-projects.github.io/micronaut-data/latest/guide/#querying)
 
-TODO
+![keyboard](./images/keyboard.jpg)
+
+Over to you:
+* Open the newly created repository class.
+* Use the code completion, `CTRL + Space`, to generate a query (`findBy`) method to return an instance of a `Country`.
+* How did you find generating query methods? Could anything be improved? Please make a note.
+* Open your controller that wraps around your repository. Add a `GET` method that calls the query (`findBy`) method. Run the application and call the new endpoint using the REST compose editor.
+* In the controller, use the code completion to add an `update` and a `delete` method. test these methods out in the REST query composer.
+* Add a `save` method to the controller. This will accept a JSON document. Again use the REST query composer to create a new country entity.
+
 
 ### Generate tests for your controllers
 
