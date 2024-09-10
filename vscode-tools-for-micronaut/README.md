@@ -349,9 +349,26 @@ Over to you:
 
 ### Create Micronaut Data entities, repositories from and REST controllers to expose an existing database schema
 
-TODO
+We can create Micronaut Data enity and repository classes directly from the schema within the database that we are now connected to. We will use the right click (`CMD + Mouse Click` on MacOS) conext menu to do this. We will start with creating the entoty classes form the HR schema.
 
-### Run youe application using the attached database
+<img alt="Create a Micronaut Data entity from a schema" src="./images/add-new-mn-data-entity-from-schema-menu.png" width="60%" >
+
+You can use the same menu to create a Micronaut Data repositiory class to wrap around entity classes.
+
+<img alt="Create a Micronaut Data repository from an entity class" src="./images/add-new-mn-data-repository-context-menu.png" width="60%" >
+
+![keyboard](./images/keyboard.jpg)
+
+Over to you:
+* Create new packages within your project: `com.example.entity`, `com.example.repository`
+* Create a Micronaut Data entity class for the `COUNTRIES` table within the `com.example.entity`.
+* Use the same context menu to create a Micronaut Data repository class for wrapping around the Country entity. Do this within the `com.example.repository` package.
+
+
+
+
+
+### Run your application using the attached database
 
 TODO
 
