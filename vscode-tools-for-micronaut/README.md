@@ -235,12 +235,12 @@ We hinted in the previous section that it was possible to do more than view the 
 
 The first of these new icons, shown below, will open the running endpoint in a browser.
 
-<img alt="Application View" src="./images/mn-activity-view-endpoint-open-in-browser.png" width="40%" >
+<img alt="Application View" src="./images/mn-activity-view-endpoint-open-in-browser.png" width="25%" >
 
 
 The second launches a REST composition tool that will allow you to call the endpoint with HTTP parameters and payloads.
 
-<img alt="Application View" src="./images/mn-activity-view-controllers-compose-query.png" width="40%" >
+<img alt="Application View" src="./images/mn-activity-view-controllers-compose-query.png" width="25%" >
 
 By clicking on the, `Send Request`, text above the `curl`-like query string we can send data to the endpoint and we will see the response opened in a side window.
 
