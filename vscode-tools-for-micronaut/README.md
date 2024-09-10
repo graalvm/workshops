@@ -271,12 +271,24 @@ With the control panel enabled restart your application from within the Applicat
 
 ![keyboard](./images/keyboard.jpg)
 
+Over to you:
 * Enable the Micronaut Control Panel for your application.
 * Open and browse around the Control Panel for your application.
 * Are there missing features for integrating with the Control Panel? Please make a note.
 
 ### Monitor & manage your application in realtime
 
+We can also automatically install support for monitoring and management into our application (adding support for Micronaut Micrometer and Micronaut Cache) in a similar way. First stop your running application, so that we can update it's configuration, and follow the steps shown below.
+
+<img alt="Enabling the Micronaut Monitoring and Management" src="./images/mn-activity-view-enable-monitoring-and-management.gif" width="60%" >
+
+![keyboard](./images/keyboard.jpg)
+
+Over to you:
+* Enable Monitoring and managment for your application. Restart the application.
+* Take a look within the `MONITORING & MANAGEMENT` panel. Notice what properties of the running application are now visible within the IDE.
+* Add a custom logger to your application and some custom logging to your controller. restart the application & play with controlling the logging from within the `MONITORING & MANAGEMENT` panel. We also have support for managing caches in a very similar manner.
+* What other features would you expect to see here? Please make a note.
 
 
 ## Autocomplete within properties files
