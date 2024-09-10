@@ -74,25 +74,11 @@ We start this lab by creating a simple Micronaut application and seeing how our 
 
 An application can be created using the `Micronaut Launch: Create Micronaut Project` action within the VS Code Command Pallette. The Command Pallette can be opened with:
 
-### Mac
-
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```
-⌘ + Shift + P
-```
-
-### Linux
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```
-Ctrl + Shift + P
-```
-
-###  Windows
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```
-Ctrl + Shift + P
+Mac: ⌘ + Shift + P
+Windows: Ctrl + Shift + P
+Linux: Ctrl + Shift + P
 ```
 
 Then search for and run, `Micronaut Launch: Create Micronaut Project`.
