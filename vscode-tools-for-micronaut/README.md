@@ -2,9 +2,8 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="images/GraalVM-rgbrev.png">
   <source media="(prefers-color-scheme: light)" srcset="images/GraalVM-rgb.png">
-  <img alt="GraalVM logo" src="images/GraalVM-rgb.png" width="50%">
+  <img alt="GraalVM logo" src="images/GraalVM-rgb.png" width="40%"  style="margin-left: -50; padding-left: 0;">
 </picture>
-
 
 # ![Lab Flask](../images/lab-flask.png) VS Code Tools for Micronaut
 
