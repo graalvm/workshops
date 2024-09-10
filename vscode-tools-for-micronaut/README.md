@@ -154,7 +154,7 @@ Over to you:
 
 ## Discover what the Micronaut Activity View Can Do
 
-The Tools for Micronaut extension aupports a custom IDE view dedicated to Micronaut. When you install the extension the icon for this view is visible on the right activity bar, as shown below. It can be shown, or hidden, by right clicking (`CTRL + mouse click` on MacOS) on the activity bar and either activating, or deactivating it.
+The Tools for Micronaut extension supports a custom IDE view dedicated to Micronaut. When you install the extension the icon for this view is visible on the right activity bar, as shown below. It can be shown, or hidden, by right-clicking (`CTRL + mouse click` on MacOS) on the activity bar and either activating or deactivating it.
 
 ![Open the Micronaut Activity View](images/micronaut-activity-view.gif)
 
