@@ -212,8 +212,50 @@ Over to you:
 * Start the application. What new features are availabl for the endpoint(s)?
 * What other features would you like to see associated with endpoints panel? Please make a note.
 
+There is one further way to navigate around your application in VS Code and that is using the, `Go to Symbol in Workspace` tool. This is opened with the key combination of, `CTRL + T` on Windows and Linux and `⌘  + T` on MacOS. When the symbols search field is opened we can use one of the two prefixes to filter the symbols to those that we want:
+
+* `@/` to show all defined request mappings.
+* `@+` to show all defined beans.
+
+<img alt="Application View" src="./images/micronaut-navigation.png" width="60%" >
+
+This functions in a similar manner to what we have already seen, but it is sometimes more convient.
+
+![keyboard](./images/keyboard.jpg)
+
+Over to you:
+* Use the `Go to Symbol in Workspace` to locate your controllers and endpoints.
+
 ### Make a REST call
+
+We hinted in the previous section that it was possible to do more than view the endpoints of your application. When your application is running, the endpoints panel will provide further icons that allow you to call an endpoint.
+
+![keyboard](./images/keyboard.jpg)
+
+* If your application isn't running at the moment, start it now.
+
+The first of these new icons, shown below, will open the running endpoint in a browser.
+
+<img alt="Application View" src="./images/mn-activity-view-endpoint-open-in-browser.png" width="40%" >
+
+
+The second launches a REST composition tool that will allow you to call the endpoint with HTTP parameters and payloads.
+
+<img alt="Application View" src="./images/mn-activity-view-controllers-compose-query.png" width="40%" >
+
+By clicking on the, `Send Request`, text above the `curl`-like query string we can send data to the endpoint and we will see the response opened in a side window.
+
+<img alt="Application View" src="./images/mn-send-rest-query-with-response.png" width="60%" >
+
+![keyboard](./images/keyboard.jpg)
+
+Over to you:
+* Use the Compose REST Query editor to call your endpoint.
+* Add another endpoint, possibly a `POST`, and compose a query and call it.
+
+
 ### Add the Micronaut Control Panel to your application
+
 ### Monitor & manage your application in realtime
 
 ## Autocomplete within properties files
