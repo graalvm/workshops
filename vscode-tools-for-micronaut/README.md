@@ -46,8 +46,9 @@ During this lab, we will introduce you to the Tools for Micronaut extension for 
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```
-# This is where you will need to do something.
+# This is where you will need to do update a file, o run a shell command.
 ```
+>Note: If you see the keyboard icon, ![keyboard](./images/keyboard.jpg), in the lab, this means you are being given some tasks to try. Keep an eye out for it.
 
 ## Lab Prerequisites
 
@@ -145,7 +146,7 @@ You can trigger code completion, Intellisense, suggestions within VS Code using 
 
 ![Triggering Intellisense in the editor](images/intellisense-gif.gif)
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+![keyboard](./images/keyboard.jpg)
 
 Over to you:
 * Add a `@POST` method to the controller you just created. It doesn't need to do anything with the payload.
@@ -168,7 +169,7 @@ The first thing we can do in the Micronaut Activity View, is run our application
 
 In the first panel of the Micornaut Activity View we can see our application. By clicking on the various icons shown when we hover the mouse over the application name we can start, debug and stop our application.
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+![keyboard](./images/keyboard.jpg)
 
 Over to you:
 * Start the application, and then stop it, using the view.
