@@ -114,7 +114,6 @@ Before we do anything else, we will need to comment out all of the `datasources.
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```properties
-#Mon Sep 09 15:24:38 UTC 2024
 #datasources.default.dialect=ORACLE
 #datasources.default.dialect=UTC
 micronaut.application.name=demo
@@ -300,7 +299,28 @@ TODO: Named datasources will be coming in a future release.
 
 ## Work with an Oracle Database
 
+The Tools for Micronaut has extensive support for working with databases and in particular the Oracle Database. We will take a look at how we can connect VS Code with an existing Oracle Autonomous Transaction Processing instance and then use an existing database schema to generate our Micronaut Data model.
+
+All of the following functionality works with MySQL as well. 
+
+The first we need to do is re-enable the Micronaut Data configuration in our application's properties file, `src/main/resources/application.properties`.
+
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+
+Update your `src/main/resources/application.properties` file so it looks liek the one below:
+```properties
+datasources.default.dialect=ORACLE
+datasources.default.dialect=UTC
+micronaut.application.name=demo
+datasources.default.ocid=
+datasources.default.schema-generate=CREATE_DROP
+datasources.default.walletPassword=
+oci.config.profile=DEFAULT
+```
+
 ### Connect to a database
+
+
 ### Create Micronaut Data entities, repositories from and REST controllers to expose an existing database schema
 ### Run youe application using the attached database
 ### Generate tests for your controllers
