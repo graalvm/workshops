@@ -385,10 +385,18 @@ Over to you:
 * In the controller, use the code completion to add an `update` and a `delete` method. test these methods out in the REST query composer.
 * Add a `save` method to the controller. This will accept a JSON document. Again use the REST query composer to create a new country entity.
 
-
 ### Generate tests for your controllers
 
-TODO
+Having come so far we can now complete our project by auto-generating tests. Test generation is available from the `Source action` menu. This can be accessed by right-clicking within the code editor.
+
+<img alt="Create a controller to wrap the repository" src="./images/generate-tests.png" width="60%" >
+
+![keyboard](./images/keyboard.jpg)
+
+Over to you:
+* Open the controller that wraps around the repository. Use the `Generate Tests` source action.
+* Take a look through the generaterd tests.
+* WHat could be improved? What features would you like to see added? Please make notes. 
 
 ## Use Visual VM from within VS Code
 
