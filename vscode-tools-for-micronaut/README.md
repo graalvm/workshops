@@ -145,7 +145,6 @@ You can trigger code completion, Intellisense, suggestions within VS Code using 
 
 ![Triggering Intellisense in the editor](images/intellisense-gif.gif)
 
-
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 
 Over to you:
@@ -155,7 +154,11 @@ Over to you:
 
 ## Discover what the Micronaut Activity View Can Do
 
-All of the Micronaut related activities 
+The Tools for Micronaut extension aupports a custom IDE view dedicated to Micronaut. When you install the extension the icon for this view is visible on the right activity bar, as shown below. It can be shown, or hidden, by right clicking (`CTRL + mouse click` on MacOS) on the activity bar and either activating, or deactivating it.
+
+![Open the Micronaut Activity View](images/micronaut-activity-view.gif)
+
+We will now use the Micronaut Activity View to run and interact with the application that we have been creating.
 
 ### Use the Micronaut Activity View to run the application 
 ### Naviagte around the end points and beans
