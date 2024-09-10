@@ -395,7 +395,7 @@ Having come so far we can now complete our project by auto-generating tests. Tes
 
 Over to you:
 * Open the controller that wraps around the repository. Use the `Generate Tests` source action.
-* Take a look through the generaterd tests.
+* Take a look through the generaterd tests. The tests are only a starting point.
 * WHat could be improved? What features would you like to see added? Please make notes. 
 
 ## Use Visual VM from within VS Code
