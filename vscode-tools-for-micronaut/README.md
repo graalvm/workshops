@@ -21,14 +21,13 @@ During this lab, we will introduce you to the Tools for Micronaut extension for 
 - Create a Micronaut application within VS Code.
 - Use the code creation automation:
   - Create a REST controller.
-  - Use autocomplete within properties files.
-- Navigate around your application.
 - Discover what the Micronaut Activity view can do:
   - Use the Micronaut Activity View to run the application.
   - Navigate around the application's endpoints and beans.
   - Make a REST call.
   - Add the Micronaut Control Panel to your application.
   - Monitor & manage your application in real-time.
+- Use autocomplete within properties files.
 - Use the Micronaut Expression Language.
 - Work with an Oracle Database:
   - Connect to a database.
@@ -116,6 +115,7 @@ Initially we won't be using the Micronaut Data and Oracle ATP modules, but creat
 
 Before we do anything else, we will need to comment out all of the `datasources.*` properties in the application's `src/main/resources/application.properties`.
 
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```properties
 #Mon Sep 09 15:24:38 UTC 2024
 #datasources.default.dialect=ORACLE
@@ -131,15 +131,15 @@ oci.config.profile=DEFAULT
 
 Tools for Micronaut has support for creating Micronaut classes from templates. Within the right click context menu, also launched by `CTRL + Mouse-Click`, you can see a submenu that groups all of the Micronuat context specific actions.
 
-![Micronaut context actions menu](./images/vscode-context-menu-micronaut-menu.png)
+<img alt="Micronaut context actions menu" src="./images/vscode-context-menu-micronaut-menu.png" width="50%">
 
 We will be using the items in this menu to easily create classes for us.
 
-### Create a REST controller
+## Create a REST controller
 
 Let's start by creating a REST based controller. We will first create a new Java package, within our base package, to hold our controller. A new package can be easily created with the VS Code context action menu, as shown below.
 
-![Create a new Java package](./images/vscode-context-menu-new-package.png)
+<img alt="Create a new Java package" src="./images/vscode-context-menu-new-package.png" width="50%">
 
 Once you have created the package for holding the controllers, create a new controller with the nam, `PingController`. You should see the following, or similar if you changed the name.
 
@@ -152,24 +152,35 @@ public class PingController {
         // TODO: review the generated method skeleton and provide a meaningful implementation.
         return "Example Response";
     }
-
 }
 ```
 
+You can trigger code completion, Intellisense, suggestions within VS Code using the key combination: `CTRL + SPACE`.
 
-### Autocomplete within properties files
+![Triggering Intellisense in the editor](images/intellisense-gif.gif)
 
-Named datasources will be coming in a future release.
 
-## Navigate Around your Application
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+
+Over to you:
+* Add a `@POST` method to the controller you just created. It doesn't need to do anything with the payload.
+* What other methods can be added to the controller?
+* What code completions, code generations would you like to see added?
 
 ## Discover what the Micronaut Activity View Can Do
+
+All of the Micronaut related activities 
 
 ### Use the Micronaut Activity View to run the application 
 ### Naviagte around the end points and beans
 ### Make a REST call
 ### Add the Micronaut Control Panel to your application
 ### Monitor & manage your application in realtime
+
+## Autocomplete within properties files
+
+TODO: Named datasources will be coming in a future release.
+
 
 ## Use the Micronaut Expression Language
 
