@@ -251,7 +251,9 @@ By clicking on the, `Send Request`, text above the `curl`-like query string we c
 
 Over to you:
 * Use the Compose REST Query editor to call your endpoint.
-* Add another endpoint, possibly a `POST`, and compose a query and call it.
+* Add another endpoint, using `POST`, and compose a query and call it.
+* Are there any features you would like to see? Please make a note.
+
 
 
 ### Add the Micronaut Control Panel to your application
