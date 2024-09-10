@@ -294,8 +294,9 @@ Over to you:
 
 TODO: Named datasources will be coming in a future release.
 
-
 ## Use the Micronaut Expression Language
+
+TODO
 
 ## Work with an Oracle Database
 
@@ -320,21 +321,47 @@ oci.config.profile=DEFAULT
 
 ### Connect to a database
 
+TODO
 
 ### Create Micronaut Data entities, repositories from and REST controllers to expose an existing database schema
+
+TODO
+
 ### Run youe application using the attached database
+
+TODO
+
 ### Generate tests for your controllers
+
+TODO
 
 ## Use Visual VM from within VS Code
 
+TODO
+
 ### Install Visual VM from within VS Code
+
+TODO
+
 ### Use the integrated Visual VM support to solve performance issues in your application
+
+TODO
 
 ## Work with Cloud Resources in OCI
 
+TODO
+
 ### Learn how to work with Oracle Cloud (OCI) resources within your application
+
+TODO
+
 ### Add an Object Storage bucket to your application
+
+TODO
+
 ### Run the application using the attached Object Storage Bucket
+
+TODO
 
 ## Summary
 
