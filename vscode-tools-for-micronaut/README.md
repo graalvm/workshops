@@ -123,11 +123,11 @@ We will be using the items in this menu to easily create classes for us.
 
 ## Create a REST controller
 
-Let's start by creating a REST based controller. We will first create a new Java package, within our base package, to hold our controller. A new package can be easily created with the VS Code context action menu, as shown below.
+Let's start by creating a REST-based controller. We will first create a new Java package, within our base package, to hold our controller. This can easily be done within the VS Code context action menu, as shown below.
 
 <img alt="Create a new Java package" src="./images/vscode-context-menu-new-package.png" width="50%">
 
-Once you have created the package for holding the controllers, create a new controller with the nam, `PingController`. You should see the following, or similar if you changed the name.
+Once you have created the package for holding the controllers, create a new controller with the name, `PingController`. You should see the following, or similar if you changed the name.
 
 ```java
 @Controller("/ping")
@@ -150,7 +150,7 @@ You can trigger code completion, Intellisense, suggestions within VS Code using 
 Over to you:
 * Add a `@POST` method to the controller you just created. It doesn't need to do anything with the payload.
 * What other methods can be added to the controller?
-* What code completions, code generations would you like to see added?
+* What code completions and code generations would you like to see added?
 
 ## Discover what the Micronaut Activity View Can Do
 
