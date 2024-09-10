@@ -261,11 +261,11 @@ The [Micronaut Control Panel](https://micronaut-projects.github.io/micronaut-con
 
 * If your application is running, stop it now. We are not able to update the configuration of a running application.
 
-To enable the control panel we can use the Application panel within the Micronaut Activity View. Click on the pencil icon to edit, choose `Enabled`, confirm updating the dependencies of your project and finally specifiy an environment. The process is shown below.
+To enable the control panel we can use the Application panel within the Micronaut Activity View. Click on the pencil icon to edit, choose `Enabled`, confirm updating the dependencies of your project and finally specify an environment. This is shown below.
 
 <img alt="Enabling the Micronaut Control Panel" src="./images/mn-activity-view-enable-control-panel.gif" width="60%" >
 
-With the control panel enabled you can now restart your application, from within the Application Panel of the Micronaut Activity View, and go to the control panel. You can open the control panel by clicking on the link icon shown below.
+With the control panel enabled restart your application from within the Application Panel of the Micronaut Activity View and go to the Control Panel. You can open the control panel by clicking on the link icon shown in the image below.
 
 <img alt="Enabling the Micronaut Control Panel" src="./images/mn-activity-view-goto-control-panel.png" width="40%" >
 
@@ -273,8 +273,11 @@ With the control panel enabled you can now restart your application, from within
 
 * Enable the Micronaut Control Panel for your application.
 * Open and browse around the Control Panel for your application.
+* Are there missing features for integrating with the Control Panel? Please make a note.
 
 ### Monitor & manage your application in realtime
+
+
 
 ## Autocomplete within properties files
 
