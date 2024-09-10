@@ -321,7 +321,31 @@ oci.config.profile=DEFAULT
 
 ### Connect to a database
 
-TODO
+We first need to add a connection to a databse to our project. There are a number of benefits to doing this:
+
+1. When we run our application the connection properties will be injected into the application for us, so we don't need to specify any database connection details in properties files or as environment variables.
+2. The database connection details will be stored securely.
+3. We are able to browse the schema of the database and generate Micronaut Data models from it.
+
+Open the File Explorer View to reveal the `DATABASES` panel, seen below.
+
+<img alt="Database Panel" src="./images/database-panel.png" width="40%" >
+
+Click on the `Add Oracle Autonomous DB` button to launch the database connection wizard. This will walk you through using your OCI CLI configuration to connect to OCI, select an ATP instance and then connect to that instance. 
+
+<img alt="Connect to the database instance" src="./images/add-database-connection.gif" width="60%" >
+
+Once you have a connection you can connect to it.
+
+<img alt="Connect to the database instance" src="./images/connect-todatabase.png" width="60%" >
+
+With the database connection open, you can now use the `DATABASES` panel to 
+
+![keyboard](./images/keyboard.jpg)
+
+Over to you:
+* Add a connection to an existing Oracle ATP instance.
+* Connect to that instance and browse around the schema for the HR user.
 
 ### Create Micronaut Data entities, repositories from and REST controllers to expose an existing database schema
 
