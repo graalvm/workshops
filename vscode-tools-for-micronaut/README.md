@@ -2,7 +2,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="images/GraalVM-rgbrev.png">
   <source media="(prefers-color-scheme: light)" srcset="images/GraalVM-rgb.png">
-  <img alt="GraalVM logo" src="images/GraalVM-rgb.png" width="40%"  style="margin-left: -50; padding-left: 0;">
+  <img alt="GraalVM logo" src="images/GraalVM-rgb.png" width="40%" style="margin-left: -50;">
 </picture>
 
 # ![Lab Flask](../images/lab-flask.png) VS Code Tools for Micronaut
@@ -253,9 +253,26 @@ Over to you:
 * Add another endpoint, using `POST`, and compose a query and call it.
 * Are there any features you would like to see? Please make a note.
 
-
-
 ### Add the Micronaut Control Panel to your application
+
+The [Micronaut Control Panel](https://micronaut-projects.github.io/micronaut-control-panel/snapshot/guide/) provides a web UI that allows you to view and manage the state of your Micronaut application. The Micronaut Activity View allows for integrating the Control Panel into your application. 
+
+![keyboard](./images/keyboard.jpg)
+
+* If your application is running, stop it now. We are not able to update the configuration of a running application.
+
+To enable the control panel we can use the Application panel within the Micronaut Activity View. Click on the pencil icon to edit, choose `Enabled`, confirm updating the dependencies of your project and finally specifiy an environment. The process is shown below.
+
+<img alt="Enabling the Micronaut Control Panel" src="./images/mn-activity-view-enable-control-panel.gif" width="60%" >
+
+With the control panel enabled you can now restart your application, from within the Application Panel of the Micronaut Activity View, and go to the control panel. You can open the control panel by clicking on the link icon shown below.
+
+<img alt="Enabling the Micronaut Control Panel" src="./images/mn-activity-view-goto-control-panel.png" width="40%" >
+
+![keyboard](./images/keyboard.jpg)
+
+* Enable the Micronaut Control Panel for your application.
+* Open and browse around the Control Panel for your application.
 
 ### Monitor & manage your application in realtime
 
