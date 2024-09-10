@@ -76,9 +76,9 @@ An application can be created using the `Micronaut Launch: Create Micronaut Proj
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```
-Mac: ⌘ + Shift + P
+Mac:     ⌘ + Shift + P
 Windows: Ctrl + Shift + P
-Linux: Ctrl + Shift + P
+Linux:   Ctrl + Shift + P
 ```
 
 Then search for and run, `Micronaut Launch: Create Micronaut Project`.
@@ -97,7 +97,7 @@ The wizard will walk you through the process of creating a Micronuat application
 
 Save the project and open it in VS Code. You can choose to add it to the current workspace, which will allow you to keep this guide open if you have opened it within VS Code.
 
-Initially we won't be using the Micronaut Data and Oracle ATP modules, but creating them now will mean that adding database functionality to our application will be easier later on.
+Initially, we won't be using the Micronaut Data and Oracle ATP modules, but creating them now will mean that adding database functionality to our application will be easier later on.
 
 Before we do anything else, we will need to comment out all of the `datasources.*` properties in the application's `src/main/resources/application.properties`.
 
