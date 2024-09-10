@@ -129,7 +129,7 @@ oci.config.profile=DEFAULT
 
 Tools for Micronaut has support for creating Micronaut classes from templates. Within the right click context menu, also launched by `CTRL + Mouse-Click`, you can see a submenu that groups all of the Micronuat context specific actions.
 
-<img alt="Micronaut context actions menu" src="./images/vscode-context-menu-micronaut-menu.png" width="50%">
+<img alt="Micronaut context actions menu" src="./images/vscode-context-menu-micronaut-menu.png" width="40%">
 
 We will be using the items in this menu to easily create classes for us.
 
@@ -137,7 +137,7 @@ We will be using the items in this menu to easily create classes for us.
 
 Let's start by creating a REST-based controller. We will first create a new Java package, within our base package, to hold our controller. This can easily be done within the VS Code context action menu, as shown below.
 
-<img alt="Create a new Java package" src="./images/vscode-context-menu-new-package.png" width="50%">
+<img alt="Create a new Java package" src="./images/vscode-context-menu-new-package.png" width="40%">
 
 Once you have created the package for holding the controllers, create a new controller with the name, `PingController`. You should see the following, or similar if you changed the name.
 
@@ -176,7 +176,7 @@ We will now use the Micronaut Activity View to run and interact with the applica
 
 The first thing we can do in the Micronaut Activity View, is run our application. 
 
-<img alt="Application View" src="./images/mn-activity-view-run.png" width="50%" >
+<img alt="Application View" src="./images/mn-activity-view-run.png" width="40%" >
 
 In the first panel of the Micornaut Activity View we can see our application. By clicking on the various icons shown when we hover the mouse over the application name we can start, debug and stop our application.
 
@@ -192,7 +192,7 @@ Over to you:
 
 Within the Micronaut Activity View, there is rich support for finding and querying beans and the HTTP endpoints of your application. We can see the panels shown in the Micronaut Activity View below.
 
-<img alt="Application View" src="./images/mn-activity-view-beans-and-endpoints.png" width="50%" >
+<img alt="Application View" src="./images/mn-activity-view-beans-and-endpoints.png" width="40%" >
 
 Within the `BEANS` panel, we can see the beans that have been declared within the application and those that come from dependencies. 
 
