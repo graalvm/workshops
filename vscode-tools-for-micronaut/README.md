@@ -45,12 +45,12 @@ During this lab, we will introduce you to the Tools for Micronaut extension for 
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```
-# This is where you will need to do update a file, o run a shell command.
+# This is where you will need to do update a file, or run a shell command.
 ```
 
 >Note: If you see the keyboard icon, ![keyboard](./images/keyboard.jpg), in the lab, this means you are being given some tasks to try. Keep an eye out for it.
 
->Note: Please do keep a note of any suggestions for improvements, bugs, or for features that you think are missing. We will basking you along the way to make a note of these.
+>Note: Please do keep a note of any suggestions for improvements, bugs, or for features that you think are missing. We will be asking you along the way to make a note of these.
 
 ## Lab Prerequisites
 
@@ -75,7 +75,7 @@ The following is a set of documentation that may prove useful when completing th
 For this lab you will need to install the following two extensions into VS Code:
 
 * [MS Extension Pack for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack).
-* [tools for Micronaut® Framework](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools).
+* [Tools for Micronaut® Framework](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools).
 
 You can either install directly from within the VS Code marketplace, links above, or through the extensions activity view within VS Code.
 
