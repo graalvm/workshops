@@ -336,7 +336,7 @@ Click on the `Add Oracle Autonomous DB` button to launch the database connection
 
 Once you have a connection you can connect to it.
 
-<img alt="Connect to the database instance" src="./images/connect-todatabase.png" width="60%" >
+<img alt="Connect to the database instance" src="./images/connect-todatabase.png" width="40%" >
 
 With the database connection open, you can now use the `DATABASES` panel to 
 
