@@ -435,9 +435,4 @@ We hope you have enjoyed this lab and learnt a few things along the way. You hav
 * Easily connecting to and working with databases.
 * Creating complete REST APIs from existing database schemas with 
 
-## Learn More
-
-- Watch a presentation by the Native Image architect Christian Wimmer [GraalVM Native Image: Large-scale static analysis for Java](https://www.youtube.com/embed/rLP-8q3Cb8M)
-- [GraalVM Native Image reference documentation](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/)
-
 Micronaut® is a registered trademark of Object Computing, Inc. Use is for referential purposes and does not imply any endorsement or affiliation with any third-party product.
