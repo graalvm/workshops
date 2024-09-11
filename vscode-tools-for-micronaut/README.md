@@ -398,15 +398,15 @@ Over to you:
 * Take a look through the generated tests. The tests are only a starting point.
 * What could be improved? What features would you like to see added? Please make notes. 
 
-## Use Visual VM from within VS Code
+## Use VisualVM from within VS Code
 
 [VisualVM](https://visualvm.github.io) is a powerful visual tool for analysing and profiling your applications. It has been integrated into the tooling. We will see how the Tools for Micronaut extension can install VisualVM and how the tight integration between the extension and VisualVM allows you to find and resolve performance issues in your code.
 
-### Install Visual VM from within VS Code
+### Install VisualVM from within VS Code
 
-TODO
 
-### Use the integrated Visual VM support to solve performance issues in your application
+
+### Use the integrated VisualVM support to solve performance issues in your application
 
 TODO
 
