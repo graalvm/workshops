@@ -7,7 +7,7 @@
 
 # ![Lab Flask](../images/lab-flask.png) VS Code Tools for Micronaut
 
-In this lab we will introduce you to the Micronaut&reg; tooling available within VS Code. This tooling is very feature rich and makes building and working with Micronaut applciations easy. Let's get started.
+In this lab we will introduce you to the Micronaut&reg; tooling available within VS Code. This tooling is very feature-rich and makes building and working with Micronaut applications easy. Let's get started.
 
 
 **Estimated lab time: 90 minutes**
@@ -44,12 +44,12 @@ During this lab, we will introduce you to the Tools for Micronaut extension for 
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```
-# This is where you will need to do update a file, or run a shell command.
+# This is where you will need to update a file or run a shell command.
 ```
 
->Note: If you see the keyboard icon, ![keyboard](./images/keyboard.jpg), in the lab, this means you are being given some tasks to try. Keep an eye out for it.
+>Note: If you see the keyboard icon ![keyboard](./images/keyboard.jpg) in the lab, this means you are being given some tasks to try. Keep an eye out for it.
 
->Note: Please do keep a note of any suggestions for improvements, bugs, or for features that you think are missing. We will be asking you along the way to make a note of these.
+>Note: Please do keep a note of any suggestions for improvements, bugs, or features that you think are missing. We will be asking you along the way to make a note of these.
 
 ## Lab Prerequisites
 
@@ -76,13 +76,13 @@ For this lab you will need to install the following two extensions into VS Code:
 * [MS Extension Pack for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack).
 * [Tools for Micronaut® Framework](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools).
 
-You can either install directly from within the VS Code marketplace, links above, or through the extensions activity view within VS Code.
+You can install it directly from within the VS Code marketplace, using the links above, or through the extensions activity view within VS Code.
 
 ## Create a Micronaut Application
 
 We start this lab by creating a simple Micronaut application and seeing how our tooling can progressively support us in adding features to it. We will also see how easy it is to run and interact with our application using the Tools for Micronaut, but the first step is to create an application. Let's do that now.
 
-An application can be created using the `Micronaut Launch: Create Micronaut Project` action within the VS Code Command Pallette. The Command Pallette can be opened with:
+An application can be created using the `Micronaut Launch: Create Micronaut Project` action within the VS Code Command Palette. The Command Palette can be opened with:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```
@@ -105,9 +105,9 @@ The wizard will walk you through the process of creating a Micronuat application
 * Build tool: You choose
 * Test framework: JUnit
 
-Save the project and open it in VS Code. You can choose to add it to the current workspace, which will allow you to keep this guide open if you have opened it within VS Code.
+Save the project and open it in VS Code. You can add it to the current workspace, which will allow you to keep this guide open if you have opened it within VS Code.
 
-Initially, we won't be using the Micronaut Data and Oracle ATP modules, but creating them now will mean that adding database functionality to our application will be easier later on.
+Initially, we won't be using the Micronaut Data and Oracle ATP modules, but creating them now will mean that adding database functionality to our application will be easier later.
 
 Before we do anything else, we will need to comment out all of the `datasources.*` properties in the application's `src/main/resources/application.properties`.
 
@@ -124,11 +124,11 @@ oci.config.profile=DEFAULT
 
 ## Code Creation
 
-Tools for Micronaut has support for creating Micronaut classes from templates. Within the right click context menu, also launched by `CTRL + Mouse-Click`, you can see a submenu that groups all of the Micronuat context specific actions.
+The Tools for Micronaut extension supports creating Micronaut classes from templates. Within the right-click context menu, also launched by `CTRL + Mouse-Click`, you can see a submenu that groups all of the Micronuat context-specific actions.
 
 <img alt="Micronaut context actions menu" src="./images/vscode-context-menu-micronaut-menu.png" width="40%">
 
-We will be using the items in this menu to easily create classes for us.
+We will be using this menu to create classe.
 
 ## Create a REST controller
 
@@ -150,7 +150,7 @@ public class PingController {
 }
 ```
 
-You can trigger code completion, Intellisense, suggestions within VS Code using the key combination: `CTRL + SPACE`.
+You can trigger code completion, Intellisense, and suggestions within VS Code using the key combination: `CTRL + SPACE`.
 
 ![Triggering Intellisense in the editor](images/intellisense-gif.gif)
 
@@ -163,7 +163,7 @@ Over to you:
 
 ## Discover what the Micronaut Activity View Can Do
 
-The Tools for Micronaut extension supports a custom IDE view dedicated to Micronaut. When you install the extension the icon for this view is visible on the right activity bar, as shown below. It can be shown, or hidden, by right-clicking (`CTRL + mouse click` on MacOS) on the activity bar and either activating or deactivating it.
+The Tools for Micronaut extension supports a custom IDE view dedicated to Micronaut. When you install the extension the icon for this view is visible on the right activity bar, as shown below. It can be displayed in the Activity Bar, or hidden, by right-clicking (`CTRL + mouse click` on MacOS) on the activity bar and either activating or deactivating it.
 
 ![Open the Micronaut Activity View](images/micronaut-activity-view.gif)
 
@@ -171,11 +171,11 @@ We will now use the Micronaut Activity View to run and interact with the applica
 
 ### Use the Micronaut Activity View to run the application 
 
-The first thing we can do in the Micronaut Activity View, is run our application. 
+The first thing we can do in the Micronaut Activity View is run our application. 
 
 <img alt="Application View" src="./images/mn-activity-view-run.png" width="40%" >
 
-In the first panel of the Micornaut Activity View we can see our application. By clicking on the various icons shown when we hover the mouse over the application name we can start, debug and stop our application.
+In the first panel of the Micornaut Activity View, we can see our application. By clicking on the various icons shown when we hover the mouse over the application name we can start, debug and stop our application.
 
 ![keyboard](./images/keyboard.jpg)
 
@@ -185,7 +185,7 @@ Over to you:
 * Run the application in continuous mode, then change the text generated by the controller and see what happens.
 * What other features and functionality would you expect to see? Please make a note.
 
-### Naviagte around the end points and beans
+### Naviagte around the endpoints and beans
 
 Within the Micronaut Activity View, there is rich support for finding and querying beans and the HTTP endpoints of your application. We can see the panels shown in the Micronaut Activity View below.
 
@@ -200,14 +200,14 @@ Over to you:
 * Use the search and filter feature of the `BEANS` panel to locate some subset of beans that come from dependencies. Navigate to the source code for these beans.
 * What other features would you like to see associated with the beans panel? Please make a note.
 
-Within the `ENDPOINTS` panel we can see the endpoints that were defined within our controller. 
+Within the `ENDPOINTS` panel we can see the endpoints that are defined within our controller. 
 
 ![keyboard](./images/keyboard.jpg)
 
 Over to you:
-* Use the `ENDPOINTS` view to navigate to the code defining the endpoints in the application.
-* Start the application. What new features are availabl for the endpoint(s)?
-* What other features would you like to see associated with endpoints panel? Please make a note.
+* Use the `ENDPOINTS` panel to navigate to the code defining the endpoints in the application.
+* Start the application. What new features are available for the endpoint(s)?
+* What other features would you like to see associated with the `ENDPOINTS` panel? Please make a note.
 
 There is one further way to navigate around your application in VS Code and that is using the, `Go to Symbol in Workspace` tool. This is opened with the key combination of, `CTRL + T` on Windows and Linux and `⌘  + T` on MacOS. When the symbols search field is opened we can use one of the two prefixes to filter the symbols to those that we want:
 
@@ -216,7 +216,7 @@ There is one further way to navigate around your application in VS Code and that
 
 <img alt="Application View" src="./images/micronaut-navigation.png" width="60%" >
 
-This functions in a similar manner to what we have already seen, but it is sometimes more convient.
+This functions similarly to what we have already seen, but it is sometimes more convenient.
 
 ![keyboard](./images/keyboard.jpg)
 
@@ -236,11 +236,11 @@ The first of these new icons, shown below, will open the running endpoint in a b
 <img alt="Application View" src="./images/mn-activity-view-endpoint-open-in-browser.png" width="25%" >
 
 
-The second launches a REST composition tool that will allow you to call the endpoint with HTTP parameters and payloads.
+The second launches a REST composition tool that allows for composing a REST query and calling the endpoint with HTTP parameters and payloads.
 
 <img alt="Application View" src="./images/mn-activity-view-controllers-compose-query.png" width="25%" >
 
-By clicking on the, `Send Request`, text above the `curl`-like query string we can send data to the endpoint and we will see the response opened in a side window.
+By clicking on the, `Send Request`, text above the `curl`-like query string we can send data to the endpoint and we can see the response in a side window.
 
 <img alt="Application View" src="./images/mn-send-rest-query-with-response.png" width="60%" >
 
@@ -253,7 +253,7 @@ Over to you:
 
 ### Add the Micronaut Control Panel to your application
 
-The [Micronaut Control Panel](https://micronaut-projects.github.io/micronaut-control-panel/snapshot/guide/) provides a web UI that allows you to view and manage the state of your Micronaut application. The Micronaut Activity View allows for integrating the Control Panel into your application. 
+The [Micronaut Control Panel](https://micronaut-projects.github.io/micronaut-control-panel/snapshot/guide/) provides a web UI that allows you to view and manage the state of your Micronaut application. The Micronaut Activity View supports integrating the Micronaut Control Panel into your application. 
 
 ![keyboard](./images/keyboard.jpg)
 
@@ -274,24 +274,24 @@ Over to you:
 * Open and browse around the Control Panel for your application.
 * Are there missing features for integrating with the Control Panel? Please make a note.
 
-### Monitor & manage your application in realtime
+### Monitor & manage your application in real time
 
-We can also automatically install support for monitoring and management into our application (adding support for Micronaut Micrometer and Micronaut Cache) in a similar way. First stop your running application, so that we can update it's configuration, and follow the steps shown below.
+We can also automatically install support for monitoring and management into our application (adding support for Micronaut Micrometer and Micronaut Cache) in a similar way. First stop your running application, so that we can update its configuration, and follow the steps shown below.
 
 <img alt="Enabling the Micronaut Monitoring and Management" src="./images/mn-activity-view-enable-monitoring-and-management.gif" width="60%" >
 
 ![keyboard](./images/keyboard.jpg)
 
 Over to you:
-* Enable Monitoring and managment for your application. Restart the application.
+* Enable Monitoring and management for your application. Restart the application.
 * Take a look within the `MONITORING & MANAGEMENT` panel. Notice what properties of the running application are now visible within the IDE.
-* Add a custom logger to your application and some custom logging to your controller. restart the application & play with controlling the logging from within the `MONITORING & MANAGEMENT` panel. We also have support for managing caches in a very similar manner.
+* Add a custom logger to your application and some custom logging to your controller. Restart the application & play with controlling the logging from within the `MONITORING & MANAGEMENT` panel. We also have support for managing caches in a very similar manner.
 * What other features would you expect to see here? Please make a note.
 
 
 ## Autocomplete within properties files
 
-TODO: Named datasources will be coming in a future release.
+TODO: Named data sources will be coming in a future release.
 
 ## Use the Micronaut Expression Language
 
@@ -299,15 +299,15 @@ TODO
 
 ## Work with an Oracle Database
 
-The Tools for Micronaut has extensive support for working with databases and in particular the Oracle Database. We will take a look at how we can connect VS Code with an existing Oracle Autonomous Transaction Processing instance and then use an existing database schema to generate our Micronaut Data model.
+The Tools for Micronaut has extensive support for working with databases and in particular the Oracle Database. We will see how we can connect VS Code with an existing Oracle Autonomous Transaction Processing instance and then use an existing database schema, within that instance, to generate our Micronaut Data model.
 
 All of the following functionality works with MySQL as well. 
 
-The first we need to do is re-enable the Micronaut Data configuration in our application's properties file, `src/main/resources/application.properties`.
+The first thing we need to do is re-enable the Micronaut Data configuration in our application's properties file, `src/main/resources/application.properties`.
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 
-Update your `src/main/resources/application.properties` file so it looks liek the one below:
+Update your `src/main/resources/application.properties` file so it looks like the one below:
 ```properties
 datasources.default.dialect=ORACLE
 datasources.default.dialect=UTC
@@ -320,11 +320,11 @@ oci.config.profile=DEFAULT
 
 ### Connect to a database
 
-We first need to add a connection to a databse to our project. There are a number of benefits to doing this:
+We first need to add a connection to a database to our project. There are several benefits to doing this:
 
 1. When we run our application the connection properties will be injected into the application for us, so we don't need to specify any database connection details in properties files or as environment variables.
-2. The database connection details will be stored securely.
-3. We are able to browse the schema of the database and generate Micronaut Data models from it.
+2. The database connection details are stored securely.
+3. We can browse the schema of the database and generate Micronaut Data models from it.
 
 Open the File Explorer View to reveal the `DATABASES` panel, seen below.
 
@@ -348,11 +348,11 @@ Over to you:
 
 ### Create Micronaut Data entities, repositories from and REST controllers to expose an existing database schema
 
-We can create Micronaut Data enity and repository classes directly from the schema within the database that we are now connected to. We will use the right click (`CMD + Mouse Click` on MacOS) conext menu to do this. We will start with creating the entoty classes form the HR schema.
+We can create Micronaut Data entity and repository classes directly from the schema within the database that we are now connected to. We will use the right click (`CMD + Mouse Click` on MacOS) context menu to do this. We will start with creating the entity classes from the HR schema.
 
 <img alt="Create a Micronaut Data entity from a schema" src="./images/add-new-mn-data-entity-from-schema-menu.png" width="60%" >
 
-You can use the same menu to create a Micronaut Data repositiory class to wrap around entity classes.
+You can use the same menu to create a Micronaut Data repository class to wrap around entity classes.
 
 <img alt="Create a Micronaut Data repository from an entity class" src="./images/add-new-mn-data-repository-context-menu.png" width="60%" >
 
@@ -361,9 +361,9 @@ You can use the same menu to create a Micronaut Data repositiory class to wrap a
 Over to you:
 * Create new packages within your project: `com.example.entity`, `com.example.repository`
 * Create a Micronaut Data entity class for the `COUNTRIES` table within the `com.example.entity`. This will generate an entity class, `Country`.
-* Use the same context menu to create a Micronaut Data repository class for wrapping around the Country entity. Do this within the `com.example.repository` package. This will create a `CountryRepository` class.
+* Use the same context menu to create a Micronaut Data repository class that wraps around the Country entity. Do this within the `com.example.repository` package. This will create a `CountryRepository` class.
 
-Now that we have our repository and entity created we will want to wrap that in a controller so that we can expose this tbale form the schema through a REST API.
+Now that we have our repository and entity created we will want to wrap that in a controller in order to expose it through a REST API.
 
 <img alt="Create a controller to wrap the repository" src="./images/create-data-controller.png" width="60%" >
 
@@ -382,7 +382,7 @@ Over to you:
 * Use the code completion, `CTRL + Space`, to generate a query (`findBy`) method to return an instance of a `Country`.
 * How did you find generating query methods? Could anything be improved? Please make a note.
 * Open your controller that wraps around your repository. Add a `GET` method that calls the query (`findBy`) method. Run the application and call the new endpoint using the REST compose editor.
-* In the controller, use the code completion to add an `update` and a `delete` method. test these methods out in the REST query composer.
+* In the controller, use the code completion to add an `update` and a `delete` method. Test these methods in the REST query composer.
 * Add a `save` method to the controller. This will accept a JSON document. Again use the REST query composer to create a new country entity.
 
 ### Generate tests for your controllers
@@ -395,12 +395,12 @@ Having come so far we can now complete our project by auto-generating tests. Tes
 
 Over to you:
 * Open the controller that wraps around the repository. Use the `Generate Tests` source action.
-* Take a look through the generaterd tests. The tests are only a starting point.
-* WHat could be improved? What features would you like to see added? Please make notes. 
+* Take a look through the generated tests. The tests are only a starting point.
+* What could be improved? What features would you like to see added? Please make notes. 
 
 ## Use Visual VM from within VS Code
 
-[VisualVM](https://visualvm.github.io) is a powerful visual tool for analysing and profiling your applications. It has been integrated into the tooling. We will take a look at how the Tools for Micronaut extension can install VisualVM and how the tight integration between the extension and VisualVM allows you to find and resolve performance issues in your code.
+[VisualVM](https://visualvm.github.io) is a powerful visual tool for analysing and profiling your applications. It has been integrated into the tooling. We will see how the Tools for Micronaut extension can install VisualVM and how the tight integration between the extension and VisualVM allows you to find and resolve performance issues in your code.
 
 ### Install Visual VM from within VS Code
 
