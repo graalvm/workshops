@@ -446,7 +446,7 @@ Over to you:
 
 ## Work with Cloud Resources in OCI
 
-TODO
+One of the most important aspects of building applications these days is integration with the cloud. We will see how, by using the Tools for Micronaut, we can simplify working with cloud based resources, such as object storage buckets.
 
 ### Learn how to work with Oracle Cloud (OCI) resources within your application
 
