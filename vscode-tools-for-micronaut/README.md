@@ -404,7 +404,9 @@ Over to you:
 
 ### Install VisualVM from within VS Code
 
+It is easy to install VisualVm from within Micronaut Activity View. Simply open the `MONITORING & MANAGEMENT` panel, then click on the VisuaVM logo in the top of the panel. This will install and open the VisualVM panle into the Micronaut Activity View. Click on the `Download Latest VisualVM` button and follow along with the presented instructions. Remember, once the installtion is complete you will need to set the path to the newly downloaded VisualVM by clicking on the `Select Local VisualVM Installtion` button.
 
+<img alt="Create a controller to wrap the repository" src="./images/install-visualvm.gif" width="60%" >
 
 ### Use the integrated VisualVM support to solve performance issues in your application
 
