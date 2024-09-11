@@ -396,6 +396,7 @@ Having come so far we can now complete our project by auto-generating tests. Tes
 Over to you:
 * Open the controller that wraps around the repository. Use the `Generate Tests` source action.
 * Take a look through the generated tests. The tests are only a starting point.
+* Delete the created tests before moving on.
 * What could be improved? What features would you like to see added? Please make notes. 
 
 ## Use VisualVM from within VS Code
@@ -404,13 +405,44 @@ Over to you:
 
 ### Install VisualVM from within VS Code
 
-It is easy to install VisualVm from within Micronaut Activity View. Simply open the `MONITORING & MANAGEMENT` panel, then click on the VisuaVM logo in the top of the panel. This will install and open the VisualVM panle into the Micronaut Activity View. Click on the `Download Latest VisualVM` button and follow along with the presented instructions. Remember, once the installtion is complete you will need to set the path to the newly downloaded VisualVM by clicking on the `Select Local VisualVM Installtion` button.
+It is easy to install VisualVm from within Micronaut Activity View. Simply open the `MONITORING & MANAGEMENT` panel, then click on the VisuaVM logo at the top of the panel. This will install and open the VisualVM panel into the Micronaut Activity View. Click on the `Download Latest VisualVM` button and follow along with the presented instructions. Remember, once the installation is complete you will need to set the path to the newly downloaded VisualVM by clicking on the `Select Local VisualVM installation` button.
 
 <img alt="Create a controller to wrap the repository" src="./images/install-visualvm.gif" width="60%" >
 
 ### Use the integrated VisualVM support to solve performance issues in your application
 
-TODO
+We will update the controller we created at the start of this lab, `PingController`. Update the `get` method so that it looks like the following code. You will notice that we have deliberately added a slowdown to the code. We are going to use the VisualVM integration to profile our code and then help us find this issue.
+
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+```java
+    @Get(produces = "text/plain")
+    public String get() {
+        // TODO: review the generated method skeleton and provide a meaningful implementation.
+        try {
+            TimeUnit.SECONDS.sleep(3);
+            return "Example Response";
+        } catch (InterruptedException ex) {
+            return null;
+        }
+    }
+```
+
+You will need to also add the following imports to the controller class:
+
+```java
+import java.util.concurrent.TimeUnit;
+```
+
+Save the file and then start the application using the Micronaut Activity View. 
+
+![keyboard](./images/keyboard.jpg)
+
+Over to you:
+* Open the VisualVM panel. Expand the `CPU Sampler` section. Click on the `Filter` action and filter to only sample classes, `Include Only Project Classes`. Click on the play icon next to `CPU Sampler` to start the sampling. This will launch VisualVM.
+* Return to VS Code. Use the `EnDPOINTS` panel to call the `/ping` `GET` endpoint. This is the endpoint that we deliberately made slow.
+* Return to VisualVM. Right-click on the sample, and select, `Expand / Collapse` > `Expand Topmost Path`. This will order the callpath. Drill into the innermost element and you should find our call to `sleep`. Surrounding this will be our `get` method. Right-click and select `Go to Source`. This will return you to the offending code.
+* Don't forget to clean up. Stop the application and kill VisualVM.
+* What other useful integrations would you like to see? Please make a note.
 
 ## Work with Cloud Resources in OCI
 
