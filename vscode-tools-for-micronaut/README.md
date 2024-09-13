@@ -57,10 +57,11 @@ Before starting this lab, you must have:
 
 * A recent install of VS Code. If you don't have it, you can [download it here](https://code.visualstudio.com/download).
 * An install of the most recent version of Oracle GraalVM. Please read the GraalVM documentation for more details: [Download Oracle GraalVM](https://www.graalvm.org/downloads/).
-* An install of the [Oracle Cloud CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm).
+* An install of the [Oracle Cloud CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm). You will need to esnure that this is configured to connect to an Oracle Cloud (OCI) tenancy that you have access to.
 * An Oracle [Autonomous Transaction Processing](https://www.oracle.com/uk/autonomous-database/autonomous-transaction-processing/) (ATP) instance with the HR schema installed. If you can not create an ATP instance and install the schema then we can provide you with a pre-configured instance.
 * The Oracle sample [HR schema can be found here](https://github.com/oracle-samples/db-sample-schemas). This link also contains instructions for installing. 
 * An Object Storage bucket created within your OCI tenancy, that you can access.
+* A Linux compute instance created within your OCI tenancy.
 
 ## Supporting Documentation
 
@@ -611,9 +612,24 @@ Over to you:
 * When you have uploaded the image, open the `ENDPOINTS` panel within the Micronaut Activity View and call the `GET` endpoint for `/pictures/{userId}`.
 * Did everything work and were you able to fetch the image from Object Storage? Was the process easy and if not what could be improved? Please make a note.
 
-### Geberate OCI policy statements
+### Generate OCI policy statements
 
-The final step in the OCI tools story is moving your code to the cloud. 
+The final step in the OCI tools story is moving your code to the cloud. There are several ways that this can be done. We can build a container, push it to a container repository and then to Kubernetes. We could build a container, push it and then run the container on a compute instance in the cloud. We won't have time to go into these in detail today, but we would ask you to experiment with the `ORACLE CLOUD ASSETS` panel and try these out yourself.
+
+When running code in the cloud security is of paramount importance and within OCI security is enforced through [Identity and Access Management (IAM) policies](https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policygetstarted.htm). These policies describe which cloud assets can be accessed and by whom and much more. In our case, we would need to configure policies to allow our Object Storage bucket to be accessed by a process running on a compute instance using instance principals (which you can find out read more about [here](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm)).
+
+Let's look at how the tooling can help generate the required policies.
+
+![keyboard](./images/keyboard.jpg)
+
+Over to you:
+* Open the `ORACLE CLOUD ASSETS` panel. Remember, it can be found in the File Explorer View.
+* Add a compute instance. You can do this by clicking the `plus` icon next to `Select Compute Instance` in the `ORACLE CLOUD ASSETS` panel.
+
+  > We select a compute instance as a destination to deploy our code to. This will give us the opportunity to generate the required IAM policies to run the code from that compute instance.
+
+* With a compute instance selected as a place to run our code, when packaged as a container, we can now generate our policies. Click on the `key` icon in the banner of the `ORACLE CLOUD ASSETS` panel. This will open an editing window containing the required IAM policies. You can copy these into the OCI console.
+
 
 ## Summary
 
