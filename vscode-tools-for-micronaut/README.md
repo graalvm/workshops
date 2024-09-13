@@ -60,7 +60,7 @@ Before starting this lab, you must have:
 * An install of the [Oracle Cloud CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm).
 * An Oracle [Autonomous Transaction Processing](https://www.oracle.com/uk/autonomous-database/autonomous-transaction-processing/) (ATP) instance with the HR schema installed. If you can not create an ATP instance and install the schema then we can provide you with a pre-configured instance.
 * The Oracle sample [HR schema can be found here](https://github.com/oracle-samples/db-sample-schemas). This link also contains instructions for installing. 
-
+* An Object Storage bucket created within your OCI tenancy, that you can access.
 
 ## Supporting Documentation
 
@@ -389,7 +389,7 @@ Over to you:
 
 Having come so far we can now complete our project by auto-generating tests. Test generation is available from the `Source action` menu. This can be accessed by right-clicking within the code editor.
 
-<img alt="Create a controller to wrap the repository" src="./images/generate-tests.png" width="60%" >
+<img alt="Generate database tests." src="./images/generate-tests.png" width="60%" >
 
 ![keyboard](./images/keyboard.jpg)
 
@@ -407,7 +407,7 @@ Over to you:
 
 It is easy to install VisualVm from within Micronaut Activity View. Simply open the `MONITORING & MANAGEMENT` panel, then click on the VisuaVM logo at the top of the panel. This will install and open the VisualVM panel into the Micronaut Activity View. Click on the `Download Latest VisualVM` button and follow along with the presented instructions. Remember, once the installation is complete you will need to set the path to the newly downloaded VisualVM by clicking on the `Select Local VisualVM installation` button.
 
-<img alt="Create a controller to wrap the repository" src="./images/install-visualvm.gif" width="60%" >
+<img alt="Installing VisualVM." src="./images/install-visualvm.gif" width="60%" >
 
 ### Use the integrated VisualVM support to solve performance issues in your application
 
@@ -446,17 +446,172 @@ Over to you:
 
 ## Work with Cloud Resources in OCI
 
-One of the most important aspects of building applications these days is integration with the cloud. We will see how, by using the Tools for Micronaut, we can simplify working with cloud based resources, such as object storage buckets.
+One of the most important aspects of building applications these days is integration with the cloud. We will see how, by using the Tools for Micronaut, we can simplify working with cloud-based resources, such as object storage buckets.
 
 ### Learn how to work with Oracle Cloud (OCI) resources within your application
 
-TODO
+Micronaut supports working with many cloud providers, but the Tools for Micronaut extension only supports working with [Oracle Cloud (OCI)](https://www.oracle.com/cloud/). In this section, we will see how the tooling accelerates building an application that works with OCI.
 
 ### Add an Object Storage bucket to your application
 
-TODO
+Let's look at the `ORACLE CLOUD ASSETS` panel which can be found in the file explorer view. The image below shows you how to locate it.
+
+<img alt="The Oracle Cloud Assets panel." src="./images/oci-cloud-assets-panel.png" width="40%" >
+
+Within the panel you can see several cloud asset types that might apply to this project: Compute Instance; Container Repository; Oracle Autonomous Database; and Oracle Container Engline for Kubernetes; The tooling looks at your project dependencies and deduces what cloud assets it will require. In this case, we don't rely on any cloud assets apart from the database. It adds, by default, cloud asset types such as container registry, compute and Kubernetes as these will apply to all projects. You will always need somewhere to run your application and you will typically need somewhere to put your container images.
+
+As well as deducing what your project is currently using the tooling also allows you to add to your project. If you want to add an object storage bucket to your project the tooling will:
+
+* Add the dependencies that are required.
+* Add Object Storage to the Cloud View. 
+* Select a particular Object Storage bucket to work with.
+
+We can see how this takes place below:
+
+<img alt="Add an Object Storage bucket." src="./images/add-object-storage-bucket-to-project.gif" width="60%" >
+
+The tooling manages the configuration required for all these cloud assets and injects this configuration into your application when you run it in VS Code. You can view the configuration properties in use by clicking the sliders icon in the `ORACLE CLOUD ASSETS` panel. This is shown below:
+
+<img alt="View the configuration properties." src="./images/view-config-properties.gif" width="60%" >
+
+This is great if you want to save this configuration and use it in a deployed environment. The tooling also supports creating a Kubernetes Config Map from the configuration that can be used in conjunction with our OCI DevOps tooling (which is not discussed in the lab, but you can read more [about it here](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.oci-devops)).
 
 ### Run the application using the attached Object Storage Bucket
+
+We should now add some code to use the object storage bucket. The following code is taken from the Micronaut Guide: [USE THE MICRONAUT OBJECT STORAGE API TO STORE FILES IN ORACLE CLOUD INFRASTRUCTURE (OCI) OBJECT STORAGE](https://guides.micronaut.io/latest/micronaut-object-storage-oracle-cloud.html).
+
+Create the following Java interface in your application, with the location: `src/main/java/example/micronaut/ProfilePicturesApi.java`:
+
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+```java
+package com.example;
+
+public interface ProfilePicturesApi {
+
+    @Post(uri = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA) 
+    HttpResponse upload(CompletedFileUpload fileUpload, String userId, HttpRequest<?> request);
+
+    @Get("/{userId}") 
+    Optional<HttpResponse<StreamedFile>> download(String userId);
+
+    @Status(HttpStatus.NO_CONTENT) 
+    @Delete("/{userId}") 
+    void delete(String userId);
+}
+```
+
+And now create the following controller in your application, with the location: `src/main/java/example/micronaut/ProfilePicturesApi.java`:
+
+
+![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+```java
+package com.example;
+
+import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MutableHttpResponse;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.multipart.CompletedFileUpload;
+import io.micronaut.http.server.types.files.StreamedFile;
+import io.micronaut.http.server.util.HttpHostResolver;
+import io.micronaut.http.uri.UriBuilder;
+import io.micronaut.objectstorage.ObjectStorageEntry;
+import io.micronaut.objectstorage.ObjectStorageOperations;
+import io.micronaut.objectstorage.request.UploadRequest;
+import io.micronaut.objectstorage.response.UploadResponse;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
+
+import java.net.URI;
+import java.util.Optional;
+
+import static io.micronaut.http.HttpHeaders.ETAG;
+import static io.micronaut.http.MediaType.IMAGE_JPEG_TYPE;
+
+@Controller(ProfilePicturesController.PREFIX)
+@ExecuteOn(TaskExecutors.IO)
+class ProfilePicturesController implements ProfilePicturesApi {
+
+    static final String PREFIX = "/pictures";
+
+    private final ObjectStorageOperations<?, ?, ?> objectStorage;
+    private final HttpHostResolver httpHostResolver;
+
+    ProfilePicturesController(ObjectStorageOperations<?, ?, ?> objectStorage,
+                              HttpHostResolver httpHostResolver) {
+        this.objectStorage = objectStorage;
+        this.httpHostResolver = httpHostResolver;
+    }
+
+    @Override
+    public HttpResponse<?> upload(CompletedFileUpload fileUpload,
+                                  String userId,
+                                  HttpRequest<?> request) {
+        String key = buildKey(userId);
+        UploadRequest objectStorageUpload = UploadRequest.fromCompletedFileUpload(fileUpload, key);
+        UploadResponse<?> response = objectStorage.upload(objectStorageUpload);
+
+        return HttpResponse
+                .created(location(request, userId))
+                .header(ETAG, response.getETag());
+    }
+
+    private static String buildKey(String userId) {
+        return userId + ".jpg";
+    }
+
+    private URI location(HttpRequest<?> request, String userId) {
+        return UriBuilder.of(httpHostResolver.resolve(request))
+                .path(PREFIX)
+                .path(userId)
+                .build();
+    }
+
+    @Override
+    public Optional<HttpResponse<StreamedFile>> download(String userId) {
+        String key = buildKey(userId);
+        return objectStorage.retrieve(key)
+                .map(ProfilePicturesController::buildStreamedFile);
+    }
+
+    private static HttpResponse<StreamedFile> buildStreamedFile(ObjectStorageEntry<?> entry) {
+        StreamedFile file = new StreamedFile(entry.getInputStream(), IMAGE_JPEG_TYPE).attach(entry.getKey());
+        MutableHttpResponse<Object> httpResponse = HttpResponse.ok();
+        file.process(httpResponse);
+        return httpResponse.body(file);
+    }
+
+    @Override
+    public void delete(String userId) {
+        String key = buildKey(userId);
+        objectStorage.delete(key);
+    }
+}
+```
+
+We now have a controller that can use an object storage bucket.
+
+![keyboard](./images/keyboard.jpg)
+
+Over to you:
+* You should already have an Object Storage bucket created within a tenancy that you can access on OCI. If you haven't already, please create an Object Storage bucket now. You can find out how in [these instructions](https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/managingbuckets_topic-To_create_a_bucket.htm).
+* Add the two classes shown above to your code. Start the application using the Micronaut Activity View.
+
+Now you have your application running we will need to upload some data. Unfortunately, the Compose REST Query tool within the Micronaut Activity view does not currently support uploading files correctly, so we will call the endpoint to upload a file from the shell. A new shell can be opened as follows, remember to leave the shell with the running application within it untouched.
+
+<img alt="Create a new shell within VS Code." src="./images/create-new-shell.gif" width="60%" >
+
+![keyboard](./images/keyboard.jpg)
+
+Over to you:
+* Call the Pictures API that we just added from a new shell in VS Code. The `curl` script is shown below:
+  ```bash
+  curl -i -F 'fileUpload=@images/GraalVM-rgb.png' http://localhost:8080/pictures/graalvm
+  ```
+* When you have uploaded the image, open the `ENDPOINTS` panel within the Micronaut Activity View and call the `GET` endpoint for `/pictures/{userId}`.
+* Did everything work and were you able to fetch the image from Object Storage? Was the process easy and if not what could be improved? Please make a note.
+
+### Geberate OCI policy statements
 
 TODO
 
