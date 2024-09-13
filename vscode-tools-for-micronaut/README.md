@@ -290,10 +290,6 @@ Over to you:
 * What other features would you expect to see here? Please make a note.
 
 
-## Autocomplete within properties files
-
-TODO: Named data sources will be coming in a future release.
-
 ## Use the Micronaut Expression Language
 
 TODO
