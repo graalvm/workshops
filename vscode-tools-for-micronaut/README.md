@@ -613,15 +613,20 @@ Over to you:
 
 ### Geberate OCI policy statements
 
-TODO
+The final step in the OCI tools story is moving your code to the cloud. 
 
 ## Summary
 
-We hope you have enjoyed this lab and learnt a few things along the way. You have seen the variety of benefits offered by the Tools for Micronaut extension. These include:
+We hope you have enjoyed this lab and learnt a few things along the way. Although we have only touched upon what is possible with the Tools for Micronaut you have seen some of the variety of benefits offered, which include:
 
 * The ability to monitor and manage you rapplication from within VS Code.
 * Easy code creation for a host of mundane tasks.
 * Easily connecting to and working with databases.
-* Creating complete REST APIs from existing database schemas with 
+* Creating complete REST APIs from existing database schemas.
+* Intuitive support for calling REST APIs.
+* Profiling and solving performance problems.
+* Easy integration with OCI Cloud assets and resources.
+
+Thanks for taking the time to do this lab!
 
 Micronaut® is a registered trademark of Object Computing, Inc. Use is for referential purposes and does not imply any endorsement or affiliation with any third-party product.
