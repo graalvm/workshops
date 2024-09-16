@@ -282,7 +282,9 @@ Over to you:
 
 ### 4.5 - Monitor & manage your application in real time
 
-We can also automatically install support for monitoring and management into our application (adding support for Micronaut Micrometer and Micronaut Cache) in a similar way. First stop your running application, so that we can update its configuration, and follow the steps shown below.
+We can also automatically install support for monitoring and management into our application (adding support for Micronaut Micrometer and Micronaut Cache) similarly. Adding these dependencies automatically to your application allows the tooling to fetch and display real-time data on the state of the application within VS Code.  Data such as CPU utilisation, memory usage etc. are now shown in the `MONITORING & MANAGEMENT`.
+
+First, stop your running application, so that we can update its configuration, and follow the steps shown below.
 
 <img alt="Enabling the Micronaut Monitoring and Management" src="./images/mn-activity-view-enable-monitoring-and-management.gif" width="60%" >
 
@@ -290,7 +292,7 @@ We can also automatically install support for monitoring and management into our
 
 Over to you:
 * Enable Monitoring and management for your application. Restart the application.
-* Take a look within the `MONITORING & MANAGEMENT` panel. Notice what properties of the running application are now visible within the IDE.
+* Take a look within the `MONITORING & MANAGEMENT` panel. Notice what properties of the running application are now visible within the IDE. 
 * Add a custom logger to your application and some custom logging to your controller. Restart the application & play with controlling the logging from within the `MONITORING & MANAGEMENT` panel. We also have support for managing caches in a very similar manner.
 * What other features would you expect to see here? Please make a note.
 
