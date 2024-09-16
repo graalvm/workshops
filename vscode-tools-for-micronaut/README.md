@@ -71,6 +71,10 @@ The following is a set of documentation that may prove useful when completing th
 * [Tools for Micronaut Extension for VS Code.](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools)
 * [Launch for Micronaut Extension for VS Code.](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut)
 
+## Completed Project
+
+The code for the completed project can be found in the directory: `vscode-tools-for-micronaut/demo`. It is recommended to follow along with the lab, but if you get stuck at any point the code is available to you.
+
 ## 1 - Install the Tools for Micronaut Extension
 
 For this lab you will need to install the following two extensions into VS Code:
