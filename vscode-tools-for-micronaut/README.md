@@ -624,7 +624,7 @@ Over to you:
 
   > We select a compute instance as a destination to deploy our code to. This will give us the opportunity to generate the required IAM policies to run the code from that compute instance.
 
-* With a compute instance selected as a place to run our code, when packaged as a container, we can now generate our policies. Click on the `key` icon in the banner of the `ORACLE CLOUD ASSETS` panel. This will open an editing window containing the required IAM policies. You can copy these into the OCI console.
+* With a compute instance selected as a place to run our code, when packaged as a container, we can now generate our policies. Click on the `key` icon in the banner of the `ORACLE CLOUD ASSETS` panel. This will open an editing window containing the required IAM policies. You can copy these into the OCI console and run them using the [Policy Builder tool](https://docs.oracle.com/en-us/iaas/Content/Identity/policymgmt/managingpolicies_topic-Using_the_Policy_Builder.htm).
 
 
 ## Summary
