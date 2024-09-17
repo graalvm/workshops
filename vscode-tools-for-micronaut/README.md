@@ -299,15 +299,15 @@ Over to you:
 
 ## 5 - Use the Micronaut Expression Language
 
-The tooling also provides support for working with the [Micronaut expression Language](https://docs.micronaut.io/latest/guide/#evaluatedExpressions). Using the tooling will support code completion within Expression Lanaguage strings. We will see an example of this in a small addition to our application that makes use of the `@Scheduled` annotation to create a scheduled event.
+The tooling also supports working with the [Micronaut expression Language](https://docs.micronaut.io/latest/guide/#evaluatedExpressions). Using the tooling will support code completion within Expression Language strings. We will see an example of this in a small addition to our application that will use the `@Scheduled` annotation to create a scheduled event.
 
 ![keyboard](./images/keyboard.jpg)
 
 Over to you:
 * Create a new Java package within your application: `com.example.jobs`.
-* Create a new Java class in the `com.example.jobs` package (remember that you can create a Controller through the Mcironaut menu within the right click context menu - right-click, or `ctrl + click`, on the package to bring up the context menu): `Job.java`.
+* Create a new Java class in the `com.example.jobs` package (remember that you can create a Controller through the Mcironaut menu within the right-click context menu - right-click, or `ctrl + click`, on the package to bring up the context menu): `Job.java`.
 
-Next we will need to create a scheduled job which will contain the following code:
+Next, we will need to create a scheduled job which will contain the following code:
 
 ```java
 package com.example.jobs;
@@ -347,12 +347,12 @@ public class Job {
 }
 ```
 
-This class represents a scheduled job that will run once every second. When it runs, ti will output a messgae to `stdout` letting you know that it has run. We haven't yet used the expression language support, but we will soon when we add a condition to the job. But, first let's get the job up and running and tested.
+This class represents a scheduled job that will run once every second. When it runs, it will output a message to `stdout` saying it has run. We haven't yet used the expression language support, but we will soon when we add a condition to the job. But first, let's get the job up and running and tested.
 
 ![keyboard](./images/keyboard.jpg)
 
 Over to you:
-* Replace the cotnents of the `Job.java` file with the code from the aboce code snippet.
+* Replace the contents of the `Job.java` file with the code from the above code snippet.
 * Run the application using the Micronaut Activity view. Do you see the task generating output in the terminal window?
 * Stop your application.
 
@@ -374,11 +374,11 @@ The scheduled job runs. We will now add a condition to the scheduled job, using 
 Over to you:
 * Update the `Job.java` file so that the `run()` method looks identical to above.
 * Place your cursor inside the `#{}`.
-* Use the code completion that is now available to add the following expression. Code completion will work in the same was as everywhere else: `#{!this.paused}`
+* Use the code completion that is now available to add the following expression. Code completion will work in the same way as everywhere else: `#{!this.paused}`
 * Run the application using the Micronaut Activity view. The output from the scheduled task should no longer be seen.
 * Stop your application.
 
-And finally, to finish off this addition to the application, we need to add a means of changing the paused state of our scheduled task. We will do this using a controller, whch when the endpoint in it is hit will set the paused state to false.
+And finally, to finish off this addition to the application, we need to add a means of changing the paused state of our scheduled task. We will do this using a controller, which when the endpoint in it is hit will set the paused state to false.
 
 The following code is what we will use to do this:
 
@@ -413,9 +413,9 @@ Over to you:
 * Create a new Java class in the `com.example.controller` package: `RunTaskController.java`.
 * Replace the contents of the new controller, `RunTaskController.java` with the code snippet above.
 * Run the application using the Micronaut Activity view.
-* Open the `ENDPOINTS` panel in the Micronaut Activity View. Click on the new endpoint, `/runtask`. Call it suing the REST Query Composer window. What do you see in the application output in the terminal window?
+* Open the `ENDPOINTS` panel in the Micronaut Activity View. Click on the new endpoint, `/runtask`. Call it using the REST Query Composer window. What do you see in the application output in the terminal window?
 * Stop your application.
-* What esle can you do with the Expression Language support? Where else would you use it? Please make a note.
+* What else can you do with the Expression Language support? Where else would you use it? Please make a note.
 
 ## 6 - Work with an Oracle Database
 
