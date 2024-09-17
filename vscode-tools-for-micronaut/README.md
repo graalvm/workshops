@@ -32,9 +32,9 @@ During this lab, we will introduce you to the Tools for Micronaut extension for 
   - Connect to a database.
   - Create Micronaut Data entities, repositories from an existing database schema, and then REST controllers using the tooling.
   - Generate tests for your controllers.
-- Use Visual VM from within VS Code:
-  - Install Visual VM from within VS Code.
-  - Use the integrated Visual VM support to solve performance issues in your application.
+- Use VisualVM from within VS Code:
+  - Install VisualVM from within VS Code.
+  - Use the integrated VisualVM support to solve performance issues in your application.
 - Work with cloud resources in Oracle Cloud Infrastructure (OCI):
   - Learn how to work with Oracle Cloud (OCI) resources within your application.
   - Add an Object Storage bucket to your application.
