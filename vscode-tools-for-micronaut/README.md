@@ -81,6 +81,7 @@ For this lab you will need to install the following two extensions into VS Code:
 
 * [MS Extension Pack for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack).
 * [Tools for Micronaut® Framework](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools).
+* [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
 
 You can install it directly from within the VS Code marketplace, using the links above, or through the extensions activity view within VS Code.
 
@@ -163,7 +164,7 @@ You can trigger code completion, Intellisense, and suggestions within VS Code us
 ![keyboard](./images/keyboard.jpg)
 
 Over to you:
-* Add a `@POST` method to the controller you just created. It doesn't need to do anything with the payload.
+* Add a `@Post` method to the controller you just created. It doesn't need to do anything with the payload.
 * What other methods can be added to the controller?
 * What code completions and code generations would you like to see added? Please make a note.
 
@@ -254,7 +255,7 @@ By clicking on the, `Send Request`, text above the `curl`-like query string we c
 
 Over to you:
 * Use the Compose REST Query editor to call your endpoint.
-* Add another endpoint, using `POST`, and compose a query and call it.
+* Call the `/ping` `POST` endpoint, and compose a query and call it.
 * Are there any features you would like to see? Please make a note.
 
 ### 4.4 - Add the Micronaut Control Panel to your application
@@ -293,7 +294,7 @@ First, stop your running application, so that we can update its configuration, a
 Over to you:
 * Enable Monitoring and management for your application. Restart the application.
 * Take a look within the `MONITORING & MANAGEMENT` panel. Notice what properties of the running application are now visible within the IDE. 
-* Add a custom logger to your application and some custom logging to your controller. Restart the application & play with controlling the logging from within the `MONITORING & MANAGEMENT` panel. We also have support for managing caches in a very similar manner.
+* Add a custom logger to your application and some custom logging to your controller. Look in the `MONITORING & MANAGEMENT` panel, under management. Restart the application & play with controlling the logging from within the `MONITORING & MANAGEMENT` panel. We also have support for managing caches in a very similar manner.
 * What other features would you expect to see here? Please make a note.
 
 
@@ -600,11 +601,23 @@ This is great if you want to save this configuration and use it in a deployed en
 
 We should now add some code to use the object storage bucket. The following code is taken from the Micronaut Guide: [USE THE MICRONAUT OBJECT STORAGE API TO STORE FILES IN ORACLE CLOUD INFRASTRUCTURE (OCI) OBJECT STORAGE](https://guides.micronaut.io/latest/micronaut-object-storage-oracle-cloud.html).
 
-Create the following Java interface in your application, with the location: `src/main/java/example/micronaut/ProfilePicturesApi.java`:
+Create the following Java interface in your application, with the location: `src/main/java/com/example/controllers/ProfilePicturesApi.java`:
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```java
-package com.example;
+package com.example.controllers;
+
+import java.util.Optional;
+import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.annotation.Delete;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Status;
+import io.micronaut.http.multipart.CompletedFileUpload;
+import io.micronaut.http.server.types.files.StreamedFile;
 
 public interface ProfilePicturesApi {
 
@@ -620,12 +633,12 @@ public interface ProfilePicturesApi {
 }
 ```
 
-And now create the following controller in your application, with the location: `src/main/java/example/micronaut/ProfilePicturesApi.java`:
+And now create the following controller in your application, with the location: `src/main/java/com/example/controllers/ProfilePicturesApi.java`:
 
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```java
-package com.example;
+package com.example.controllers;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
