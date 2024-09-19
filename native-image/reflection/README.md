@@ -1,6 +1,8 @@
-<img src="https://www.graalvm.org/resources/img/home/logo_mobile_openmenu.svg"
-alt="GraalVM logo"
-width="200px">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="../../images/GraalVM-rgb.png">
+  <source media="(prefers-color-scheme: light)" srcset="../../images/GraalVM-rgb.png">
+  <img alt="GraalVM logo" src="../../images/GraalVM-rgb.png" width="40%" style="margin-left: -50;">
+</picture>
 
 # Using Java Reflection with GraalVM Native Image
 

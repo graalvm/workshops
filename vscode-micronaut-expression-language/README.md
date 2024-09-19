@@ -59,6 +59,8 @@ For this Lab you will need to install the following two extensions into VS Code:
 
 You can install it directly from within the VS Code marketplace, using the links above, or through the extensions activity view within VS Code.
 
+> **Important:** If you already have these extensions installed, you will need to update to the latest versions.
+
 ## 2 - Create a Micronaut Application
 
 We start this Lab by creating a simple Micronaut application. Throughout the Lab, we will add code to the application that will allow us to demonstrate support for the Micronaut Expression Language. Let's do that now.
