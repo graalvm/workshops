@@ -54,7 +54,7 @@ During this lab, we will introduce you to the Tools for Micronaut extension for 
 Before starting this lab, you must have:
 
 * A recent install of VS Code. If you don't have it, you can [download it here](https://code.visualstudio.com/download).
-* An install of the most recent version of Oracle GraalVM. Please read the GraalVM documentation for more details: [Download Oracle GraalVM](https://www.graalvm.org/downloads/).
+* An install of the most recent version of Oracle GraalVM, JDK17. Please read the GraalVM documentation for more details: [Download Oracle GraalVM](https://www.graalvm.org/downloads/).
 * An Oracle Cloud Infrastructure (OCI) account and a tenancy to work within.
 * An install of the [Oracle Cloud CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm). You will need to esnure that this is configured to connect to an Oracle Cloud (OCI) tenancy that you have access to.
 * An Oracle [Autonomous Transaction Processing](https://www.oracle.com/uk/autonomous-database/autonomous-transaction-processing/) (ATP) instance with the HR schema installed. If you can not create an ATP instance and install the schema then we can provide you with a pre-configured instance.
@@ -102,7 +102,7 @@ The wizard will walk you through the process of creating a Micronuat application
 
 * Version 4.6.2
 * Application Type: Micronaut Application
-* Java runtime: GraalVM JDK21
+* Java runtime: GraalVM JDK17
 * Project name: demo
 * Base package: com.example
 * Language: Java (our tools focus on Java support)
