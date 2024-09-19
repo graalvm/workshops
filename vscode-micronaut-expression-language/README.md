@@ -18,7 +18,7 @@ Before attempting this Lab it is important that you do the core [VS Code tools f
 During this lab, we will introduce you to the support for the [Micronaut expression Language](https://docs.micronaut.io/latest/guide/#evaluatedExpressions) available within the Tools for Micronaut extension for VS Code. This extension supports working with and building Micronaut applications. You will:
 
 - Use the [Micronaut expression Language](https://docs.micronaut.io/latest/guide/#evaluatedExpressions) within an application.
-- Been shown the code-completion support for the Micronaut Expression Language within the Tools for Micronaut extension.
+- Have been shown the code-completion support for the Micronaut Expression Language within the Tools for Micronaut extension.
 
 >Note: If you see the laptop icon in the lab, this means you need to do something, such as enter a command. Keep an eye out for it.
 
@@ -36,7 +36,7 @@ During this lab, we will introduce you to the support for the [Micronaut express
 Before starting this lab, you must have:
 
 * A recent install of VS Code. If you don't have it, you can [download it here](https://code.visualstudio.com/download).
-* An install of the most recent version of Oracle GraalVM. Please read the GraalVM documentation for more details: [Download Oracle GraalVM](https://www.graalvm.org/downloads/).
+* An install of the most recent version of Oracle GraalVM, JDK17. Please read the GraalVM documentation for more details: [Download Oracle GraalVM](https://www.graalvm.org/downloads/).
 
 ## Supporting Documentation
 
@@ -78,7 +78,7 @@ The wizard will walk you through the process of creating a Micronuat application
 
 * Version 4.6.2
 * Application Type: Micronaut Application
-* Java runtime: GraalVM JDK21
+* Java runtime: GraalVM JDK17
 * Project name: demo
 * Base package: com.example
 * Language: Java (our tools focus on Java support)
