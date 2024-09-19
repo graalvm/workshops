@@ -51,7 +51,7 @@ The code for the completed project can be found in the directory: `vscode-tools-
 
 ## 1 - Install the Tools for Micronaut Extension
 
-For this Lab you will need to install the following two extensions into VS Code:
+For this Lab you will need to install the following extensions into VS Code:
 
 * [MS Extension Pack for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack).
 * [Tools for Micronaut® Framework](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools).
