@@ -26,7 +26,6 @@ During this lab, we will introduce you to the Tools for Micronaut extension for 
   - Make a REST call.
   - Add the Micronaut Control Panel to your application.
   - Monitor & manage your application in real-time.
-- Use the Micronaut Expression Language.
 - Work with an Oracle Database:
   - Connect to a database.
   - Create Micronaut Data entities, repositories from an existing database schema, and then REST controllers using the tooling.
@@ -101,7 +100,7 @@ Then search for and run, `Micronaut Launch: Create Micronaut Project`.
 
 The wizard will walk you through the process of creating a Micronuat application. You will need to create an application with the following properties:
 
-* Version 4.6.1
+* Version 4.6.2
 * Application Type: Micronaut Application
 * Java runtime: GraalVM JDK21
 * Project name: demo
@@ -773,6 +772,10 @@ We hope you have enjoyed this lab and learnt a few things along the way. Althoug
 * Intuitive support for calling REST APIs.
 * Profiling and solving performance problems.
 * Easy integration with OCI Cloud assets and resources.
+
+If you are interested in the other features that are offered by the Tools for Micronaut extension for VS Code you could try the following Lab:
+
+* [Using the Micronaut Expression Language within VS Code Tools for Micronaut](../vscode-micronaut-expression-language/README.md)
 
 Thanks for taking the time to do this lab!
 
