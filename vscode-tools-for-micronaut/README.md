@@ -83,6 +83,8 @@ For this lab you will need to install the following two extensions into VS Code:
 
 You can install it directly from within the VS Code marketplace, using the links above, or through the extensions activity view within VS Code.
 
+> **Important:** If you already have these extensions installed, you will need to update to the latest versions.
+
 ## 2 - Create a Micronaut Application
 
 We start this lab by creating a simple Micronaut application and seeing how our tooling can progressively support us in adding features to it. We will also see how easy it is to run and interact with our application using the Tools for Micronaut, but the first step is to create an application. Let's do that now.
@@ -119,7 +121,6 @@ Before we do anything else, we will need to comment out all of the `datasources.
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```properties
 #datasources.default.dialect=ORACLE
-#datasources.default.dialect=UTC
 micronaut.application.name=demo
 #datasources.default.ocid=
 #datasources.default.schema-generate=CREATE_DROP
