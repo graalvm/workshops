@@ -80,4 +80,19 @@ GraalVM as a Java runtime.
 >  - An introduction to some of the capabilities of the Oracle Cloud Infrastructure (OCI) always free tier.
 >  - Showw how using [GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/) can help you make the most of your free tier allocation
 
+### ![Lab Flask](./images/lab-flask.png) [VS Code Tools for Micronaut](/vscode-tools-for-micronaut/README.md)
+
+>  A workshop that introduces the support for Micronaut&reg; available within VS Code when using the Tools for Micronaut extension.
+> 
+>  - Create a Micronaut application within VS Code.
+>  - Use the code creation automation.
+>  - Discover what the Micronaut Activity view can do:
+>  - Work with an Oracle Database.
+>  - Use VisualVM from within VS Code.
+>  - Work with cloud resources in Oracle Cloud Infrastructure (OCI).
+
+### ![Lab Flask](./images/lab-flask.png) [Using the Micronaut Expression Language within VS Code Tools for Micronaut](/vscode-micronaut-expression-language/README.md)
+
+>  A workshop that introduces the support for Micronaut&reg; Expression Language available within VS Code when using the Tools for Micronaut extension.
+
 
