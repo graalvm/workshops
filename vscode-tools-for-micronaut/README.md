@@ -26,7 +26,6 @@ During this lab, we will introduce you to the Tools for Micronaut extension for 
   - Make a REST call.
   - Add the Micronaut Control Panel to your application.
   - Monitor & manage your application in real-time.
-- Use autocomplete within properties files.
 - Use the Micronaut Expression Language.
 - Work with an Oracle Database:
   - Connect to a database.
@@ -633,7 +632,7 @@ public interface ProfilePicturesApi {
 }
 ```
 
-And now create the following controller in your application, with the location: `src/main/java/com/example/controllers/ProfilePicturesApi.java`:
+And now create the following controller in your application, with the location: `src/main/java/com/example/controllers/ProfilePicturesController.java`:
 
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
