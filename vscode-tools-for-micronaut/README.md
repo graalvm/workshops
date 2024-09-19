@@ -296,127 +296,7 @@ Over to you:
 * What other features would you expect to see here? Please make a note.
 
 
-## 5 - Use the Micronaut Expression Language
-
-The tooling also supports working with the [Micronaut expression Language](https://docs.micronaut.io/latest/guide/#evaluatedExpressions). Using the tooling will support code completion within Expression Language strings. We will see an example of this in a small addition to our application that will use the `@Scheduled` annotation to create a scheduled event.
-
-![keyboard](./images/keyboard.jpg)
-
-Over to you:
-* Create a new Java package within your application: `com.example.jobs`.
-* Create a new Java class in the `com.example.jobs` package (remember that you can create a Controller through the Mcironaut menu within the right-click context menu - right-click, or `ctrl + click`, on the package to bring up the context menu): `Job.java`.
-
-Next, we will need to create a scheduled job which will contain the following code:
-
-```java
-package com.example.jobs;
-
-import io.micronaut.scheduling.annotation.Scheduled;
-import jakarta.inject.Singleton;
-
-@Singleton
-public class Job {
-    private boolean jobRan = false;
-    private boolean paused = true;
-
-
-    @Scheduled(
-        fixedRate = "1s")
-    void run() {
-        System.out.println("Job Running");
-        this.jobRan = true;
-    }
-
-    public boolean isPaused() {
-        return paused;
-    } // (2)
-
-    public boolean hasJobRun() {
-        return jobRan;
-    }
-
-    public void unpause() {
-        paused = false;
-    }
-
-    public void pause() {
-        paused = true;
-    }
-
-}
-```
-
-This class represents a scheduled job that will run once every second. When it runs, it will output a message to `stdout` saying it has run. We haven't yet used the expression language support, but we will soon when we add a condition to the job. But first, let's get the job up and running and tested.
-
-![keyboard](./images/keyboard.jpg)
-
-Over to you:
-* Replace the contents of the `Job.java` file with the code from the above code snippet.
-* Run the application using the Micronaut Activity view. Do you see the task generating output in the terminal window?
-* Stop your application.
-
-The scheduled job runs. We will now add a condition to the scheduled job, using the Micronaut Expression Language, that stops it from running. The job has a `paused` variable, which it currently ignores. We will use this variable to control whether the task runs or not.
-
-```java
-    @Scheduled(
-        fixedRate = "1s",
-        condition = "#{}"
-        )
-    void run() {
-        System.out.println("Job Running");
-        this.jobRan = true;
-    }
-```
-
-![keyboard](./images/keyboard.jpg)
-
-Over to you:
-* Update the `Job.java` file so that the `run()` method looks identical to above.
-* Place your cursor inside the `#{}`.
-* Use the code completion that is now available to add the following expression. Code completion will work in the same way as everywhere else: `#{!this.paused}`
-* Run the application using the Micronaut Activity view. The output from the scheduled task should no longer be seen.
-* Stop your application.
-
-And finally, to finish off this addition to the application, we need to add a means of changing the paused state of our scheduled task. We will do this using a controller, which when the endpoint in it is hit will set the paused state to false.
-
-The following code is what we will use to do this:
-
-```java
-package com.example.controller;
-
-import com.example.jobs.Job;
-
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import jakarta.inject.Inject;
-
-@Controller("/runtask")
-public class RunTaskController {
-
-    // The scheduled task singleton
-    @Inject
-    Job job;
-
-    @Get(produces = "text/plain")
-    public String activateTask() {
-        job.unpause();
-        return "Task activated.";
-    }
-
-}
-```
-
-![keyboard](./images/keyboard.jpg)
-
-Over to you:
-* Create a new Java class in the `com.example.controller` package: `RunTaskController.java`.
-* Replace the contents of the new controller, `RunTaskController.java` with the code snippet above.
-* Run the application using the Micronaut Activity view.
-* Open the `ENDPOINTS` panel in the Micronaut Activity View. Click on the new endpoint, `/runtask`. Call it using the REST Query Composer window. What do you see in the application output in the terminal window?
-* Stop your application.
-* What else can you do with the Expression Language support? Where else would you use it? Please make a note.
-
-## 6 - Work with an Oracle Database
+## 5 - Work with an Oracle Database
 
 The Tools for Micronaut has extensive support for working with databases and in particular the Oracle Database. We will see how we can connect VS Code with an existing Oracle Autonomous Transaction Processing instance and then use an existing database schema, within that instance, to generate our Micronaut Data model.
 
@@ -437,7 +317,7 @@ datasources.default.walletPassword=
 oci.config.profile=DEFAULT
 ```
 
-### 6.1 - Connect to a database
+### 5.1 - Connect to a database
 
 We first need to add a connection to a database to our project. There are several benefits to doing this:
 
@@ -465,7 +345,7 @@ Over to you:
 * Add a connection to an existing Oracle ATP instance.
 * Connect to that instance and browse around the schema for the HR user.
 
-### 6.2 - Create Micronaut Data entities, repositories from and REST controllers to expose an existing database schema
+### 5.2 - Create Micronaut Data entities, repositories from and REST controllers to expose an existing database schema
 
 We can create Micronaut Data entity and repository classes directly from the schema within the database that we are now connected to. We will use the right click (`CMD + Mouse Click` on MacOS) context menu to do this. We will start with creating the entity classes from the HR schema.
 
@@ -504,7 +384,7 @@ Over to you:
 * In the controller, use the code completion to add an `update` and a `delete` method. Test these methods in the REST query composer.
 * Add a `save` method to the controller. This will accept a JSON document. Again use the REST query composer to create a new country entity.
 
-### 6.3 - Generate tests for your controllers
+### 5.3 - Generate tests for your controllers
 
 Having come so far we can now complete our project by auto-generating tests. Test generation is available from the `Source action` menu. This can be accessed by right-clicking within the code editor.
 
@@ -518,17 +398,17 @@ Over to you:
 * Delete the created tests before moving on.
 * What could be improved? What features would you like to see added? Please make notes. 
 
-## 7 - Use VisualVM from within VS Code
+## 6 - Use VisualVM from within VS Code
 
 [VisualVM](https://visualvm.github.io) is a powerful visual tool for analysing and profiling your applications. It has been integrated into the tooling. We will see how the Tools for Micronaut extension can install VisualVM and how the tight integration between the extension and VisualVM allows you to find and resolve performance issues in your code.
 
-### 7.1 - Install VisualVM from within VS Code
+### 6.1 - Install VisualVM from within VS Code
 
 It is easy to install VisualVM from within Micronaut Activity View. Simply open the `MONITORING & MANAGEMENT` panel, then click on the VisuaVM logo at the top of the panel. This will install and open the VisualVM panel into the Micronaut Activity View. Click on the `Download Latest VisualVM` button and follow along with the presented instructions. Remember, once the installation is complete you will need to set the path to the newly downloaded VisualVM by clicking on the `Select Local VisualVM installation` button.
 
 <img alt="Installing VisualVM." src="./images/install-visualvm.gif" width="60%" >
 
-### 7.2 - Use the integrated VisualVM support to solve performance issues in your application
+### 6.2 - Use the integrated VisualVM support to solve performance issues in your application
 
 We will update the controller we created at the start of this lab, `PingController`. Update the `get` method so that it looks like the following code. You will notice that we have deliberately added a slowdown to the code. We are going to use the VisualVM integration to profile our code and then help us find this issue.
 
@@ -563,15 +443,15 @@ Over to you:
 * Don't forget to clean up. Stop the application and kill VisualVM.
 * What other useful integrations would you like to see? Please make a note.
 
-## 8 - Work with Cloud Resources in OCI
+## 7 - Work with Cloud Resources in OCI
 
 One of the most important aspects of building applications these days is integration with the cloud. We will see how, by using the Tools for Micronaut, we can simplify working with cloud-based resources, such as object storage buckets.
 
-### 8.1 - Learn how to work with Oracle Cloud (OCI) resources within your application
+### 7.1 - Learn how to work with Oracle Cloud (OCI) resources within your application
 
 Micronaut supports working with many cloud providers, but the Tools for Micronaut extension only supports working with [Oracle Cloud (OCI)](https://www.oracle.com/cloud/). In this section, we will see how the tooling accelerates building an application that works with OCI.
 
-### 8.2 - Add an Object Storage bucket to your application
+### 7.2 - Add an Object Storage bucket to your application
 
 Let's look at the `ORACLE CLOUD ASSETS` panel which can be found in the file explorer view. The image below shows you how to locate it.
 
@@ -595,7 +475,7 @@ The tooling manages the configuration required for all these cloud assets and in
 
 This is great if you want to save this configuration and use it in a deployed environment. The tooling also supports creating a Kubernetes Config Map from the configuration that can be used in conjunction with our OCI DevOps tooling (which is not discussed in the lab, but you can read more [about it here](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.oci-devops)).
 
-### 8.3 - Run the application using the attached Object Storage Bucket
+### 7.3 - Run the application using the attached Object Storage Bucket
 
 We should now add some code to use the object storage bucket. The following code is taken from the Micronaut Guide: [USE THE MICRONAUT OBJECT STORAGE API TO STORE FILES IN ORACLE CLOUD INFRASTRUCTURE (OCI) OBJECT STORAGE](https://guides.micronaut.io/latest/micronaut-object-storage-oracle-cloud.html).
 
@@ -742,7 +622,7 @@ Over to you:
 * When you have uploaded the image, open the `ENDPOINTS` panel within the Micronaut Activity View and call the `GET` endpoint for `/pictures/{userId}`.
 * Did everything work and were you able to fetch the image from Object Storage? Was the process easy and if not what could be improved? Please make a note.
 
-### 8.4 - Generate OCI policy statements
+### 7.4 - Generate OCI policy statements
 
 The final step in the OCI tools story is moving your code to the cloud. There are several ways that this can be done. We can build a container, push it to a container repository and then to Kubernetes. We could build a container, push it and then run the container on a compute instance in the cloud. We won't have time to go into these in detail today, but we would ask you to experiment with the `ORACLE CLOUD ASSETS` panel and try these out yourself.
 
