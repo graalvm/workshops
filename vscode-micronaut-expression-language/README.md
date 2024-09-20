@@ -61,6 +61,18 @@ You can install it directly from within the VS Code marketplace, using the links
 
 > **Important:** If you already have these extensions installed, you will need to update to the latest versions.
 
+As we will be using pre-release features in this Lab, as we are keen to show you these new features, you will need to install a dev build of the following extension. 
+
+* [Dev Build of Netbeans Language Server](https://ci-builds.apache.org/job/Netbeans/job/netbeans-vscode/2361/artifact/nbbuild/build/apache-netbeans-java-24.0.2361.vsix).
+
+To install this extension:
+
+* Download the extension from the link above.
+* Within VS Code, open the Extensions View.
+* From the banner of the Extensions, click on the three dots icon to reveal a menu and then select, `Install from VSIX`. This is shown in the image below.
+
+<img alt="Micronaut context actions menu" src="./images/install-from-vsix.gif" width="60%">
+
 ## 2 - Create a Micronaut Application
 
 We start this Lab by creating a simple Micronaut application. Throughout the Lab, we will add code to the application that will allow us to demonstrate support for the Micronaut Expression Language. Let's do that now.

@@ -56,7 +56,7 @@ Before starting this lab, you must have:
 * A recent install of VS Code. If you don't have it, you can [download it here](https://code.visualstudio.com/download).
 * An install of the most recent version of Oracle GraalVM, JDK17. Please read the GraalVM documentation for more details: [Download Oracle GraalVM](https://www.graalvm.org/downloads/).
 * An Oracle Cloud Infrastructure (OCI) account and a tenancy to work within.
-* An install of the [Oracle Cloud CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm). You will need to esnure that this is configured to connect to an Oracle Cloud (OCI) tenancy that you have access to.
+* An install of the [Oracle Cloud CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm). You will need to ensure that this is configured to connect to an Oracle Cloud (OCI) tenancy that you have access to.
 * An Oracle [Autonomous Transaction Processing](https://www.oracle.com/uk/autonomous-database/autonomous-transaction-processing/) (ATP) instance with the HR schema installed. If you can not create an ATP instance and install the schema then we can provide you with a pre-configured instance.
 * The Oracle sample [HR schema can be found here](https://github.com/oracle-samples/db-sample-schemas). This link also contains instructions for installing. 
 * An Object Storage bucket created within your OCI tenancy, that you can access.
@@ -84,6 +84,18 @@ For this lab you will need to install the following extensions into VS Code:
 You can install it directly from within the VS Code marketplace, using the links above, or through the extensions activity view within VS Code.
 
 > **Important:** If you already have these extensions installed, you will need to update to the latest versions.
+
+As we will be using pre-release features in this Lab, as we are keen to show you these new features, you will need to install a dev build of the following extension. 
+
+* [Dev Build of Netbeans Language Server](https://ci-builds.apache.org/job/Netbeans/job/netbeans-vscode/2361/artifact/nbbuild/build/apache-netbeans-java-24.0.2361.vsix).
+
+To install this extension:
+
+* Download the extension from the link above.
+* Within VS Code, open the Extensions View.
+* From the banner of the Extensions, click on the three dots icon to reveal a menu and then select, `Install from VSIX`. This is shown in the image below.
+
+<img alt="Micronaut context actions menu" src="./images/install-from-vsix.gif" width="60%">
 
 ## 2 - Create a Micronaut Application
 
