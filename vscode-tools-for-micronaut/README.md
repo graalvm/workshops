@@ -235,7 +235,7 @@ Within the `BEANS` panel, we can see the beans that have been declared within th
 
 Over to you:
 * Use the `BEANS` panel to navigate to your Controller bean.
-* Use the search and filter feature of the `BEANS` panel to locate some subset of beans that come from dependencies. Navigate to the source code for these beans.
+* Use the search and filter feature of the `BEANS` panel to locate some subset of beans that come from dependencies. This can be found by clicking on the magnifying glass icon on the top right-hand side of the panel. Navigate to the source code for these beans.
 * What other features would you like to see associated with the beans panel? Please make a note.
 
 Within the `ENDPOINTS` panel we can see the endpoints that are defined within our controller. 
