@@ -263,7 +263,7 @@ Over to you:
 
 ### 4.3 - Make a REST call
 
-We hinted in the previous section that it was possible to do more than view the endpoints of your application. When your application is running, the endpoints panel will provide further icons that allow you to call an endpoint.
+We hinted in the previous section that it was possible to do more than view the endpoints of your application and you may have already discovered that you can call ednpoints. Let's take a look at exactly what you can do in more detail.
 
 ![keyboard](./images/keyboard.jpg)
 
@@ -471,7 +471,7 @@ Save the file and then start the application using the Micronaut Activity View.
 
 Over to you:
 * Open the VisualVM panel. Expand the `CPU Sampler` section. Click on the `Filter` action and filter to only sample classes, `Include Only Project Classes`. Click on the play icon next to `CPU Sampler` to start the sampling. This will launch VisualVM.
-* Return to VS Code. Use the `EnDPOINTS` panel to call the `/ping` `GET` endpoint. This is the endpoint that we deliberately made slow.
+* Return to VS Code. Use the `ENDPOINTS` panel to call the `/ping` `GET` endpoint. This is the endpoint that we deliberately made slow.
 * Return to VisualVM. Right-click on the sample, and select, `Expand / Collapse` > `Expand Topmost Path`. This will order the callpath. Drill into the innermost element and you should find our call to `sleep`. Surrounding this will be our `get` method. Right-click and select `Go to Source`. This will return you to the offending code.
 * Don't forget to clean up. Stop the application and kill VisualVM.
 * What other useful integrations would you like to see? Please make a note.
