@@ -511,6 +511,21 @@ The tooling manages the configuration required for all these cloud assets and in
 
 This is great if you want to save this configuration and use it in a deployed environment. The tooling also supports creating a Kubernetes Config Map from the configuration that can be used in conjunction with our OCI DevOps tooling (which is not discussed in the lab, but you can read more [about it here](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.oci-devops)).
 
+> These configuration properties are passed to the application through an environment varibale, `MICRONAUT_CONFIG_FILES`. When you run the application through the tooling the run command string is updated to set this variable to the location of a temporary file containing the application configuration. When you next run the application through the tooling take a moment to examine the run command shown so that you can see this for yourself.
+
+/usr/bin/env JDT_LAUNCHWRAP_CWD=/Users/krifoste/repos/workshops/vscode-micronaut-expression-language/demo 
+    JDT_LAUNCHWRAP_PROJECT_SCRIPTS=/var/folders/kg/y51b7gjd6nj63_dzgdnt_1hr0000gn/T/ext-dir.4QKxJeVX6F/oracle-labs-graalvm.micronaut-tools-0.6.7/resources/launch-wrappers 
+    JDT_LAUNCHWRAP_PROJECT_TYPE=Maven 
+    JDT_LAUNCHWRAP_PROJECT_CONTAINER=micronaut 
+    JDT_LAUNCHWRAP_PROJECT_DIR=/Users/krifoste/repos/workshops/vscode-micronaut-expression-language/demo 
+    JDT_LAUNCHWRAP_PROJECT_ROOT=/Users/krifoste/repos/workshops/vscode-micronaut-expression-language/demo 
+    JDT_LAUNCHWRAP_PROJECT_LAUNCHER=/var/folders/kg/y51b7gjd6nj63_dzgdnt_1hr0000gn/T/ext-dir.4QKxJeVX6F/oracle-labs-graalvm.micronaut-tools-0.6.7/agent JDT_LAUNCHWRAP_MICRONAUT_CONTINUOUS=false 
+    MICRONAUT_CONFIG_FILES=/var/folders/kg/y51b7gjd6nj63_dzgdnt_1hr0000gn/T/usr-dir.BjbQjh5kYz/User/workspaceStorage/bf3e8e0e0d22b704ebb741ac01817893/asf.apache-netbeans-java/userdir/var/cache/nbls.db.connection/db-2911445290496334280.properties
+    /var/folders/kg/y51b7gjd6nj63_dzgdnt_1hr0000gn/T/ext-dir.4QKxJeVX6F/oracle-labs-graalvm.micronaut-tools-0.6.7/resources/launch-wrappers/launcher.sh /Users/krifoste/.sdkman/candidates/java/17.0.12-graal/bin/java 
+    @/var/folders/kg/y51b7gjd6nj63_dzgdnt_1hr0000gn/T/cp_4kz9ftbwfqflziowjib1d4pgv.argfile
+    com.example.Application 
+
+
 ### 7.3 - Run the application using the attached Object Storage Bucket
 
 We should now add some code to use the object storage bucket. The following code is taken from the Micronaut Guide: [USE THE MICRONAUT OBJECT STORAGE API TO STORE FILES IN ORACLE CLOUD INFRASTRUCTURE (OCI) OBJECT STORAGE](https://guides.micronaut.io/latest/micronaut-object-storage-oracle-cloud.html).
@@ -548,7 +563,6 @@ public interface ProfilePicturesApi {
 ```
 
 And now create the following controller in your application, with the location: `src/main/java/com/example/controllers/ProfilePicturesController.java`:
-
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```java
