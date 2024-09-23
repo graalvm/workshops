@@ -327,7 +327,6 @@ Over to you:
 * Take a look within the `MONITORING & MANAGEMENT` panel. Notice what properties of the running application are now visible within the IDE. 
 * What other features would you expect to see here? Please make a note.
 
-
 ## 5 - Work with an Oracle Database
 
 The Tools for Micronaut has extensive support for working with databases and in particular the Oracle Database. We will see how we can connect VS Code with an existing Oracle Autonomous Transaction Processing instance and then use an existing database schema, within that instance, to generate our Micronaut Data model.
@@ -341,7 +340,6 @@ The first thing we need to do is re-enable the Micronaut Data configuration in o
 Update your `src/main/resources/application.properties` file so it looks like the one below:
 ```properties
 datasources.default.dialect=ORACLE
-datasources.default.dialect=UTC
 micronaut.application.name=demo
 datasources.default.ocid=
 datasources.default.schema-generate=CREATE_DROP
