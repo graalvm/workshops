@@ -156,9 +156,17 @@ We will be using this menu to create the class.
 
 Let's start by creating a REST-based controller. We will first create a new Java package, within our base package, to hold our controller. This can easily be done within the VS Code context action menu, as shown below. Create the package, `com.example.controllers`.
 
+![keyboard](./images/keyboard.jpg)
+
+Over to you:
+
+* Create the package, `com.example.controllers`, within your project.
+
+Once you have created the package for holding the controllers, create a new controller with the name, `PingController`. This can be done through the context menu that we introduced you to in the introduction to this section.
+
 <img alt="Create a new Java package" src="./images/vscode-context-menu-new-package.png" width="60%">
 
-Once you have created the package for holding the controllers, create a new controller with the name, `PingController`. You should see the following, or similar if you changed the name.
+You should see the following, or similar if you changed the name.
 
 ```java
 @Controller("/ping")
