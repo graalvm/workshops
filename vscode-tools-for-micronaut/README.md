@@ -142,17 +142,19 @@ micronaut.application.name=demo
 oci.config.profile=DEFAULT
 ```
 
+> **Note**: When connecting to OCI your local OCI CLI configuration is used. The OCI CLI uses the concept of profiles to create different user profiles for you, the user, to connect to OCI. By default, the project wizard assumes you will use your default profile to connect. If you are not, then you will need to update this later.
+
 ## 3 - Code Creation
 
 The Tools for Micronaut extension supports creating Micronaut classes from templates. Within the right-click context menu, also launched by `CTRL + Mouse-Click`, you can see a submenu that groups all of the Micronuat context-specific actions.
 
 <img alt="Micronaut context actions menu" src="./images/vscode-context-menu-micronaut-menu.png" width="60%">
 
-We will be using this menu to create classe.
+We will be using this menu to create the class.
 
 ### 3.1 - Create a REST controller
 
-Let's start by creating a REST-based controller. We will first create a new Java package, within our base package, to hold our controller. This can easily be done within the VS Code context action menu, as shown below.
+Let's start by creating a REST-based controller. We will first create a new Java package, within our base package, to hold our controller. This can easily be done within the VS Code context action menu, as shown below. Create the package, `com.example.controllers`.
 
 <img alt="Create a new Java package" src="./images/vscode-context-menu-new-package.png" width="60%">
 
