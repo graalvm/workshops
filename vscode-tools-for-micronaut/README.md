@@ -178,8 +178,10 @@ You can trigger code completion, Intellisense, and suggestions within VS Code us
 
 ![keyboard](./images/keyboard.jpg)
 
+You are now going to use the code completion to add various methods to your controller.
+
 Over to you:
-* Add a `@Post` method to the controller you just created. It doesn't need to do anything with the payload.
+* Add a `@Post` method to the controller you just created. It doesn't need to do anything with the payload, we want you to see what methods you can add and how to add to them.
 * What other methods can be added to the controller?
 * What code completions and code generations would you like to see added? Please make a note.
 
