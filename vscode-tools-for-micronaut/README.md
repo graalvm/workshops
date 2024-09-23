@@ -325,7 +325,6 @@ First, stop your running application, so that we can update its configuration, a
 Over to you:
 * Enable Monitoring and management for your application. Restart the application.
 * Take a look within the `MONITORING & MANAGEMENT` panel. Notice what properties of the running application are now visible within the IDE. 
-* Add a custom logger to your application and some custom logging to your controller. Look in the `MONITORING & MANAGEMENT` panel, under management. Restart the application & play with controlling the logging from within the `MONITORING & MANAGEMENT` panel. We also have support for managing caches in a very similar manner.
 * What other features would you expect to see here? Please make a note.
 
 
