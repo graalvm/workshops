@@ -20,7 +20,7 @@
     <micronaut.runtime>netty</micronaut.runtime>
     <micronaut.aot.enabled>false</micronaut.aot.enabled>
     <micronaut.aot.packageName>com.example.aot.generated</micronaut.aot.packageName>
-    <micronaut.test.resources.enabled>true</micronaut.test.resources.enabled>
+    <micronaut.test.resources.enabled>false</micronaut.test.resources.enabled>
     <exec.mainClass>com.example.Application</exec.mainClass>
   </properties>
 
