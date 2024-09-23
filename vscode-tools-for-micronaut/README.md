@@ -126,6 +126,8 @@ The wizard will walk you through the process of creating a Micronuat application
 
 Save the project and open it in VS Code. You can add it to the current workspace, which will allow you to keep this guide open if you have opened it within VS Code.
 
+> **Note**: If, for some reason, the Tools for Micronaut extension is disabled then during the last step of the project creation you will be asked to install the Tools for Micronaut extension again. Don't do this, just be sure to enable the extension.
+
 Initially, we won't be using the Micronaut Data and Oracle ATP modules, but creating them now will mean that adding database functionality to our application will be easier later.
 
 Before we do anything else, we will need to comment out all of the `datasources.*` properties in the application's `src/main/resources/application.properties`.
