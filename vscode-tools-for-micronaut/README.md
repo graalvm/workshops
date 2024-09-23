@@ -121,7 +121,7 @@ The wizard will walk you through the process of creating a Micronuat application
 * Base package: com.example
 * Language: Java (our tools focus on Java support)
 * Project features: Micronaut Data JDBC, Oracle Cloud Autonomous Transaction Processing (ATP), HTTP Client
-* Build tool: You choose
+* Build tool: Maven
 * Test framework: JUnit
 
 Save the project and open it in VS Code. You can add it to the current workspace, which will allow you to keep this guide open if you have opened it within VS Code.
@@ -140,6 +140,12 @@ micronaut.application.name=demo
 #datasources.default.schema-generate=CREATE_DROP
 #datasources.default.walletPassword=
 oci.config.profile=DEFAULT
+```
+
+This Lab does not require support for Test Containers. As warnings and errors may be generated in the build logs if you do not have support for Test Containers, we suggest that you disable this support in the build file. As we are using maven you will need to disable the following property in the `pom.xml` file, so that it looks as below:
+
+```xml
+<micronaut.test.resources.enabled>false</micronaut.test.resources.enabled>
 ```
 
 > **Note**: When connecting to OCI your local OCI CLI configuration is used. The OCI CLI uses the concept of profiles to create different user profiles for you, the user, to connect to OCI. By default, the project wizard assumes you will use your default profile to connect. If you are not, then you will need to update this later.
