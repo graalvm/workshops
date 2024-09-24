@@ -112,7 +112,7 @@ Linux:   Ctrl + Shift + P
 
 Then search for and run, `Micronaut Launch: Create Micronaut Project`.
 
-The wizard will walk you through the process of creating a Micronuat application. You will need to create an application with the following properties:
+The wizard will walk you through the process of creating a Micronaut application. You will need to create an application with the following properties:
 
 * Version 4.6.2
 * Application Type: Micronaut Application
@@ -152,7 +152,7 @@ This Lab does not require support for Test Containers. As warnings and errors ma
 
 ## 3 - Code Creation
 
-The Tools for Micronaut extension supports creating Micronaut classes from templates. Within the right-click context menu, also launched by `CTRL + Mouse-Click`, you can see a submenu that groups all of the Micronuat context-specific actions.
+The Tools for Micronaut extension supports creating Micronaut classes from templates. Within the right-click context menu, also launched by `CTRL + Mouse-Click`, you can see a submenu that groups all of the Micronaut context-specific actions.
 
 <img alt="Micronaut context actions menu" src="./images/vscode-context-menu-micronaut-menu.png" width="60%">
 
