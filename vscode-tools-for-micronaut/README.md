@@ -16,7 +16,7 @@ In this lab we will introduce you to the Micronaut&reg; tooling available within
 
 During this lab, we will introduce you to the Tools for Micronaut extension for VS Code. This extension supports working and building Micronaut applications. You will:
 
-- Install VS Code and the Tools for Micronaut extension.
+- [Install VS Code](https://code.visualstudio.com/download) and the Tools for Micronaut extension.
 - Create a Micronaut application within VS Code.
 - Use the code creation automation:
   - Create a REST controller.
