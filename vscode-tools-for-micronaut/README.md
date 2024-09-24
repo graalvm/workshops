@@ -21,7 +21,7 @@ During this lab, we will introduce you to the Tools for Micronaut extension for 
 - Use the code creation automation:
   - Create a REST controller.
 - Discover what the Micronaut Activity view can do:
-  - Use the Micronaut Activity View to run the application.
+  - Use the Micronaut Activity View to run the application. You can select the Micronaut Activity View by clicking the Micronaut Logo on the left navigation panel.
   - Navigate around the application's endpoints and beans.
   - Make a REST call.
   - Add the Micronaut Control Panel to your application.
