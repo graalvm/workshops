@@ -14,11 +14,18 @@ jobs:
     - name: Set up GraalVM
       uses: graalvm/setup-graalvm@v1
       with:
-        java-version: '23-ea'
+        java-version: '23'
         distribution: 'graalvm'
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Run Spring Boot Web Server
+      # working-directory: native-image/spring-boot-webserver
       run: |
+        # Prepapre static resources
+        pwd
+        unzip native-image/spring-boot-webserver/src/main/resources/static.zip
+        cd /home/runner/work/workshops/workshops/native-image/spring-boot-webserver
+        #
+
         # Build JAR (Debian Slim)
         ./build-jar.sh
         #
@@ -59,6 +66,9 @@ jobs:
         # Compare file sizes
         ls -lh target/webserver*
         docker images webserver
+
+        # Restore defaults
+        git clean -fd static/
     - name: Archive production artifacts
       uses: actions/upload-artifact@v4
       with:
