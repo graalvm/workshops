@@ -1,0 +1,5 @@
+FROM scratch
+WORKDIR /tmp
+COPY target/webserver.static-upx /
+EXPOSE 8080
+ENTRYPOINT ["/webserver.static-upx"]
