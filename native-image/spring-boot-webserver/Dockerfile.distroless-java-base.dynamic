@@ -1,0 +1,4 @@
+FROM gcr.io/distroless/java-base-debian12
+COPY target/webserver /
+EXPOSE 8080
+ENTRYPOINT ["/webserver"]

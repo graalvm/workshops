@@ -1,0 +1,4 @@
+FROM gcr.io/distroless/base-debian12
+COPY target/webserver.mostly-static /
+EXPOSE 8080
+ENTRYPOINT ["/webserver.mostly-static"]
