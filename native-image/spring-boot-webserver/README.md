@@ -132,7 +132,65 @@ The `ENTRYPOINT` for the application would be `java` from the custom runtime.
     ```
     Jlink shrank the container by **46MB**.
 
-## **STEP 3**: Build a Native Image Locally and Run Inside a Container (Default Configuration)
+## **STEP 3**: Build and Run a Native Image Inside a Container Using Paketo Buildpacks
+
+You can also compile this Spring Boot application ahead of time with GraalVM Native Image and run it using Paketo Buildpacks container images. 
+
+### Explanation
+
+Spring Boot supports building a native image in a container using the [Paketo Buildpack for Oracle](https://github.com/paketo-buildpacks/oracle) which provides Oracle GraalVM Native Image. 
+
+The Paketo builder pulls the [Jammy Tiny Stack image](https://github.com/paketo-buildpacks/builder-jammy-tiny) (Ubuntu distroless-like image) which contains no buildpacks. 
+Then you point the **builder** image to the **creator** image. 
+For this workshop, you point to the [Paketo Buildpack for Oracle](https://github.com/paketo-buildpacks/oracle), explicitly requesting the Native Image tool.
+
+If you open the _pom.xml_ file, you see the `spring-boot-maven-plugin` declaration added for you:
+```xml
+<configuration>
+    <image>
+    <builder>paketobuildpacks/builder-jammy-buildpackless-tiny</builder>
+    <buildpacks>
+        <buildpack>paketobuildpacks/oracle</buildpack>
+        <buildpack>paketobuildpacks/java-native-image</buildpack>
+    </buildpacks>
+    </image>
+</configuration>
+```
+When `java-native-image` is requested, the buildpack downloads Oracle GraalVM, which includes Native Image.
+The [Paketo documentation provides several examples](https://paketo.io/docs/howto/java/#build-an-app-as-a-graalvm-native-image-application) that show you how to build applications with Native Image using buildpacks.
+
+> Note that if you do not specify Oracle's buildpack, it will pull the default buildpack, which can result in reduced performance. 
+
+### Action
+
+1. Build a native executable for this Spring application using the Paketo buildpack:
+    ```bash
+    ./mvnw -Pnative spring-boot:build-image
+    ```
+
+2. Once the build completes, a container image _0.0.1-SNAPSHOT_ should be available. Run it, mapping the ports:
+    ```bash
+    docker run --rm -p8080:8080 docker.io/library/webserver:0.0.1-SNAPSHOT
+    ```
+    
+    The application is running from the native image inside a container. The container started in **0.031 seconds**.
+
+3. Open a browser and navigate to [localhost:8080/](http://localhost:8080/). You see the GraalVM documentation pages served.
+
+4. Return to the terminal and stop the running container by clicking CTRL+C.
+
+5. Check the size of this container image:
+    ```bash
+    docker images
+    ```
+    The expected output is:
+    ```
+    REPOSITORY   TAG                          IMAGE ID       CREATED          SIZE
+    webserver    0.0.1-SNAPSHOT               0660806da4a2   44 years ago     163MB
+    ```
+    The new container, tagged as _0.0.1-SNAPSHOT_, is **163MB**.
+
+## **STEP 4**: Build a Native Image Locally and Run Inside a Container (Default Configuration)
 
 In this step, you will create a native image with the default configuration on a host machine, and only run it inside a container.
 
@@ -195,7 +253,7 @@ Learn more in ["Distroless" Container Images](https://github.com/GoogleContainer
     The expected size is **125M**. 
     Note that the static resources are "baked" into this native executable and added 44M to its size.
 
-## **STEP 4**: Build a Size-Optimized Native Image Locally and Run Inside a Container
+## **STEP 5**: Build a Size-Optimized Native Image Locally and Run Inside a Container
 
 _This is where the fun begins._
 
@@ -281,7 +339,7 @@ The script _build-dynamic-image.sh_, available in this repository for your conve
 
     The size decreased from **125M** (`webserver`) to **92M** (`webserver.dynamic-optimized`) by applying the file size optimization.
 
-## **STEP 5**: Build a Size-Optimized Mostly Static Native Image Locally and Run Inside a Container
+## **STEP 6**: Build a Size-Optimized Mostly Static Native Image Locally and Run Inside a Container
 
 In this step, you will build a **mostly static** native image, with the file size optimization on, on a host machine, then package it into a container image that provides `glibc`, and run.
 
@@ -367,7 +425,7 @@ A separate Maven profile exists for this step:
 
     The size of the mostly static native image (`webserver.mostly-static`) has not changed much, and is around **93MB**.
  
-## **STEP 6**: Build a Size-Optimized Fully Static Native Image Locally and Run Inside a Container
+## **STEP 7**: Build a Size-Optimized Fully Static Native Image Locally and Run Inside a Container
 
 In this step, you will build a **fully static** native image, with the file size optimization on, on a host machine, then package it into a _scratch_ container.
 
@@ -467,7 +525,7 @@ A separate Maven profile exists for this step:
 
     The size of the mostly static native image (`webserver.static`) has not changed, and is around **93MB**.
 
-## **STEP 7**: Compress a Static Native Image with UPX and Run Inside a Container
+## **STEP 8**: Compress a Static Native Image with UPX and Run Inside a Container
 
 _What can you do next to reduce the size even more?_
 
@@ -532,69 +590,6 @@ It can significantly reduce the executable size, but note, that UPX loads the ex
     ```
     The container size reduced dramatically to just **36.2MB**.
     The application and container image's size have been shrunk to the minimum.
-
-## **STEP 8**: (Optional) Build and Run a Native Image Inside a Container Using Paketo Buildpacks
-
-You can also compile this Spring Boot application ahead of time with GraalVM Native Image and run it using Paketo Buildpacks container images. 
-
-> Prerequisite: [GraalVM for JDK 21](https://www.graalvm.org/downloads/). We recommend using [SDKMAN!](https://sdkman.io/). (For other download options, see [GraalVM Downloads](https://www.graalvm.org/downloads/).)
-    ```bash
-    sdk install java 21-graal
-    ```
-
-### Explanation
-
-Spring Boot supports building a native image in a container using the [Paketo Buildpack for Oracle](https://github.com/paketo-buildpacks/oracle) which provides Oracle GraalVM Native Image. 
-
-The Paketo builder pulls the [Jammy Tiny Stack image](https://github.com/paketo-buildpacks/builder-jammy-tiny) (Ubuntu distroless-like image) which contains no buildpacks. 
-Then you point the **builder** image to the **creator** image. 
-For this workshop, you point to the [Paketo Buildpack for Oracle](https://github.com/paketo-buildpacks/oracle), explicitly requesting the Native Image tool.
-
-If you open the _pom.xml_ file, you see the `spring-boot-maven-plugin` declaration added for you:
-```xml
-<configuration>
-    <image>
-    <builder>paketobuildpacks/builder-jammy-buildpackless-tiny</builder>
-    <buildpacks>
-        <buildpack>paketobuildpacks/oracle</buildpack>
-        <buildpack>paketobuildpacks/java-native-image</buildpack>
-    </buildpacks>
-    </image>
-</configuration>
-```
-When `java-native-image` is requested, the buildpack downloads Oracle GraalVM, which includes Native Image.
-The [Paketo documentation provides several examples](https://paketo.io/docs/howto/java/#build-an-app-as-a-graalvm-native-image-application) that show you how to build applications with Native Image using buildpacks.
-
-> Note that if you do not specify Oracle's buildpack, it will pull the default buildpack, which can result in reduced performance. 
-
-### Action
-
-1. Build a native executable for this Spring application using the Paketo buildpack:
-    ```bash
-    ./mvnw -Pnative spring-boot:build-image
-    ```
-
-2. Once the build completes, a container image _0.0.1-SNAPSHOT_ should be available. Run it, mapping the ports:
-    ```bash
-    docker run --rm -p8080:8080 docker.io/library/webserver:0.0.1-SNAPSHOT
-    ```
-    
-    The application is running from the native image inside a container. The container started in **0.031 seconds**.
-
-3. Open a browser and navigate to [localhost:8080/](http://localhost:8080/). You see the GraalVM documentation pages served.
-
-4. Return to the terminal and stop the running container by clicking CTRL+C.
-
-5. Check the size of this container image:
-    ```bash
-    docker images
-    ```
-    The expected output is:
-    ```
-    REPOSITORY   TAG                          IMAGE ID       CREATED          SIZE
-    webserver    0.0.1-SNAPSHOT               0660806da4a2   44 years ago     163MB
-    ```
-    The new container, tagged as _0.0.1-SNAPSHOT_, is **163MB**.
 
 ## **STEP 9**: (Optional) Clean up
 
