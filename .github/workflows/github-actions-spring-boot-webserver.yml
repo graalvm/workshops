@@ -34,6 +34,9 @@ jobs:
         ./build-jlink.sh
         #
 
+        # Build dynamic image using Paketo Buildpacks
+        ./mvnw -Pnative spring-boot:build-image
+
         # Build dynamic image (Distroless Java Base)
         ./build-dynamic-image.sh
         #
