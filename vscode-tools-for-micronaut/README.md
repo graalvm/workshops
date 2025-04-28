@@ -16,7 +16,8 @@ In this lab we will introduce you to the Micronaut&reg; tooling available within
 
 During this lab, we will introduce you to the Tools for Micronaut extension for VS Code. This extension supports working and building Micronaut applications. You will:
 
-- Install VS Code and the [Tools for Micronaut extension](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#:~:text=Tools%20for%20Micronaut®%20framework%20is%20a%20powerful%20extension%20for,contains%20this%20extension%20and%20others.).
+
+- Install VS Code and the [Tools for Micronaut extension](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#:~:text=Tools%20for%20Micronaut®%20framework%20is%20a%20powerful%20extension%20for,contains%20this%20extension%20and%20others).
 - Create a Micronaut application within VS Code.
 - Use the code creation automation:
   - Create a REST controller.
