@@ -16,7 +16,8 @@ In this lab we will introduce you to the Micronaut&reg; tooling available within
 
 During this lab, we will introduce you to the Tools for Micronaut extension for VS Code. This extension supports working and building Micronaut applications. You will:
 
-- [Install VS Code](https://code.visualstudio.com/download) and the Tools for Micronaut extension.
+
+- Install VS Code and the [Tools for Micronaut extension](https://marketplace.visualstudio.com/items?itemName=oracle-labs-graalvm.micronaut-tools#:~:text=Tools%20for%20Micronaut®%20framework%20is%20a%20powerful%20extension%20for,contains%20this%20extension%20and%20others).
 - Create a Micronaut application within VS Code.
 - Use the code creation automation:
   - Create a REST controller.
@@ -112,7 +113,7 @@ Linux:   Ctrl + Shift + P
 
 Then search for and run, `Micronaut Launch: Create Micronaut Project`.
 
-The wizard will walk you through the process of creating a Micronuat application. You will need to create an application with the following properties:
+The wizard will walk you through the process of creating a Micronaut application. You will need to create an application with the following properties:
 
 * Version 4.6.2
 * Application Type: Micronaut Application
@@ -152,7 +153,7 @@ This Lab does not require support for Test Containers. As warnings and errors ma
 
 ## 3 - Code Creation
 
-The Tools for Micronaut extension supports creating Micronaut classes from templates. Within the right-click context menu, also launched by `CTRL + Mouse-Click`, you can see a submenu that groups all of the Micronuat context-specific actions.
+The Tools for Micronaut extension supports creating Micronaut classes from templates. Within the right-click context menu, also launched by `CTRL + Mouse-Click`, you can see a submenu that groups all of the Micronaut context-specific actions.
 
 <img alt="Micronaut context actions menu" src="./images/vscode-context-menu-micronaut-menu.png" width="60%">
 
