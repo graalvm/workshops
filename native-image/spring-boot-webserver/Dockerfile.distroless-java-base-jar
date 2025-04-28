@@ -1,0 +1,10 @@
+FROM container-registry.oracle.com/graalvm/jdk:24 AS build
+COPY . /webserver
+WORKDIR /webserver
+RUN ./mvnw clean package
+
+# Distoless Java 21 (Debian)
+FROM gcr.io/distroless/java21-debian12
+COPY --from=build /webserver/target/webserver-0.0.1-SNAPSHOT.jar webserver-0.0.1-SNAPSHOT.jar  
+EXPOSE 8080  
+ENTRYPOINT ["java", "-jar", "webserver-0.0.1-SNAPSHOT.jar"]

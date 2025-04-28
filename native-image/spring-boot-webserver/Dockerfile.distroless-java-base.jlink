@@ -1,4 +1,4 @@
-FROM container-registry.oracle.com/graalvm/jdk:23 AS build
+FROM container-registry.oracle.com/graalvm/jdk:24 AS build
 COPY . /webserver
 WORKDIR /webserver
 RUN ./mvnw clean package
@@ -15,6 +15,7 @@ RUN jlink \
         --strip-java-debug-attributes \
         --output jlink-jre
 
+# Distroless Java Base-provides glibc and other libraries needed by the JDK
 FROM gcr.io/distroless/java-base-debian12
 COPY --from=build /webserver/target/webserver-0.0.1-SNAPSHOT.jar webserver-0.0.1-SNAPSHOT.jar
 COPY --from=build /webserver/jlink-jre jlink-jre
