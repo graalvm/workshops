@@ -1,4 +1,4 @@
-name: Multi-Cloud Apps with GraalVM - Up and Running
+name: Multi-Cloud with GraalVM - Building and Deploying Optimized Applications
 on:
   push:
     paths:
@@ -6,52 +6,61 @@ on:
       - '.github/workflows/github-actions-spring-boot-webserver.yml'
 jobs:
   build:
-    name: Run Jwebserver
-    runs-on: ubuntu-20.04 # Docker changed its behavior on Ubuntu 22.04
-    timeout-minutes: 30    
+    name: Run webserver
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
     steps:
     - uses: actions/checkout@v4
     - name: Set up GraalVM
       uses: graalvm/setup-graalvm@v1
       with:
-        java-version: '23'
+        java-version: '24'
         distribution: 'graalvm'
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Run Spring Boot Web Server
       # working-directory: native-image/spring-boot-webserver
       run: |
-        # Prepapre static resources
+        # Prepare static resources
         pwd
         unzip native-image/spring-boot-webserver/src/main/resources/static.zip
         cd /home/runner/work/workshops/workshops/native-image/spring-boot-webserver
         #
 
-        # Build JAR (Debian Slim)
-        ./build-jar.sh
+        # Build JAR (Debian Distoless Java 21)
+        ./build-jar-java-base.sh
         #
 
-        # Build Jlink custom runtime (Distroless Java Base)
+        # Build JAR (Eclipse-temurin:21)
+        ./build-jar-eclipse-temurin.sh
+        #
+
+        # Build Jlink custom runtime (Distroless Java Base Debian)
         ./build-jlink.sh
         #
 
-        # Build dynamic image using Paketo Buildpacks
-        ./mvnw -Pnative spring-boot:build-image
-
-        # Build dynamic image (Distroless Java Base)
+        # Build dynamic image (Distroless Java Base Debian)
         ./build-dynamic-image.sh
         #
 
-        # Build dynamic image, optimized for size (Distroless Java Base)
+        # Build dynamic image, optimized for size (Distroless Java Base Debian)
         ./build-dynamic-image-optimized.sh
         #
-        
+
+        # Build dynamic image, optimized for size with SkipFlow (Distroless Java Base Debian)
+        ./build-dynamic-image-skipflow.sh
+        #
+
         # Setup musl toolchain
         ./setup-musl.sh
         export PATH="$PWD/musl-toolchain/bin:$PATH"
         #
 
-        # Build mostly static image (Distroless Base)
+        # Build mostly static image (Distroless Base Debian)
         ./build-mostly-static-image.sh
+        #
+
+        # Build fully static image (Alpine Static)
+        ./build-alpine-static-image.sh
         #
 
         # Build fully static image (Scratch)
@@ -65,16 +74,4 @@ jobs:
         # Build fully static compressed image (Scratch UPX)
         ./build-static-upx-image.sh
         #
-
-        # Compare file sizes
-        ls -lh target/webserver*
         docker images webserver
-
-        # Restore defaults
-        git clean -fd static/
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v4
-      with:
-          name: native-binaries-${{ matrix.os }}
-          path: |
-            target/webserver*
