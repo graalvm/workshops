@@ -1,10 +1,14 @@
-#!/bin/sh 
+#!/bin/sh
 
-./build-jar.sh
+./build-jar-java-base.sh
+./build-jar-eclipse-temurin.sh
 ./build-jlink.sh
 ./build-dynamic-image.sh
+./build-dynamic-image-optimized.sh
+./build-dynamic-image-skipflow.sh
 ./build-mostly-static-image.sh
 ./build-static-image.sh
+./build-alpine-static-image.sh
 ./build-static-upx-image.sh
 
 echo "Generated Executables"

@@ -1,4 +1,11 @@
+FROM container-registry.oracle.com/graalvm/native-image:24 AS nativebuild
+COPY . /webserver
+WORKDIR /webserver
+# Build a mostly statically linked native image with optimization for size
+RUN ./mvnw -Dmaven.test.skip=true -Pnative,mostly-static native:compile
+
+# Distroless Base - provides glibc
 FROM gcr.io/distroless/base-debian12
-COPY target/webserver.mostly-static /
-EXPOSE 8080
-ENTRYPOINT ["/webserver.mostly-static"]
+COPY --from=nativebuild /webserver/target/webserver.mostly-static /
+EXPOSE 8000
+ENTRYPOINT ["/webserver.mostly-static", "-b", "0.0.0.0", "-d", "/web"]

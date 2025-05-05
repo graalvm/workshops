@@ -1,5 +1,12 @@
+FROM container-registry.oracle.com/graalvm/native-image:24-muslib AS nativebuild
+COPY . /webserver
+WORKDIR /webserver
+# Build a fully static native image with optimization for size
+RUN ./mvnw -Dmaven.test.skip=true -Pnative,fully-static native:compile
+
+# Scratch-nothing
 FROM scratch
 WORKDIR /tmp
-COPY target/webserver.static /
-EXPOSE 8080
-ENTRYPOINT ["/webserver.static"]
+COPY --from=nativebuild /webserver/target/webserver.static /
+EXPOSE 8000
+ENTRYPOINT ["/webserver.static", "-b", "0.0.0.0", "-d", "/web"]
