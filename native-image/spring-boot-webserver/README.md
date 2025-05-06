@@ -1,4 +1,4 @@
-# Multi-Cloud with GraalVM: Building and Deploying Optimized Applications
+# From JVM to Native: The Path to Efficient Java Containers
 
 This workshop focuses on how to **build size-optimized native applications** using [GraalVM Native Image](https://www.graalvm.org/jdk24/reference-manual/native-image/) and how to leverage containerization to optimize the runtime environment.
 You are going to discover ways to minimize application footprint by taking advantage of different Native Image linking options, and packaging a size-compact application into various containers, focusing on two main strategies: Distroless and static, discussing the trade-offs.
