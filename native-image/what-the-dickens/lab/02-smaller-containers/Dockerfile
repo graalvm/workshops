@@ -1,13 +1,5 @@
 # Base Container Image
-FROM ghcr.io/graalvm/native-image:ol8-java17-22.3.1 AS builder
-
-# Install tar and gzip to extract the Maven binaries
-RUN microdnf update \
- && microdnf install --nodocs \
-    tar \
-    gzip \
- && microdnf clean all \
- && rm -rf /var/cache/yum
+FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
 
 # Set the working directory to /build
 WORKDIR /build
@@ -16,7 +8,7 @@ WORKDIR /build
 COPY . /build
 
 # Build
-RUN ./mvnw --no-transfer-progress -Pnative -DskipTests=true clean package
+RUN ./mvnw --no-transfer-progress -Pnative,mostly-static -DskipTests=true clean package
 
 # Deployment Container
 # This time we use the distroless image - which is around 20 MB in size. Even smaller versions are available.
@@ -26,7 +18,7 @@ FROM gcr.io/distroless/base
 EXPOSE 8080
 
 # Copy the native executable into the container
-COPY --from=builder /build/target/What_the_Dickens .
+COPY --from=builder /build/target/what_the_dickens .
 
-# Run What_the_Dickens when starting the container
-ENTRYPOINT ["/What_the_Dickens"]
+# Run what_the_dickens when starting the container
+ENTRYPOINT ["/what_the_dickens"]
