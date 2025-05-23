@@ -1,12 +1,5 @@
-FROM ghcr.io/graalvm/native-image:ol8-java17-22 AS builder
-
-# Install tar and gzip to extract the Maven binaries
-RUN microdnf update \
- && microdnf install --nodocs \
-    tar \
-    gzip \
- && microdnf clean all \
- && rm -rf /var/cache/yum
+# Base Image
+FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
 
 # Set the working directory to /home/app
 WORKDIR /build
@@ -15,10 +8,10 @@ WORKDIR /build
 COPY . /build
 
 # Build
-RUN ./mvnw --no-transfer-progress clean package -Pdistroless
+RUN ./mvnw --no-transfer-progress clean package -Pnative,distroless
 
 # Deployment Containers
-FROM gcr.io/distroless/base
+FROM gcr.io/distroless/base-debian12
 
 EXPOSE 8080
 
