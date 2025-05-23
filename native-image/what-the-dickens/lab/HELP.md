@@ -1,62 +1,49 @@
-# Getting Started
-
-### Reference Documentation
-For further reference, please consider the following sections:
-
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.0.5/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.0.5/maven-plugin/reference/html/#build-image)
-* [GraalVM Native Image Support](https://docs.spring.io/spring-boot/docs/3.0.5/reference/html/native-image.html#native-image)
-
-### Additional Links
-These additional references should also help you:
-
-* [Configure AOT settings in Build Plugin](https://docs.spring.io/spring-boot/docs/3.0.5/maven-plugin/reference/htmlsingle/#aot)
-
-## GraalVM Native Support
+# Help Guide
 
 This project has been configured to let you generate either a lightweight container or a native executable.
-It is also possible to run your tests in a native image.
+It is also possible to run your tests as a native code.
 
-### Lightweight Container with Cloud Native Buildpacks
+### Lightweight Container with Paketo Buildpacks
+
 If you're already familiar with Spring Boot container images support, this is the easiest way to get started.
-Docker should be installed and configured on your machine prior to creating the image.
+Docker should be installed and configured on your machine prior to running the steps.
 
 To create the image, run the following goal:
-
-```
-$ ./mvnw spring-boot:build-image -Pnative
+```bash
+./mvnw spring-boot:build-image -Pnative
 ```
 
 Then, you can run the app like any other container:
-
-```
-$ docker run --rm What_the_Dickens:0.0.1-SNAPSHOT
+```bash
+docker run --rm what_the_dickens:0.0.1-SNAPSHOT
 ```
 
 ### Executable with Native Build Tools
-Use this option if you want to explore more options such as running your tests in a native image.
-The GraalVM `native-image` compiler should be installed and configured on your machine.
 
-NOTE: GraalVM 22.3+ is required.
+Use this option if you want to explore more options such as running your tests as a native code.
+[GraalVM for JDK 24](https://www.graalvm.org/downloads/) should be installed on your machine.
 
 To create the executable, run the following goal:
-
-```
-$ ./mvnw native:compile -Pnative
-```
-
-Then, you can run the app as follows:
-```
-$ target/What_the_Dickens
+```bash
+./mvnw native:compile -Pnative
 ```
 
-You can also run your existing tests suite in a native image.
+Then, you can run the application as follows:
+```bash
+./target/what_the_dickens
+```
+
+You can also run your existing tests suite as a native code.
 This is an efficient way to validate the compatibility of your application.
 
 To run your existing tests in a native image, run the following goal:
-
+```bash
+./mvnw test -PnativeTest
 ```
-$ ./mvnw test -PnativeTest
-```
 
+### Learn More
+
+For further reference, check the following:
+
+* [Build a Native Executable from a Spring Boot Application](https://www.graalvm.org/latest/reference-manual/native-image/guides/build-spring-boot-app-into-native-executable/)
+* [Developing Your First GraalVM Native Application](https://docs.spring.io/spring-boot/how-to/native-image/developing-your-first-application.html)
