@@ -8,6 +8,7 @@ jobs:
   build:
     name: Native Image What_the_Dickens
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2
 
@@ -50,4 +51,4 @@ jobs:
           docker stop $container_id
 
           # List container images
-          docker images | head -n2
+          docker images
