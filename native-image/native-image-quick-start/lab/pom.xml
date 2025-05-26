@@ -1,44 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>oracle</groupId>
     <artifactId>graalvmnidemos</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <graalvm.version>22.2.0</graalvm.version>
-        <jackson.version>2.10.1</jackson.version>
-        <app.main.class>oracle.App</app.main.class>
-        <!-- Define the version of the GraalVM Maven Plugin we want to use -->
-        <native.maven.plugin.version>0.9.13</native.maven.plugin.version>
-        <!-- We can use properties to define the name of the executable we produce -->
+        <!-- <app.main.class>oracle.App</app.main.class> -->
+        <app.main.class>serialization.App</app.main.class>
+        <native.maven.plugin.version>0.10.6</native.maven.plugin.version>
         <exe.file.name>file-count</exe.file.name>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.graalvm.sdk</groupId>
-            <artifactId>graal-sdk</artifactId>
-            <version>${graalvm.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.0</version>
         </dependency>
     </dependencies>
 
     <profiles>
-        <!-- This is the profile for running the JIT version of the app AND RUNNING THE AGENTLIB
-            to profile the app to identify reflection etc. To run:
-
-            $ mvn clean package exec:exec -PJAVA_AGENT_LIB
-        -->
         <profile>
             <id>java_agent</id>
             <build>
@@ -88,52 +71,35 @@
                                 <argument>-agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image/</argument>
                                 <argument>-classpath</argument>
                                 <classpath />
-                                <argument>oracle.App</argument>
+                                <argument>${app.main.class}</argument>
                             </arguments>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
-        <!-- This is the profile for generating the native image. It must be run
-            after the agent lib has done it's work, or if it doesn't need to do it's
-            work ;)
-
-            To run:
-
-            $ mvn clean package exec:exec -PNATIVE_IMAGE
-        -->
+        <!-- Native Image plugin -->
         <profile>
             <id>native</id>
             <build>
                 <plugins>
-                    <!-- Native Image -->
                     <plugin>
                         <groupId>org.graalvm.buildtools</groupId>
                         <artifactId>native-maven-plugin</artifactId>
                         <version>${native.maven.plugin.version}</version>
                         <extensions>true</extensions>
                         <executions>
-                        <execution>
-                            <id>build-native</id>
-                            <goals>
-                            <goal>build</goal>
-                            </goals>
-                            <phase>package</phase>
-                        </execution>
+                                <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>compile-no-fork</goal>
+                                </goals>
+                                <phase>package</phase>
+                                </execution>
                         </executions>
                         <configuration>
-                            <!-- Set this to true if you need to switch this off -->
-                            <skip>false</skip>
-                            <!-- The output name for the executable -->
-                            <imageName>${exe.file.name}</imageName>
-                            <mainClass>${app.main.class}</mainClass>
-                            <buildArgs>
-                                <!-- With Enterprise you can use the G1GC -->
-                                <!--buildArg>- -gc=G1</buildArg-->
-                                <buildArg>--no-fallback</buildArg>
-                                <buildArg>--report-unsupported-elements-at-runtime</buildArg>
-                            </buildArgs>
+                                <imageName>${exe.file.name}</imageName>
+                                <mainClass>${app.main.class}</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>

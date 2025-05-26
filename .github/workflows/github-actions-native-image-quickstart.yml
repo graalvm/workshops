@@ -1,8 +1,8 @@
-name: GraalVM Native Image Quick Start Pipeline
+name: Native Image Quick Start Pipeline
 on:
   push:
     paths:
-      - 'native-image/graalvm-native-image-quick-start/lab/**'
+      - 'native-image/native-image-quick-start/lab/**'
       - '.github/workflows/github-actions-native-image-quickstart.yml'
 jobs:
   build:
@@ -16,15 +16,13 @@ jobs:
 
       - uses: graalvm/setup-graalvm@v1
         with:
-          version: 'latest'
-          java-version: '17'
-          components: 'native-image'
+          java-version: '24'
+          distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build and Test Java Code
         run: |
-          cd native-image/graalvm-native-image-quick-start/lab/
+          cd native-image/native-image-quick-start/lab/
           ./mvnw --no-transfer-progress clean package exec:exec
-          ./mvnw --no-transfer-progress clean package exec:exec -Pjava_agent
+          java -agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image -cp ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar serialization.App
           ./mvnw --no-transfer-progress package -Pnative
           ./target/file-count
