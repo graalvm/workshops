@@ -161,7 +161,7 @@ This can cause issues with reflection, but luckily there is a way to deal with t
 
 Reflection is a core feature of Java, so how can you use reflection **and** still take advantage of GraalVM Native Image?
 You can tell the `native-image` tool about instances of reflection through a special configuration file, _reachability-metadata.json_.
-These file is written in the JSON format and can be passed to the `native-image` tool using command-line options.
+This file is written in the JSON format and can be passed to the `native-image` tool using command-line options.
 
 The tool supports reflection, resource files, JNI, dynamic proxies, and serialization configuration.
 This workshop is only looking at how to deal with reflection.
