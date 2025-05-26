@@ -7,7 +7,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson.version>2.17.0</jackson.version>
         <!-- <app.main.class>oracle.App</app.main.class> -->
         <app.main.class>serialization.App</app.main.class>
         <native.maven.plugin.version>0.10.6</native.maven.plugin.version>
@@ -72,7 +71,7 @@
                                 <argument>-agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image/</argument>
                                 <argument>-classpath</argument>
                                 <classpath />
-                                <argument>oracle.App</argument>
+                                <argument>serialization.App</argument>
                             </arguments>
                         </configuration>
                     </plugin>

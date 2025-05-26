@@ -13,8 +13,7 @@ A native executable produced by Native Image has several important advantages, i
 - Can be packaged into a lightweight container image for faster and more efficient deployment
 - Presents a reduced attack surface
 
-In addition, there are [Maven and Gradle plugins for Native Image](https://graalvm.github.io/native-build-tools/) so you can easily build,
-test, and run Java applications as executable files.
+In addition, there are [Maven and Gradle plugins for Native Image](https://graalvm.github.io/native-build-tools/) so you can easily build, test, and run Java applications as executable files.
 
 Estimated workshop time: 45 minutes
 
@@ -270,6 +269,14 @@ Now use the [Tracing agent](https://docs.oracle.com/en/graalvm/jdk/24/docs/refer
     ```bash
     java -agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image -cp ./target/graalvmnidemos-1.0-SNAPSHOT-jar-with-dependencies.jar serialization.App
     ```
+
+   > Note: The _pom.xml_ file contains a Maven profile that can do this for you.
+   The following command will run the Tracing agent:
+
+   ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+   ```bash
+   ./mvnw clean package exec:exec -Pjava_agent
+   ```
 
    Have a look at the configuration file that the agent created:
 
