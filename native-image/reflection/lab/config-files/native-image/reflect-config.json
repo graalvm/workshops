@@ -1,6 +1,0 @@
-[
-{
-  "name":"StringReverser",
-  "methods":[{"name":"reverse","parameterTypes":["java.lang.String"] }]}
-
-]

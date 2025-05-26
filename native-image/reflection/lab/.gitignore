@@ -32,3 +32,4 @@ hs_err_pid*
 # Exclude the built native images
 **/reflectionexample
 **/reflectionexample.build*
+META-INF/

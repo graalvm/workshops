@@ -1,8 +1,8 @@
-name: GraalVM Native Reflection Tutorial Pipeline
+name: Native Image Reflection Workshop Pipeline
 on:
   push:
     paths:
-      - 'native-image/graalvm-native-image-reflection/lab/**'
+      - 'native-image/reflection/lab/**'
       - '.github/workflows/github-actions-native-image-reflection.yml'
 jobs:
   build:
@@ -12,18 +12,19 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest]
     steps:
-      - uses: actions/checkout@v2
-
-      - uses: graalvm/setup-graalvm@v1
-        with:
-          version: 'latest'
-          java-version: '17'
-          components: 'native-image'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and run
-        run: |
-          cd native-image/reflection/lab/
-          javac ReflectionExample.java
-          native-image -cp . --no-fallback -H:ReflectionConfigurationFiles=META-INF-WORKING/native-image/reflect-config.json ReflectionExample
-          ./reflectionexample StringReverser reverse "hello"
+    - uses: actions/checkout@v4
+    - name: Set up GraalVM
+      uses: graalvm/setup-graalvm@v1
+      with:
+        java-version: '24'
+        distribution: 'graalvm'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build and run
+      run: |
+        cd native-image/reflection/lab/
+        javac ReflectionExample.java
+        java -agentlib:native-image-agent=config-output-dir=META-INF/native-image ReflectionExample StringReverser reverse "hello"
+        java -agentlib:native-image-agent=config-merge-dir=META-INF/native-image ReflectionExample StringCapitalizer capitalize "hello"
+        native-image ReflectionExample
+        ./reflectionexample StringReverser reverse "hello"
+        ./reflectionexample StringCapitalizer capitalize "hello"
