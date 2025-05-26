@@ -32,3 +32,4 @@ target
 # Exclude the built native images
 **/file-count*
 **/file-count.build*
+file-stats.json
