@@ -71,7 +71,7 @@
                                 <argument>-agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image/</argument>
                                 <argument>-classpath</argument>
                                 <classpath />
-                                <argument>serialization.App</argument>
+                                <argument>${app.main.class}</argument>
                             </arguments>
                         </configuration>
                     </plugin>
