@@ -7,11 +7,11 @@ With Native Image only the code that is required by the application at run time 
 
 These native executables have a number of important advantages, in that they:
 
-- Uses a fraction of the resources required by the JVM, so cheaper to run
-- Starts in milliseconds
+- Use a fraction of the resources required by the JVM, so cheaper to run
+- Start in milliseconds
 - Deliver peak performance immediately, no warmup
 - Can be packaged into lightweight container images for faster and more efficient deployments
-- Reduced attack surface
+- Have a reduced attack surface
 
 Many of the leading microservice frameworks support ahead-of-time compilation with GraalVM Native Image, including Micronaut, Spring, Helidon, and Quarkus.
 
@@ -266,6 +266,10 @@ The [Tracing agent](https://www.graalvm.org/latest/reference-manual/native-image
     It does!
 
 Learn more how to [generate configuration with the Tracing agent from the documentation](https://www.graalvm.org/latest/reference-manual/native-image/metadata/AutomaticMetadataCollection/).
+
+### Note on the position of the `-agentlib` param
+
+Note that `-agentlib` must be specified before a `-jar` option or a class name or any application parameters as part of the java command. You should also specify a directory into which to write the files. The recommended location is under `META-INF/native-image`. Files placed in this location are picked up automatically by the `native-image` tool.
 
 ## Summary
 
