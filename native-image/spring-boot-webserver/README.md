@@ -36,7 +36,12 @@ Clone this repository with Git and enter the application directory:
 git clone https://github.com/olyagpl/spring-boot-webserver.git
 ```
 ```bash
-cd spring-boot-webserver
+cd native-image/spring-boot-webserver
+```
+
+Unzip the static resources required for the application:
+```bash
+unzip src/main/resources/static.zip -d src/main/resources/static
 ```
 
 ## **STEP 1**: Compile and Run the Application from a JAR File Inside a Container
