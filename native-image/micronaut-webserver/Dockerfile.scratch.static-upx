@@ -1,0 +1,30 @@
+FROM container-registry.oracle.com/graalvm/native-image:24-muslib AS nativebuild
+COPY . /webserver
+WORKDIR /webserver
+
+# Install UPX
+ARG UPX_VERSION=4.2.2
+ARG UPX_ARCHIVE=upx-${UPX_VERSION}-amd64_linux.tar.xz
+RUN microdnf -y install wget xz && \
+    wget -q https://github.com/upx/upx/releases/download/v${UPX_VERSION}/${UPX_ARCHIVE} && \
+    tar -xJf ${UPX_ARCHIVE} && \
+    rm -rf ${UPX_ARCHIVE} && \
+    mv upx-${UPX_VERSION}-amd64_linux/upx . && \
+    rm -rf upx-${UPX_VERSION}-amd64_linux
+
+# Build a fully static native image with optimization for size
+RUN ./mvnw --no-transfer-progress clean package -Dpackaging=native-image -Pstatic
+
+# Alternative way to pass Native Image build options with `-DbuildArgs` without using Maven profiles:
+# RUN ./mvnw --no-transfer-progress clean package -Dpackaging=native-image -DbuildArgs="--static --libc=musl,-Os,-o target/webserver.static"
+
+RUN ls -lh /webserver/target
+# Compress with UPX
+RUN ./upx --lzma --best -o /webserver/webserver.static-upx /webserver/target/webserver.static
+
+# Scratch
+FROM scratch
+WORKDIR /tmp
+COPY --from=nativebuild /webserver/webserver.static-upx /webserver/webserver.static-upx
+EXPOSE 8000
+ENTRYPOINT ["/webserver/webserver.static-upx", "-b", "0.0.0.0", "-d", "/web"]
