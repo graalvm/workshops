@@ -1,0 +1,168 @@
+{
+  "reflection": [
+    {
+      "type": "com.example.demo.DemoApplicationTests",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        },
+        {
+          "name": "testCapitalise",
+          "parameterTypes": []
+        },
+        {
+          "name": "testNoParams",
+          "parameterTypes": []
+        },
+        {
+          "name": "testNonExistantClass",
+          "parameterTypes": []
+        },
+        {
+          "name": "testNonExistantMethod",
+          "parameterTypes": []
+        },
+        {
+          "name": "testReverse",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.example.demo.IDontExist"
+    },
+    {
+      "type": "com.example.demo.StringCapitalizer",
+      "methods": [
+        {
+          "name": "capitalize",
+          "parameterTypes": [
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "com.example.demo.StringReverser",
+      "methods": [
+        {
+          "name": "reverse",
+          "parameterTypes": [
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "org.apache.maven.surefire.booter.spi.LegacyMasterProcessChannelProcessorFactory"
+    },
+    {
+      "type": "org.apache.maven.surefire.booter.spi.SurefireMasterProcessChannelProcessorFactory"
+    },
+    {
+      "type": "org.apache.maven.surefire.junitplatform.JUnitPlatformProvider",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "org.apache.maven.surefire.api.provider.ProviderParameters"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "org.apiguardian.api.API"
+    },
+    {
+      "type": "sun.security.provider.NativePRNG",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.security.SecureRandomParameters"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sun.security.provider.SHA",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "glob": "META-INF/services/java.lang.System$LoggerFinder"
+    },
+    {
+      "glob": "META-INF/services/org.apache.maven.surefire.spi.MasterProcessChannelProcessorFactory"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.engine.TestEngine"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.launcher.LauncherDiscoveryListener"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.launcher.LauncherSessionListener"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.launcher.PostDiscoveryFilter"
+    },
+    {
+      "glob": "META-INF/services/org.junit.platform.launcher.TestExecutionListener"
+    },
+    {
+      "glob": "junit-platform.properties"
+    }
+  ],
+  "bundles": [],
+  "jni": [
+    {
+      "type": "java.lang.Boolean",
+      "methods": [
+        {
+          "name": "getBoolean",
+          "parameterTypes": [
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sun.management.VMManagementImpl",
+      "fields": [
+        {
+          "name": "compTimeMonitoringSupport"
+        },
+        {
+          "name": "currentThreadCpuTimeSupport"
+        },
+        {
+          "name": "objectMonitorUsageSupport"
+        },
+        {
+          "name": "otherThreadCpuTimeSupport"
+        },
+        {
+          "name": "remoteDiagnosticCommandsSupport"
+        },
+        {
+          "name": "synchronizerUsageSupport"
+        },
+        {
+          "name": "threadAllocatedMemorySupport"
+        },
+        {
+          "name": "threadContentionMonitoringSupport"
+        }
+      ]
+    }
+  ]
+}

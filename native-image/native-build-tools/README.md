@@ -1,88 +1,72 @@
-<img src="https://www.graalvm.org/resources/img/home/logo_mobile_openmenu.svg"
-alt="GraalVM logo"
-width="200px">
+# GraalVM Native Build Tools - for Maven
 
-# Get Started with GraalVM Native Image
+This workshop takes you step by step through the process of building cloud native Java applications with
+[GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/), **using Maven**.
+It is aimed at developers with some knowledge of Java.
 
-## Introduction
-This lab is for developers who want to start building cloud native Java applications using 
-[GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/).
-<!-- do you want to point to the enterprise version here^^? -->
+GraalVM Native Image compiles Java code ahead-of-time into a binary—a self-contained executable.
+Only the code that is required at run time by the application gets added to the executable.
 
-GraalVM Native Image technology compiles Java code ahead-of-time into a native executable file. Only the code that is 
-required at run time by the application is included in the executable file.
-
-An executable file produced by Native Image has several important advantages, in that it:
+An executable produced by Native Image has several advantages, in that it:
 
 - Uses a fraction of the resources required by the JVM, so is cheaper to run
 - Starts in milliseconds
 - Delivers peak performance immediately, with no warmup
 - Can be packaged into a lightweight container image for faster and more efficient deployment
-- Presents a reduced attack surface (more on this in future labs)
+- Presents a reduced attack surface
 
-Many of the leading microservice frameworks support ahead-of-time compilation with GraalVM Native Image, including
-Micronaut, Spring, Helidon, and Quarkus.
+Many of the leading microservice frameworks support ahead-of-time compilation with GraalVM Native Image, including Micronaut, Spring, Helidon, and Quarkus.
 
-In addition, there are Maven and Gradle plugins for Native Image, so you can easily build,
-test, and run Java applications as executable files.
+There are [Maven and Gradle plugins for Native Image](https://graalvm.github.io/native-build-tools/latest/) to make building, testing, and running Java applications as native executables easy.
 
->Note: Oracle Cloud Infrastructure (OCI) provides GraalVM Enterprise at no additional cost.
+Estimated workshop time: 45 minutes
 
-Estimated lab time: 30 minutes
+### Objectives
 
-### Lab Objectives
+In workshop lab, you will:
 
-In this lab you will perform the following tasks:
+- Use the [Maven plugin for GraalVM Native Image](https://graalvm.github.io/native-build-tools/latest/maven-plugin.html) to build, test, and run a demo application.
+- Use the plugin to run unit tests on your native executable.
+- Use the plugin to create the reflection configuration for your native executable.
 
-- Learn about the _GraalVM Native Image Build Tools for Maven_
+### Prerequisites
 
-### Lab Prerequisites
+Before starting this workshop, you must have installed:
 
-Before starting this lab, you must have
+* [GraalVM for JDK 24](https://www.graalvm.org/downloads/) - you can use either the Community or Enterprise Edition.
 
-* Installed [GraalVM Installation 22 or greater, JDK11 +](https://www.graalvm.org/downloads/) - You can use either the Community or Enterprise Edition 
-* installed the `native-image` tool (see [Native Images](https://www.graalvm.org/22.0/docs/getting-started/#native-images))
-* Set your `JAVA_HOME` environment variable to point to your GraalVM installation
-* Installed Maven 3.0 or above
-
->Note: If you see the laptop icon in the lab, this means you need to do something such as enter a command. Keep an 
-eye out for it.
+> If you see the laptop icon in the text, this means you need to do something such as enter a command.
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```
 # This is where you will need to do something
 ```
 
-## **STEP 1**: Build, Test, and Run the Demo Application
+## **STEP 1**: Understanding the Native Image Building
 
-In this lab you will be create a small, but hopefully interesting, demo application. The application makes use of reflection so it is a good example to showcase a number of features of the _GraalVM Native Image Build Tools for Maven_. This application is also used in the [workshop on Reflection](../reflection/README.md), so if you have already completed that workshop, please feel free to skip over the description that follows of how the code works.
+In this lab you will run a Java application that uses some dynamic features of Java.
 
-> ### The Closed World Assumption & Using Reflection with Native Image
+When you use the `native-image` tool to create a native executable from a Java application, it relies on being able to discover, at build time, everything that can be referenced within your application code.
+This is what is known as the "closed-world assumption".
+Everything that needs to be included in the native executable must be known when it is built.
+Anything that is not found by static analysis, or not explicitly specified in the configuration supplied to the `native-image` tool, will not be included in the executable.
 
-> When you use the `native-image` tool (that comes with GraalVM) to create a native executable from an application, 
-> it relies on knowing, at build time, about everything that can be referenced within the application code. 
-> This is what is known as the "closed world" assumption. That is, everything that needs to be included in the output native
-> binary must be known when it is built. Anything that is not found by static analysis, or not 
-> explicitly specified in the configuration supplied to the `native-image` tool, will not be included in the executable file.
->
-> You can learn more about the configuration files that are used [here](https://www.graalvm.org/22.1/reference-manual/native-image/Reflection/#manual-configuration)
+The build / run model for GraalVM Native Image is the following:
 
-Before you continue, review the build/run workflow for applications that are built using GraalVM Native Image:
+1. Compile your Java source code into Java bytecode using `javac` or `mvn package`.
+2. Use the `native-image` tool to build those Java classes into a native executable.
+3. Run the native executable.
 
-1. Compile your Java source code into Java bytecode classes, `javac` / `mvn package`
-2. Use the `native-image` tool to compile those Java bytecode classes into a native executable
-3. Run the native executable
+What happens during step 2?
 
-Let's take a quick recap of what happens during step two before we look at how we can use the GraalVM Native Build Tools for Maven to integrate this step into our Maven workflow.
+The `native-image` tool analyses your Java application to determine which classes are reachable.
+But, for classes that `native-image` can't determine as required, but may be required at run time, you need to add configuration.
 
-Firstly, the `native-image` tool analyses your Java application to determine which classes are reachable. But, for classes that the `native-image` build tool can't determine are required, but may be required at runtime (as in our example below), then we need to add configuration to detail this - [How to Add Manual Configuration Files for Reflection](https://www.graalvm.org/22.1/reference-manual/native-image/Reflection/#manual-configuration).
+The demo application for this lab requires configuration, and the following steps illustrate how the _Maven plugin for GraalVM Native Image_ can help generate it for you.
 
-Our demo application will need this and we will see how the GraalVM Native Image Build Tools can help generate this for us.
+## **STEP 2**: Building, Testing, and Running the Application Using Reflection
 
-## **STEP 2**:  An Example Using Reflection
-
-Imagine you have the following file, _DemoApplication.java_ (a copy of this can be found in the directory, 
-_native-image/native-build-tools/lab_):
+Imagine you have the following Java application (a copy of it can be found in the directory, _native-image/native-build-tools/lab_):
 
 ```java
 package com.example.demo;
@@ -127,68 +111,7 @@ public class DemoApplication {
 }
 ```
 
-The above code will reflectively load one of the classes, `StringReverser`, `StringCapitalizer`, and use their methods to convert a String argument. 
-
-We have also provided unit tests that cover the various test cases and these can be found in _src/test/java/com/example/demo/DemoApplicationTests.java_. To help you 
-understand how the application works, take a look at the unit tests defined in this file. These unit tests will be important later when you generate 
-the extra configuration needed to build a working native binary.
-
-In your terminal, run the following command. This will test the demo application by running the bundled unit tests:
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-cd native-image/native-build-tools/lab
-./mvnw test
-```
-
-You should see something similar to the following, which is telling us that five unit tests ran successfully:
-
-```bash
-[INFO] -------------------------------------------------------
-[INFO]  T E S T S
-[INFO] -------------------------------------------------------
-[INFO] Running com.example.demo.DemoApplicationTests
-[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.053 s - in com.example.demo.DemoApplicationTests
-[INFO] 
-[INFO] Results:
-[INFO] 
-[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
-[INFO] 
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-```
-
-We can build a jar of the application easily:
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-./mvnw package
-```
-This creates a JAR file in the _target_ directory. Take a look:
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-ls -l target
-```
-
-You should see the following:
-```bash
--rw-rw-r--. 1 opc opc 7417 Sep 14 16:47 demo-0.0.1-SNAPSHOT-jar-with-dependencies.jar
--rw-rw-r--. 1 opc opc 7379 Sep 14 16:47 demo-0.0.1-SNAPSHOT.jar
-```
-We can run the "fat" JAR file, which also provides a `META-INF/MANIFEST.MF` to define the main class:
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-java -jar ./target/demo-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.example.demo.StringReverser reverse Java
-```
-It should produce the following output:
-```
-avaJ
-```
-
-Great. That worked as expected. The key things to notice with this example application is that it relies on reflection:
+The above code will reflectively load one of the classes, `StringReverser` or  `StringCapitalizer`, and use their methods to transform a String argument.
 
 ```java
 Class<?> clazz = Class.forName(className);
@@ -196,13 +119,50 @@ Method method = clazz.getDeclaredMethod(methodName, String.class);
 String result = (String)method.invoke(null, input);
 ```
 
-Now that you understand the application, look at how the _Native Image Build Tools for Maven_ enable building native binaries from Maven.
+There are also unit tests (that cover the various test cases) in _src/test/java/com/example/demo/DemoApplicationTests.java_.
 
-## **STEP 3** Introducing the _GraalVM Native Image Build Tools for Maven_
+1. In the terminal, enter the application directory and test the demo by running the unit tests:
 
-We will use a Maven profile (for more information, see [Maven profiles](https://maven.apache.org/guides/introduction/introduction-to-profiles.html)) to separate the building of the native binary from the standard building and packaging of your Java application.
+    ![](./images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    cd native-image/native-build-tools/lab
+    ```
+    ![](./images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    ./mvnw test
+    ```
 
-Open the file named [pom.xml](./lab/pom.xml) and take a look around. Find the profile with the ID `native`. The profile is included below:
+    You should see the output message that five unit tests ran successfully.
+
+2.  Now build the application on the JVM:
+
+    ![](./images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    ./mvnw package
+    ```
+    This creates a runnable JAR file, with all dependencies, in the _target_ directory.
+
+3. Run the JAR file, which also contains a file named _META-INF/MANIFEST.MF_ to define the main class, as follows:
+
+    ![](./images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    java -jar ./target/demo-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.example.demo.StringReverser reverse Java
+    ```
+
+    It should produce the following output:
+    ```bash
+    avaJ
+    ```
+
+Now that you understand the application, learn how the Maven plugin for GraalVM Native Image enables ahead-of-time compilation with Maven.
+
+## **STEP 3**: Introducing the Native Build Tools, for Maven
+
+You will use a Maven profile (for more information, see [Maven profiles](https://maven.apache.org/guides/introduction/introduction-to-profiles.html)) to separate the building of the native executable from the standard building and packaging of your Java application.
+
+Open the project configuration file, _pom.xml_, and review it.
+Find the profile with the ID `native`.
+The profile is included below:
 
 ```xml
 <profiles>
@@ -218,8 +178,7 @@ Open the file named [pom.xml](./lab/pom.xml) and take a look around. Find the pr
                     <!-- Enables Junit Test Support -->
                     <extensions>true</extensions>
                     <executions>
-                        <!-- Binds to the package phase - causes the native binary to be created
-                            when we run, mvn -Pnative package -->
+                        <!-- Binds to the package phase - causes the native executable to be created when you run, mvn -Pnative package -->
                         <execution>
                             <id>build-native</id>
                             <goals>
@@ -227,8 +186,7 @@ Open the file named [pom.xml](./lab/pom.xml) and take a look around. Find the pr
                             </goals>
                             <phase>package</phase>
                         </execution>
-                        <!-- Binds to the test phase - causes the JUnit tests to be run as native code
-                            when we run, mvn -Pnative test -->
+                        <!-- Binds to the test phase - causes the JUnit tests to be run as native code when you run, mvn -Pnative test -->
                         <execution>
                             <id>test-native</id>
                             <goals>
@@ -237,18 +195,14 @@ Open the file named [pom.xml](./lab/pom.xml) and take a look around. Find the pr
                             <phase>test</phase>
                         </execution>
                     </executions>
-                    <!-- This section is used to configure how the native image build happens -->
+                    <!-- This section is used to configure the native image build -->
                     <configuration>
-                        <!-- Tracing Agent Configuration -->
+                        <!-- Tracing agent configuration -->
                         <agent>
-                            <!-- shared options -->
                             <options>
-                                <option>experimental-class-loader-support</option>
-                            </options>
-                            <!-- test options -->
-                            <options name="test">
-                                <!-- Uses an access filter when running the Tracing Agent -->
-                                <option>access-filter-file=${basedir}/src/test/resources/access-filter.json</option>
+                                <accessFilterFiles>
+                                    <filterFile>access-filter-file=${basedir}/src/test/resources/access-filter.json</filterFile>
+                                </accessFilterFiles>
                             </options>
                         </agent>
                     </configuration>
@@ -261,35 +215,36 @@ Open the file named [pom.xml](./lab/pom.xml) and take a look around. Find the pr
 
 The important things to note here are:
 
-1. It lives within a profile with ID, `native`, which means that the _GraalVM Native Image Build Tools_ plugin won't be run unless you activate the profile.
-2. You must enable the extensions to the plugin with `<extensions>true</extensions>` to enable the tracing agent and JUnit support.
-3. You can configure how the native image build happens in the `configuration` section.
-4. You can configure how the Tracing Agent will operate in the `agent` section.
-5. You must define an _access-filter_ within the configuration for the Tracing Agent.
+1. The `native-maven-plugin` is contained within a profile with ID, `native`, which means that the plugin won't be run unless you activate the profile.
+2. You must enable the extensions to the plugin with `<extensions>true</extensions>` to enable the Tracing agent and JUnit support.
+3. You can configure the native image build steps in the `configuration` section.
+4. You can configure the Tracing agent in the `agent` section.
+5. You must define an `access-filter` within the configuration for use by the Tracing agent.
 
-### Note : Using the _GraalVM Native Image Build Tools_ to Generate Tracing Configuration
+### Notes on Using the Tracing Agent to Generate Configuration
 
-Because the application uses reflection we need to be aware that we have to tell the `native-image` tool about this, so that it knows to include the classes accessed by reflection in the output binary. Recall that GraalVM Native Image uses a "closed world" assumption, as discussed earlier. If you make use of reflection, which happens at runtime, you need to supply configuration files to the `native-image` build tool that detail this. Typically these are generated using the [Tracing Agent](https://www.graalvm.org/22.1/reference-manual/native-image/Agent/).
+Because the application uses reflection, you have to tell the `native-image` tool about instances of reflection through a special configuration file.
+The configuration is written in JSON.
 
-> To find out more about the Closed World assumption, which GraalVM Native Image uses to ensure only the code that is actually used is included in the output binary, please take a look at the [GraalVM Native Image Quick-start Workshop](../graalvm-native-image-quick-start/README.md).
+You can write the configuration by hand, but the most convenient and recommended way is to generate the configuration file using the assisted technology: [Tracing agent](https://www.graalvm.org/latest/reference-manual/native-image/metadata/AutomaticMetadataCollection/).
+This Java agent will generate the configuration for you, automatically, when you run your application on the JVM.
 
-As the demo application makes use of reflection you can make use of the tracing agent to generate this configuration. 
+You can:
+1. **Run the unit tests** and use the Native Image Maven plugin to inject the Tracing agent into the JVM. This is described in the next section.
+2. **Run your application** and use the Native Image Maven plugin to inject the Tracing agent into the JVM. For more information, see [the documentation](https://graalvm.github.io/native-build-tools/latest/maven-plugin.html#agent-support-running-application).
 
-1. Running the unit tests and having the _GraalVM Native Image Build Tools_ inject the tracing agent into the JVM. We will look at how to do this in the next section.
-2. Running your application and having the _GraalVM Native Image Build Tools_ inject the Tracing Agent into the JVM. For more information on how to do this, see [the documentation](https://graalvm.github.io/native-build-tools/latest/maven-plugin.html#agent-support-running-application).
-
-> Note : It is important that when you use the Tracing Agent to generate this configuration that you exercise all of the paths in your code. This is one reason it is important to have a good unit test suite.
+> Note: You need to exercise as many paths in your code as you can.
 
 ### Copying Generated Tracing Agent Configuration to Your Source Tree
 
-In the _pom.xml_ file, you probably noticed that another plugin was included into the native profile section. It is worth discussing what this is and why we are using it. When we run the Tracing Agent on our unit tests, which we will do in the next section, the configuration files that are generated in a location within the _target_ directory, _target/native/agent-output/test_. If we want the `native-image` tool to pick these up when we build a native binary we need to relocate them to the location that it expects them to be in, that is: _src/main/resources/META-INF/native-image_.
+You may have noticed that the _pom.xml_ file includes another plugin in the `native` profile section.
+When you run the Tracing agent on your unit tests, the configuration file is generated in a location within the _target_ directory, _target/native/agent-output/test_.
+To ensure the `native-image` tool picks it up when you build a native executable, the file needs to be relocated to the location that the tool expects it to be in: _src/main/resources/META-INF/native-image_.
 
-By using the `maven-resources-plugin` we can automate this task, so that the configuration files automatically get copied into the source tree when they are available. The following configuration is required to achieve this:
+The `maven-resources-plugin` automates this task, so that the configuration file automatically get copied into the source tree when they are available.
+The following code is required to achieve this:
 
 ```xml
-<!--
-    Copy over any tracing agent config generated when we run the tracing agent against the tests
--->
 <plugin>
     <artifactId>maven-resources-plugin</artifactId>
     <version>3.0.2</version>
@@ -301,13 +256,11 @@ By using the `maven-resources-plugin` we can automate this task, so that the con
                 <goal>copy-resources</goal>
             </goals>
             <configuration>
-                <!-- The tracing agent config needs to be placed here to be picked up
-                        by the native-image tool -->
+                <!-- The tracing agent config needs to be placed here to be picked up by the native-image tool -->
                 <outputDirectory>src/main/resources/META-INF/native-image</outputDirectory>
                 <resources>
                     <resource>
-                        <!-- The location that the native build tools will write the tracing agent
-                                config out to -->
+                        <!-- The location that the native build tools will write the tracing agent config out to -->
                         <directory>${basedir}/target/native/agent-output/test</directory>
                     </resource>
                 </resources>
@@ -317,233 +270,266 @@ By using the `maven-resources-plugin` we can automate this task, so that the con
 </plugin>
 ```
 
-An alternative solution would be to let the `native-image` tool know that it should look into the directory named _/target/native/agent-output/test_ for any tracing configuration. This can be achieved using the `-H:ConfigurationFileDirectories` option. At the end of this workshop we will take a look at how we can pass extra parameters, such as this, to `native-image` using the _GraalVM Native Image Build Tools for Maven_ plugin. 
+An alternative solution would be to tell the `native-image` that it should look into the directory named _/target/native/agent-output/test_ for any configuration.
+This can be achieved using the `-H:ConfigurationFileDirectories` option.
+At the end of this workshop you will see how to pass extra options to `native-image` using the `native-maven-plugin`.
 
-## **STEP 4** Using the _GraalVM Native Image Build Tools for Maven_ to Run the Tracing Agent
+## **STEP 4**: Running the Tracing Agent
 
-So we have gone over the details of what is happening, let's take a look at actually using the tooling to generate the Tracing Agent configuration. 
+Having seen the details of how the plugin works, now use it to generate the configuration.
 
-From a terminal, run the following command which will run your unit tests while at the same time enabling the Tracing Agent and generating the Tracing Agent configuration for your application:
+1. From the terminal, run the following command. It will run your unit tests while at the same time enabling the Tracing agent and generating the necessary configuration:
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-./mvnw -Pnative -DskipNativeTests=true -DskipNativeBuild=true -Dagent=true test
-```
-This will run your unit tests, but activating the profile that contains the _GraalVM Native Image Build Tools for Maven_ plugin, this is what the `-Pnative` does. You will also notice some other parameters that we are passing. Let's look at each of these in turn:
+    ![](./images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    ./mvnw -Pnative -DskipNativeTests=true -DskipNativeBuild=true -Dagent=true test
+    ```
+    This will run unit tests, and activate the default `native` profile.
+    The command includes three additional options:
 
-* `-DskipNativeTests=true` : The _GraalVM Native Image Build Tools for Maven_ can build a native executable from your unit tests and then run that, in order to check that your unit tests work for the natively compiled code. We don't want to do this just yet.
-* `-DskipNativeBuild=true` : This stops the plugin from building a native binary of our application. Again, we don't want to do that just yet.
-* `-Dagent=true` : This will cause the Tracing Agent to be "injected" into the application as it runs the unit tests.
+    * `-DskipNativeTests=true`: The plugin can build a native executable from your unit tests and then run that, in order to check that your unit tests work for the natively compiled code. By setting this option to `true`, these tests are not run. (This option is used again later in the lab.)
+    * `-DskipNativeBuild=true`: This option stops the plugin from building a native executable of this demo application. (Likewise, this option is used again later in the lab.)
+    * `-Dagent=true`: This causes the Tracing agent to be "injected" into the application as it runs the unit tests.
 
-We can view the newly created Tracing Agent configuration.
- 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-ls -l target/native/agent-output/test
-```
+2. Now take a look at the newly created configuration file _reachability-metadata.json_ in the _target/native/agent-output/test_:
 
-You should see something similar to:
+    ![](./images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    cat target/native/agent-output/test/reachability-metadata.json
+    ```
 
-```bash
-total 24
-drwxrwxr-x. 2 opc opc    6 Sep 15 14:07 agent-extracted-predefined-classes
--rw-rw-r--. 1 opc opc  538 Sep 15 21:03 jni-config.json
--rw-rw-r--. 1 opc opc   64 Sep 15 21:03 predefined-classes-config.json
--rw-rw-r--. 1 opc opc    3 Sep 15 21:03 proxy-config.json
--rw-rw-r--. 1 opc opc 1147 Sep 15 21:03 reflect-config.json
--rw-rw-r--. 1 opc opc  375 Sep 15 21:03 resource-config.json
--rw-rw-r--. 1 opc opc   51 Sep 15 21:03 serialization-config.json
-```
+    ```json
+    {
+    "reflection": [
+    {
+        "type": "com.example.demo.DemoApplicationTests",
+        "allDeclaredFields": true,
+        "methods": [
+        {
+            "name": "<init>",
+            "parameterTypes": []
+        },
+        {
+            "name": "testCapitalise",
+            "parameterTypes": []
+        },
+        {
+            "name": "testNoParams",
+            "parameterTypes": []
+        },
+        {
+            "name": "testNonExistantClass",
+            "parameterTypes": []
+        },
+        {
+            "name": "testNonExistantMethod",
+            "parameterTypes": []
+        },
+        {
+            "name": "testReverse",
+            "parameterTypes": []
+        }
+        ]
+    },
+    {
+        "type": "com.example.demo.IDontExist"
+    },
+    {
+        "type": "com.example.demo.StringCapitalizer",
+        "methods": [
+        {
+            "name": "capitalize",
+            "parameterTypes": [
+            "java.lang.String"
+            ]
+        }
+        ]
+    },
+    {
+        "type": "com.example.demo.StringReverser",
+        "methods": [
+        {
+            "name": "reverse",
+            "parameterTypes": [
+            "java.lang.String"
+            ]
+        }
+        ]
+    },
+    {
+        "type": "org.apiguardian.api.API"
+    },
+    {
+        "type": "org.junit.internal.AssumptionViolatedException"
+    },
+    {
+        "type": "org.junit.jupiter.api.Test"
+    },
+    {
+        "type": "org.junit.jupiter.engine.JupiterTestEngine"
+    },
+    {
+        "type": "sun.security.provider.NativePRNG",
+        "methods": [
+        {
+            "name": "<init>",
+            "parameterTypes": [
+            "java.security.SecureRandomParameters"
+            ]
+        }
+        ]
+    },
+    {
+        "type": "sun.security.provider.SHA",
+        "methods": [
+        {
+            "name": "<init>",
+            "parameterTypes": []
+        }
+        ]
+    }
+    ],
+    ...
+    ```
 
-Now, take a moment to look at the contents of the _reflect-config.json_ file:
+    You can see the names of the classes loaded via reflection at the top of the file.
 
-```json
-[
-{
-  "name":"com.example.demo.DemoApplicationTests",
-  "allDeclaredFields":true,
-  "allDeclaredClasses":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllPublicMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[
-    {"name":"<init>","parameterTypes":[] }, 
-    {"name":"testCapitalise","parameterTypes":[] }, 
-    {"name":"testNoParams","parameterTypes":[] }, 
-    {"name":"testNonExistantClass","parameterTypes":[] }, 
-    {"name":"testNonExistantMethod","parameterTypes":[] }, 
-    {"name":"testReverse","parameterTypes":[] }
-  ]
-},
-{
-  "name":"com.example.demo.StringCapitalizer",
-  "methods":[{"name":"capitalize","parameterTypes":["java.lang.String"] }]
-},
-{
-  "name":"com.example.demo.StringReverser",
-  "methods":[{"name":"reverse","parameterTypes":["java.lang.String"] }]
-},
-/* Some parts excluded for brevity */
-]
-```
+### Notes on Using an Access Filter
 
-> ### Notes on Using an Access Filter
->
-> When we use the Tracing Agent to generate the configuration files from running the unit tests, we need to create an access filter to ensure that certain classes are excluded from the tracing. Make sure to take a look at the file we are using, _src/test/resources/access-filter.json_. You can learn more about the access filters [here](https://www.graalvm.org/22.0/reference-manual/native-image/Agent/#caller-based-filters).
+To use the Tracing agent to generate the configuration when running the unit tests, create an access filter to ensure that the agent excludes certain classes.
+For more information, see [Agent Advanced Usage](https://www.graalvm.org/latest/reference-manual/native-image/metadata/AutomaticMetadataCollection/#agent-advanced-usage).
 
+## **STEP 5**: Running the Unit Tests as Native Code
 
-We can see that the classes that we want to load via reflection are included, which is excellent.
+With the Maven plugin for GraalVM Native Image you can also compile your unit tests into a native executable.
+It gives you confidence that your code will run as expected as a native executable.
 
-## **STEP 5** Running the Unit Tests as Native Code
+You can enable this behavior by adding `<extensions>true</extensions>` in the plugin configuration.
+In Step 5 you overrode it (the `-DskipNativeTests=true` command-line option disables building a native executable of the tests).
 
-The _GraalVM Native Image Build Tools for Maven_ also have the ability to compile our unit tests into a native binary. This is useful as this will give us the confidence that our code will run as expected as a native binary.
+Now try building natively compiled versions of your unit tests and run them.
 
-We enable this behavior through the `<extensions>true</extensions>` element of the _GraalVM Native Image Build Tools for Maven_ plugin configuration. Previously we over-rode this behavior by passing in the `-DskipNativeTests=true` option that turns building a native binary of the tests off.
+1. From the terminal, run the following command:
 
+    ![](./images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    ./mvnw -Pnative -DskipNativeBuild=true -Dagent=true test
+    ```
 
-We can now try building natively compiled versions of our unit tests and run it. 
+    This does the following:
 
-From the terminal run the following command (remember that we have removed the option, `-DskipNativeTests=true`):
+    1. Compiles your code, if needed.
+    2. Injects the Tracing agent and then runs unit tests on the JVM (**not** native).
+    3. Compiles a native executable that will run the unit tests, to which it will pass in the newly created configuration.
+    4. Runs the native executable version of your tests.
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-./mvnw -Pnative -DskipNativeBuild=true -Dagent=true test
-```
+    You should see the following output:
 
-This will do the following:
+    ```bash
+    Test run finished after 3 ms
+    [         2 containers found      ]
+    [         0 containers skipped    ]
+    [         2 containers started    ]
+    [         0 containers aborted    ]
+    [         2 containers successful ]
+    [         0 containers failed     ]
+    [         5 tests found           ]
+    [         0 tests skipped         ]
+    [         5 tests started         ]
+    [         0 tests aborted         ]
+    [         5 tests successful      ]
+    [         0 tests failed          ]
+    [INFO] ------------------------------------------------------------------------
+    [INFO] BUILD SUCCESS
+    [INFO] ------------------------------------------------------------------------
+    ```
 
-1. Compile your code, if needed.
-2. Inject the Tracing Agent and then run your Unit Tests on the JVM (**not** native).
-3. Compile a native binary that will run the unit tests, to which it will pass in the newly created Tracing Configuration.
-4. Run the native binary version of your tests.
+2. If you look within the _target_ directory, you should see the native executable of your unit tests _native-tests_. Run it:
 
-You should see the following output:
+    ![](./images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    ./target/native-tests
+    ```
 
-```bash
-Test run finished after 3 ms
-[         2 containers found      ]
-[         0 containers skipped    ]
-[         2 containers started    ]
-[         0 containers aborted    ]
-[         2 containers successful ]
-[         0 containers failed     ]
-[         5 tests found           ]
-[         0 tests skipped         ]
-[         5 tests started         ]
-[         0 tests aborted         ]
-[         5 tests successful      ]
-[         0 tests failed          ]
+## **STEP 6**: Building the Native Executable
 
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-```
+So far you have seen that the `-Dagent=true` command-line option injects the Tracing agent into your unit tests.
+You have also seen that you can generate a native executable of the unit tests, which you can run independently without using Maven.
+Now it is time to build a native executable of your application itself.
 
-And, if we look within the _target_ directory we can see the native binary that was created that runs the tests, _native-tests_. We can even run this - this is a native binary of our unit tests:
+1. This time, run the same command as before, but remove the option that switched off native image builing of the application (not tests), `-DskipNativeBuild=true`:
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-./target/native-tests
-```
+    ![](./images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    ./mvnw -Pnative -Dagent=true package
+    ```
 
-## **STEP 6** Building the Native Binary
+    This builds a native executable in the _target_ directory.
+    The default name for the generated executable is the name of the `artifactID` defined in the Maven _pom.xml_ file.
 
-So far we have seen that by passing in the `-Dagent=true` option we can inject the Tracing Agent into our unit tests. We have seen that we can generate a native binary of the unit tests, which we can run independently outside of Maven. Now it is time to build a native binary of our application itself! This time we will run the same command as before, but we will remove the option that was switching off the build of the native binary of the application, `-DskipNativeBuild=true`.
+2. Now run the executable to confirm that it works:
 
-Run the following from a terminal (note that this time we have also removed the `-DskipNativeBuild=true` option):
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    ./target/demo com.example.demo.StringReverser reverse hello
+    olleh
+    ```
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-./mvnw -Pnative -Dagent=true package
-```
+## **STEP 7**: Passing Options to `native-image`
 
-This builds our native binary--which can be found in the _target_ directory. The default name for the generated native binary will be the name of the `artifactID` defined in the Maven _pom.xml_ file. Let's run the binary:
+In this last step, you learn how pass options to the `native-image` tool while using the Maven plugin for GraalVM Native Image.
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-./target/demo com.example.demo.StringReverser reverse hello
-```
+1. Take another look at the Maven _pom.xml_ file. Below is a snippet that is commented out within the plugin configuration:
+    ```xml
+    <!--
+    <imageName>DeMo</imageName>
+    <buildArgs>
+        <buildArg>-Ob</buildArg>
+    </buildArgs>
+    -->
+    ```
 
-```bash
-olleh
-```
+    This enables you to pass extra configuration options to the `native-image` build. Take a look at each of them in turn.
 
-Great, it worked! It's important to remember though that we needed to put in place the copying of the generated Tracing Agent configuration files, without which the native binary would have built, but wouldn't have been able to run. Copying the configuration generated from running the unit tests may not always be the correct solution, but it is a good starting point.
+    - Firstly, you can specify the name of the output native executable file, as shown in this snippet:
+        ```xml
+        <imageName>DeMo</imageName>
+        ```
 
-## **STEP 7** Passing Parameters to The Native Image Tool
+    - If you want to pass additional options to `native image`, use `<buildArgs>`. Any of the `native-image` command-line options can be passed in using this mechanism. For example:
+        ```xml
+        <buildArgs>
+            <buildArg>-Ob</buildArg>
+        </buildArgs>
+        ```
+        The `-Ob` option enables quick build mode. For a full list of the available options available with GraalVM Native Image, run the following command:
 
-We can wrap this workshop up with a few examples of how you can pass parameters through to the `native-image` tool whilst using the _GraalVM Native Image Build Tools for Maven_ plugin.
+        ![](./images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+        ```bash
+        native-image --help
+        ```
 
-Let's take a look at our Maven _pom.xml_ file again. Below is a snippet from that is commented out within the configuration for the plugin:
+2. Now uncomment that section in _pom.xml_ and rebuild the application. First, edit the file and remove the comments, then, from the terminal, run the following command:
 
-```xml
-<!--
-<imageName>DeMo</imageName>
-<buildArgs>
-    <buildArg>-Ob</buildArg>
-    <buildArg>-H:+ReportExceptionStackTraces</buildArg>
-</buildArgs>
--->
-```
+    ![](./images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    ./mvnw -Pnative -Dagent=true clean package
+    ```
 
-This contains a number of elements that allow us to pass extra configuration to the `native-image` build tool during the build of the native binary. Let's take a look at each of them in turn.
+    Take a look inside the _target_ directory.
+    You can see that the native executable file has been created with its new name `DeMo`.
 
-Firstly we can specify what we want the output native binary file to be called, as shown in this snippet:
-```xml
-<imageName>DeMo</imageName>
-```
-
-This will create a native binary file named, `DeMo`. We can use this element to override the default naming of the file.
-
-If you want to pass additional arguments to the native image builder, use <buildArgs> in the configuration of the plugin. Any of the parameters that can be passed to the `native-image` tool can be passed in using this mechanism:
-
-```xml
-<buildArgs>
-    <buildArg>-Ob</buildArg>
-</buildArgs>
-```
-In the above fragment we pass in one additional argument, `-Ob`. This is the option to enable quick build mode for GraalVM Native Image, but we can pass in any of the recognised options in this manner. For a full list of the available options available with GraalVM Native Image, try running the following command:
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-native-image --expert-options-all
-```
-
-Let's uncomment the section we just looked at in the _pom.xml_ file and then rebuild the application. First edit the file and remove the comments, then from the terminal, run the following command:
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-./mvnw -Pnative -Dagent=true clean package
-```
-
-This should build, just as before. Take a look inside the _target_ directory:
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-ls -l target
-```
-
-We can see that the native binary file has been created with our new name:
-
-```bash
--rwxrwxr-x. 1 opc opc 11278976 Sep 16 16:19 DeMo
-```
-
-## Summary
+## Conclusion
 
 In this lab, you have tried out several GraalVM Native Image features:
 
-1. How to generate a fast native executable from a Java command line application
-2. How to use Maven to build a native executable
-3. How to use the tracing agent to automate the process of tracking and registering reflection calls
+1. How to generate a native executable for a Java command line application.
+2. How to use Maven to build a native executable.
+3. How to use the Tracing agent to automate the process of tracking and registering reflection calls.
 
-Write efficient, more secure, and instantly scalable cloud native Java applications with GraalVM Native Image!
-
-NOTE: There is a gradle equivalent of _GraalVM Native Image Build Tools for Maven_!
+Note that there is also the [Gradle plugin for Native Image Building](https://graalvm.github.io/native-build-tools/latest/gradle-plugin.html).
 
 ### Learn More
 
-- Watch a presentation by the Native Image architect Christian Wimmer [GraalVM Native Image: Large-scale static analysis for Java](https://www.youtube.com/embed/rLP-8q3Cb8M)
-- [GraalVM Native Image reference documentation](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/)
-- [GraalVM Native Build Tools Reference Documentation](https://graalvm.github.io/native-build-tools/latest/index.html)
-
+- [Native Build Tools](https://graalvm.github.io/native-build-tools/)
+- [Reachability Metadata](https://www.graalvm.org/latest/reference-manual/native-image/metadata/)
