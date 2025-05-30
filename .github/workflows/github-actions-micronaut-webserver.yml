@@ -1,0 +1,73 @@
+name: Micronaut - The Path to Efficient Java Containers
+on:
+  push:
+    paths:
+      - 'native-image/micronaut-webserver/**'
+      - '.github/workflows/github-actions-micronaut-webserver.yml'
+jobs:
+  build:
+    name: Run Micronaut webserver
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up GraalVM
+      uses: graalvm/setup-graalvm@v1
+      with:
+        java-version: '24'
+        distribution: 'graalvm'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run Micronaut Web Server
+      # working-directory: native-image/micronaut-webserver
+      run: |
+        # Prepare static resources
+        pwd
+        unzip native-image/micronaut-webserver/src/main/resources/static.zip
+        cd /home/runner/work/workshops/workshops/native-image/micronaut-webserver
+        #
+
+        # Build JAR (Debian Distoless Java 21)
+        ./build-jar-java-base.sh
+        #
+
+        # Build JAR (Eclipse-temurin:21)
+        ./build-jar-eclipse-temurin.sh
+        #
+
+        # Build Jlink custom runtime (Distroless Java Base Debian)
+        ./build-jlink.sh
+        #
+
+        # Build dynamic image (Distroless Java Base Debian)
+        ./build-dynamic-image.sh
+        #
+
+        # Build dynamic image, optimized for size (Distroless Java Base Debian)
+        ./build-dynamic-image-optimized.sh
+        #
+
+        # Build dynamic image, optimized for size with SkipFlow (Distroless Java Base Debian)
+        ./build-dynamic-image-skipflow.sh
+        #
+
+        # Setup musl toolchain
+        ./setup-musl.sh
+        export PATH="$PWD/musl-toolchain/bin:$PATH"
+        #
+
+        # Build mostly static image (Distroless Base Debian)
+        ./build-mostly-static-image.sh
+        #
+
+        # Build fully static image (Scratch)
+        ./build-static-image.sh
+        #
+
+        # Download upx
+        ./setup-upx.sh
+        #
+
+        # Build fully static compressed image (Scratch UPX)
+        ./build-static-upx-image.sh
+        #
+        docker images webserver
