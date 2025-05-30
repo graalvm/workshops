@@ -1,5 +1,5 @@
 # Base Image
-FROM container-registry.oracle.com/java/openjdk:17-oraclelinux8
+FROM container-registry.oracle.com/java/jdk-no-fee-term:21-oraclelinux8
 
 # Pass in the JAR file as an argument to the image build
 ARG JAR_FILE

@@ -1,98 +1,76 @@
-<img src="https://www.graalvm.org/resources/img/home/logo_mobile_openmenu.svg"
-alt="GraalVM logo"
-width="200px">
+# Understanding Containerization and GraalVM Native Image
 
-# Understanding Containerisation and GraalVM Native Image
+This workshop takes you step by step through the process of how to compile a Java application ahead of time with GraalVM Native Image and containerize it.
 
-## Introduction
-
-This lab takes you step by step through the process of how to containerise 
-[GraalVM Native Image](https://docs.oracle.com/en/graalvm/enterprise/22/docs/reference-manual/native-image/) applications.
-
-GraalVM Native Image technology compiles Java code ahead-of-time into a native executable file. Only the code that is 
-required at run time by the application is included in the executable file.
-
-An executable file produced by Native Image has several important advantages, in that it:
+[GraalVM Native Image](https://docs.oracle.com/en/graalvm/jdk/latest/docs/reference-manual/native-image/) compiles Java code ahead of time into a self-contained native executable.
+Only the code that is required by the application at run time is packaged into the executable.
+A native executable produced by Native Image has several important advantages, in that it:
 
 - Uses a fraction of the resources required by the JVM, so is cheaper to run
 - Starts in milliseconds
 - Delivers peak performance immediately, with no warmup
 - Can be packaged into a lightweight container image for faster and more efficient deployment
-- Presents a reduced attack surface (more on this in future labs)
+- Presents a reduced attack surface
 
-Many of the leading microservice frameworks support ahead-of-time compilation with GraalVM Native Image, including
-Micronaut, Spring, Helidon, and Quarkus.
+In addition, there are [Maven and Gradle plugins for Native Image](https://graalvm.github.io/native-build-tools/) so you can easily build, test, and run Java applications as executable files.
 
-In addition, there are Maven and Gradle plugins for Native Image so you can easily build,
-test, and run Java applications as executable files.
+Estimated workshop time: 90 minutes
 
->Note: Oracle Cloud Infrastructure (OCI) provides GraalVM Enterprise at no additional cost.
+### Objectives
 
-Estimated lab time: 90 minutes
+In this workshop you will:
 
-### Lab Objectives
+- Add a basic Spring Boot application to a container image and run it.
+- Build a native executable from this application, using GraalVM Native Image.
+- Add a native executable to a container.
+- Shrink your application container image size with GraalVM Native Image and Distroless solutions.
+- See how to use the GraalVM Native Build tools, Maven Plugin in particular.
 
-In this lab you will:
-
-- Add a basic Spring Boot application to a Docker Image and run it
-- Build a native executable from this application, using GraalVM Native Image 
-- Add the native executable to a Docker Image
-- Shrink your application docker image size with GraalVM Native Image and Distroless containers 
-
->Note: If you see the laptop icon in the lab, this means you need to do something such as enter a command. Keep an eye out for it.
+> Note: If you see the laptop icon in the lab, this means you need to do something such as enter a command.
 
 ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
 ```
 # This is where you will need to do something
 ```
 
-## Lab Prerequisites
+### Prerequisites
 
-Before starting this lab, you must have installed:
+Before starting this workshop, you must have installed:
 
-* [GraalVM Installation 22 or greater, JDK11 +](https://www.graalvm.org/downloads/) - You can use either the Community or Enterprise Edition 
-* The `native-image` tool (see [Native Images](https://www.graalvm.org/22.0/docs/getting-started/#native-images))
-* Set your `JAVA_HOME` environment variable to point to your GraalVM installation
-* Maven 3.0 or above
-* [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/getting-started/installation)
+* [GraalVM for JDK 24](https://www.graalvm.org/downloads/). We recommend using [SDKMAN!](https://sdkman.io/). (For other download options, see [GraalVM Downloads](https://www.graalvm.org/downloads/).)
+    ```bash
+    sdk install java 24-graal
+    ```
+* Container runtime such as [Docker](https://www.docker.com/gettingstarted/), or [Rancher Desktop](https://docs.rancherdesktop.io/getting-started/installation/) installed and running.
 
-## **STEP 1**: Meet Our Sample Java Application
+## **STEP 1**: Introduce the Sample Application
 
-In this lab you are going to build a simple application with a very minimal REST-based API. You are then going to 
-containerise the application, using Docker. First, take a quick look at your simple application.
+In this step, you are going to compile and package a Java application with a very minimal REST API.
+Then you will containerize this application using Docker.
 
-We have provided the source code and build scripts for this application in _native-image/containerisation/lab/src_.
+The source code and build scripts for this demo are available in _native-image/containerisation/lab/src_.
 
-The application is built on top of the [Spring Boot](https://spring.io/projects/spring-boot) framework and makes use
-of the [Spring Native Project](https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/) (a Spring incubator
-to generate native executables using GraalVM Native Image).
+The application is built on top of the [Spring Boot](https://spring.io/projects/spring-boot) framework and has two classes:
+* `com.example.demo.DemoApplication`: The main Spring Boot class that also defines the HTTP endpoint `/jibber`.
+* `com.example.demo.Jabberwocky`: A utility class that implements the logic of the application.
 
-The application has two classes:
-
-* `com.example.demo.DemoApplication`: The main Spring Boot class that also defines the HTTP endpoint `/jibber`
-* `com.example.demo.Jabberwocky`: A utility class that implements the logic of the application
-
-So, what does the application do? If you call the endpoint `/jibber`, it will return some nonsense verse generated
-in the style of the [Jabberwocky poem](https://en.wikipedia.org/wiki/Jabberwocky) by Lewis Carroll. The program achieves this
-by using a [Markov Chain](https://en.wikipedia.org/wiki/Markov_chain) to produce a model of the original poem (this is essentially a statistical model). 
+So, what does the application do? If you call the endpoint `/jibber`, it will return some nonsense verse generated in the style of the [Jabberwocky poem](https://en.wikipedia.org/wiki/Jabberwocky) by Lewis Carroll.
+The program achieves this by using a [Markov Chain](https://en.wikipedia.org/wiki/Markov_chain) to produce a model of the original poem (this is essentially a statistical model).
 This model is then used to generate new text.
 
-In the example application, you provide it with the text of the poem, then generate a model of the text which the application then uses to 
-generate a new text that is similar to the original text. We are using the [RiTa](https://rednoise.org/rita/) library to do the heavy lifting for us--it supports building and using Markov Chains.
+The application ingests the text of the poem, from which it creates a statistical model.
+The application uses the [RiTa library](https://rednoise.org/rita/) to do the heavy lifting — build and use Markov Chains.
 
-Below are two snippets from the utility class `com.example.demo.Jabberwocky` that builds the model. The `text` variable
-contains the text of the original poem. This snippet shows how we create the model and then populate it with `text`.
-This is called from the class constructor
-and we define the class to be a [Singleton](https://docs.spring.io/spring-framework/docs/3.0.0.M3/reference/html/ch04s04.html#beans-factory-scopes-singleton)
-(so only one instance of the class ever gets created).
-
+Below are two snippets from the utility class `com.example.demo.Jabberwocky` that builds the model.
+The `text` variable contains the text of the original poem.
+This snippet shows how the model is created and then populated with `text`.
+This is called from the class constructor and defined to be a Singleton (so only one instance of the class ever gets created).
 ```java
 this.r = new RiMarkov(3);
 this.r.addText(text);
 ```
 
-Here you can see the method to generate new lines of verse from the model based on the
-original text.
+Here you can see the method to generate new lines of verse from the model, based on the original text.
 
 ```java
 public String generate() {
@@ -106,90 +84,62 @@ public String generate() {
 }
 ```
 
-Take a little while to view the code and to get acquainted with it.
+### Action
 
-To build the application, you are going to use Maven. The _pom.xml_ file was generated using [Spring Initializr](https://start.spring.io)
-and contains support to use the Spring Native tooling. This is a dependency that you must add to your Spring Boot projects
-if you plan to target GraalVM Native Image. If you are using Maven, adding support for Spring Native will insert the following
-plugin to your default build configuration.
+To build the application, you are going to use Maven. The _pom.xml_ file was generated using Spring Initializr and supports using [Native Build Tools](https://graalvm.github.io/native-build-tools/latest/).
 
-```xml
-<plugin>
-    <groupId>org.springframework.experimental</groupId>
-    <artifactId>spring-aot-maven-plugin</artifactId>
-    <version>${spring-native.version}</version>
-    <executions>
-        <execution>
-            <id>test-generate</id>
-            <goals>
-                <goal>test-generate</goal>
-            </goals>
-        </execution>
-        <execution>
-            <id>generate</id>
-            <goals>
-                <goal>generate</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
-```
 
-Build your application: from the root directory of the repository, run the following commands in your terminal:
+1. Build the application. From the application directory, run the following commands in your terminal:
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-cd native-image/containerisation/lab
-./mvnw clean package
-```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    cd native-image/containerisation/lab
+    ./mvnw clean package
+    ```
+    This will generate a runnable JAR file, one that contains all of the application's dependencies and also a correctly configured `MANIFEST` file.
 
-This will generate an "executable" JAR file, one that contains all of the application's dependencies as well as a correctly configured `MANIFEST`
-file. You can run this JAR file and then use `curl` to call the application's endpoint to see what you get in return.
+2. Run this JAR file and then "ping" the application's endpoint to see what you get in return — put the command into the background using `&` so that you get the prompt back.
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-# Run the application in the background
-java -jar ./target/jibber-0.0.1-SNAPSHOT-exec.jar &
-```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    java -jar ./target/jibber-0.0.1-SNAPSHOT.jar &
+    ```
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-# Call the endpoint
-curl http://localhost:8080/jibber
-```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    curl http://localhost:8080/jibber
+    ```
 
-Did you get the some nonsense verse back? OK, so now that you have a built a working application, terminate
-it and move on to containerising it.
+    Did you get the some nonsense verse back?
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-# Bring the application back to the foreground
-fg
-# Terminate it with : <ctrl-c>
-<ctrl-c>
-```
+3. So now that you have a built a working application, bring the application to the foreground by typing `fg`, and then terminate it with CTRL+C.
 
-## **STEP 2**: Containerising Your Java Application with Docker
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    fg
+    CTRL+C
+    ```
 
-Containerising your Java application as a Docker container is straightforward. You can build
-a new Docker image based on one that contains a JDK distribution. So, for this tutorial you will use a container
-that already contains a JDK, `ghcr.io/graalvm/native-image:ol8-java17-22`--this is an Oracle Linux 8 
-image with the GraalVM CE JDK 17 already installed.
+## **STEP 2**: Containerize Your Java Application with Docker
 
-The following is a breakdown of the Dockerfile, which describes how to build the Docker Image. The comments explain the contents.
+Containerizing a Java application in a container image is straightforward.
+You can build a new Docker image based on one that contains a JDK distribution.
+For this workshop, you will use a container with the Oracle Linux 8 and the [NFTC Oracle JDK 21 image](https://container-registry.oracle.com/ords/ocr/ba/java/jdk-no-fee-term): `container-registry.oracle.com/java/jdk-no-fee-term:21-oraclelinux8`.
+
+The following is a breakdown of the Dockerfile, which describes how to build the Docker image. See the comments to explain the contents.
 
 ```dockerfile
 # Base Image
-FROM ghcr.io/graalvm/native-image:ol8-java17-22
+FROM container-registry.oracle.com/java/jdk-no-fee-term:21-oraclelinux8
 
 # Pass in the JAR file as an argument to the image build
-ARG JAR_FILE                   
+ARG JAR_FILE
 
 # This image will need to expose TCP port 8080, as this is the port on which your app will listen
 EXPOSE 8080
 
 # Copy the JAR file from the `target` directory into the root of the image
-COPY ${JAR_FILE} app.jar 
+COPY ${JAR_FILE} app.jar
 
 # Run Java when starting the container
 ENTRYPOINT ["java"]
@@ -198,98 +148,84 @@ ENTRYPOINT ["java"]
 CMD ["-jar","app.jar"]
 ```
 
-The Dockerfile to containerise your Java application can be found in the directory _native-image/containerisation/lab/00-containerise_.
+### Action
 
-To build a Docker image containing your application, run the following commands from your terminal:
+The Dockerfile for this step can be found in the directory _native-image/containerisation/lab/00-containerise_.
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-# Build a Docker Image
-docker build -f ./00-containerise/Dockerfile \
-             --build-arg JAR_FILE=./target/jibber-0.0.1-SNAPSHOT-exec.jar \
-             -t jibber:jdk.01 .
-```
+1. Build a Docker image containing your application by running the following command:
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-# List the newly built image
-docker images | head -n2
-```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker build -f ./00-containerise/Dockerfile \
+                --build-arg JAR_FILE=./target/jibber-0.0.1-SNAPSHOT.jar \
+                -t jibber:jdk.01 .
+    ```
 
-You should see your newly built image listed. Run this image as follows:
+    List the newly built image:
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-docker run --rm -d --name "jibber-jdk" -p 8080:8080 jibber:jdk.01
-```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker images | head -n2
+    ```
 
-Then call the endpoint as you did before--you may need to wait for a few seconds before doing to allow the
-application to startup. If you get the following error, `curl: (52) Empty reply from server`, this is because the
-application is still starting. Wait a few seconds and try again:
+2. Run this image as follows:
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-# Call the endpoint
-curl http://localhost:8080/jibber
-```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker run --rm -d --name "jibber-jdk" -p 8080:8080 jibber:jdk.01
+    ```
 
-Did you see the nonsense verse? Look at how long it took your application to startup. You can extract this from the logs,
-as Spring Boot applications write the time to startup to the logs:
+3. Then call the endpoint as you did before using the `curl` command. (You may need to wait for a few seconds before doing to allow the application to startup.)
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-docker logs jibber-jdk
-```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    curl http://localhost:8080/jibber
+    ```
 
-For example, in our experiments the Java application started up in 3.896s -- here is the extract from our logs (Note: the time taken to startup 
-will vary from machine to machine):
+    Did you see the nonsense verse?
 
-```
-2022-03-09 19:48:09.511  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 3.896 seconds (JVM running for 4.583)
-```
+4. Now check how long it took your application to start. You can extract this from the logs, as Spring Boot applications write the startup time to the logs:
 
-Before going any further in the lab, terminate your container:
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker logs jibber-jdk
+    ```
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-docker kill jibber-jdk
-```
+    The application should start in around 1s. Here is the extract from the logs:
+    ```
+    2025-05-23T18:14:39.921Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 0.99 seconds (process running for 1.266)
+    ```
 
-You can also query Docker to get the size of the container image. Run the following commands in your terminal:
+5. Before going any further in the lab, terminate your container:
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-size_in_bytes=`docker inspect -f "{{ .Size }}" jibber:jdk.01`
-echo $((size_in_bytes/1024/1024))
-```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker kill jibber-jdk
+    ```
 
-This prints the size of the image in MBs. In our experiments, the size was 569MB.
+6. You can also query Docker to get the size of the container image. Run the following commands in your terminal:
 
-## **STEP 3**: Building a Native Executable
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    size_in_bytes=`docker inspect -f "{{ .Size }}" jibber:jdk.01`
+    echo $((size_in_bytes/1024/1024))
+    ```
+    This prints the size of the image in MBs. The size is expected to be around 690MB.
 
-So far you have:
+## **STEP 3**: Build a Native Executable
 
-1. Built a Spring Boot application with a HTTP endpoint, `/jibber`
-2. Successfully containerised it
+Recap what you have done so far: built a Spring Boot application with a HTTP endpoint, and successfully containerized it.
 
-Now you can create a native executable from your application using GraalVM Native Image. The native executable
-is going to two interesting characteristics, namely:
+Now you will look at how you can create a native executable from your application.
+This native executable is going to start really fast and use fewer resources than its corresponding Java application.
 
-1. It is going to start really fast
-2. It will use fewer resources than its corresponding Java application
+You can use the `native-image` tool from the GraalVM installation to build a native executable.
+But, as you are using Maven already, apply the [Maven Plugin for Native Image](https://graalvm.github.io/native-build-tools/latest/end-to-end-maven-guide.html), which conveniently enables you to carry on using Maven.
 
-You can use the native image tooling installed with GraalVM to build a native executable of an
-application from the command line, but as you are using Maven already, you are going to use the 
-[GraalVM Native Build Tools for Maven](https://graalvm.github.io/native-build-tools/latest/maven-plugin.html) which will
-conveniently allow you to carry on using maven.
+One way of building a native executable is to use a [Maven profile](https://maven.apache.org/guides/introduction/introduction-to-profiles.html),
+which enables you to decide whether you want to build the JAR file or the native executable.
 
-One way of adding support for building a native executable is to use a Maven [profile](https://maven.apache.org/guides/introduction/introduction-to-profiles.html), 
-which will allow you to decide whether you want to build the JAR file or the native executable. 
-
-The Maven _pom.xml_ file contains a profile that builds a native executable.
-Take a closer look:
-
-The profile is declared and given a name.
+The Maven _pom.xml_ file contains a profile that builds a native executable:
 
 ```xml
 <profiles>
@@ -300,10 +236,10 @@ The profile is declared and given a name.
 </profiles>
 ```
 
-Next, within the profile, the GraalVM Native Image build tools plugin is included and attached to the `package` phase in Maven.
-This means it will run as a part of the `package` phase. Notice that you can pass configuration options and parameters to the underlying Native Image
-build tool using the `<buildArgs>` section. In individual `buildArg` tags you can pass in parameters in exactly the same way
-as you do to the `native-image` tool, so you can use all of the parameters that the `native-image` tool accepts:
+Next, within the profile, the `native-maven-plugin` is included and attached to the Maven `package` phase.
+This means it will run as a part of the `package` phase.
+Also, notice that you can pass configuration options to the underlying `native-image` tool using the `<buildArgs>` tag.
+In individual `buildArg` tags you can specify parameters in exactly the same way as you do on the command line.
 
 ```xml
 <build>
@@ -325,7 +261,7 @@ as you do to the `native-image` tool, so you can use all of the parameters that 
             <configuration>
                 <imageName>jibber</imageName>
                 <buildArgs>
-                    <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+                    <buildArg>--verbose</buildArg>
                 </buildArgs>
             </configuration>
         </plugin>
@@ -334,98 +270,75 @@ as you do to the `native-image` tool, so you can use all of the parameters that 
 </build>
 ```
 
-Now run the Maven build using the profile, as below (note that the profile name is specified with the `-P` flag):
+### Action
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-./mvnw package -Pnative
-```
-<!-- Should we tell the user to ignore the warnings here ^^? -->
+1. Run the Maven build using the profile, as below (note that the profile name is specified with the `-P` flag):
 
-This will generate a native executable in the _target_ directory, named _jibber_. Take a 
-look at the size of the file:
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    ./mvnw package -Pnative
+    ```
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-ls -lh target/jibber
-```
+    It generates a native executable in the _target_ directory, named _jibber_.
+    Take a look at the size of the file:
 
-Run this native executable and test it, using the following commands from your terminal:
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    ls -lh target/jibber
+    ```
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-./target/jibber &
-curl http://localhost:8080/jibber
-```
+2. Run this executable and test it, using the following commands from your terminal:
 
-Now you have a native executable of your application that starts really fast!
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    ./target/jibber &
+    ```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    curl http://localhost:8080/jibber
+    ```
 
-Terminate the application before you move on.
+    A native version of your application starts really fast!
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-# Bring the application to the foreground
-fg
-# Terminate it with <ctrl-c>
-<ctrl-c>
-```
+3. Terminate the application before you move on.
 
-## **STEP 4**: Containerising your Native Executable
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    # Bring the application to the foreground
+    fg
+    # Terminate it with <ctrl-c>
+    <ctrl-c>
+    ```
 
-So you have a native executable version of your application, and you have seen it working. Now to containerise it.
+## **STEP 4**: Containerize Your Native Executable
 
-A simple Dockerfile for packaging this native executable is in the directory
-_native-image/containerisation/lab/01-native-image/Dockerfile_. The contents are shown below, along with comments to 
-explain the contents. This is a two-step docker build: the first part builds the native executable, using GraalVM Native Image; the 
-second step copies the native executable into a smaller container for use.
+Now, since you have a native executable version of your application, and you have seen it working, containerize it.
 
->    ### Note: Why Are We Using a Two-Step Docker Build?
+
+A Dockerfile for packaging this native executable is provided for you in  _native-image/containerisation/lab/01-native-image/Dockerfile_.
+The contents are shown below, along with explanatory comments.
+
+This is a two-step build: the first part builds the native executable, using GraalVM Native Image;
+and the second step copies the native executable into a deployment container.
+
+>    ### Note: Why to Run a Two-Step Build?
 >
->    When you build a native executable with GraalVM Native Image the executable it builds will be for the platform that 
->    you are running on.
->    
->    So, if you are running on OSX on a Mac, then it will generate a mach64 executable. If you are running on Linux, it will
->    generate an ELF Linux executable (for the architecture of the chip you are running on). If you want to containerise your
->    application in a Docker Image and you are running on OSX, then you can't simply build the executable locally (as that will
->    be an OSX compatible executable) and package it within your Docker Image which expects the executable to be a linux
->    compatible executable. 
-> 
->    Therefore, if you are developing on an OS other than Linux, you need to build within a Docker container that contains a 
->    Linux version of GraalVM to create an executable that can be packaged into a Docker container.
->    That is what the multi-stage Docker build here achieves. The first step in the build process builds a Linux
->    compatible executable and the second one packages that into a Docker Image for deployment.
-
+>    The native executable produced by GraalVM Native Image is compatible with the platform on which you run it.
+>
+>    If you are running on Linux, it will generate an ELF Linux executable (for the architecture of the chip you are running on).
+>    If you want to containerize your application in a container and you are running on macOS,
+>    then you can't simply build the executable locally (as that will be a macOS-compatible executable) and package it
+>    within your container which expects the executable to be Linux-compatible.
+>
+>    Therefore, if you are developing on any OS other than Linux, you need to first build within a container using a
+>    Linux version of GraalVM to create an executable, and it can then be packaged into another container.
+>    This is what the multi-stage Docker build here achieves.
+>    The first step in the process builds a Linux-compatible executable and the second step packages that into a container image for deployment.
 
 ```dockerfile
-FROM ghcr.io/graalvm/graalvm-ce:ol8-java17-22 AS builder
+FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
 
-# Install tar and gzip to extract the Maven binaries
-RUN microdnf update \
- && microdnf install --nodocs \
-    tar \
-    gzip \
- && microdnf clean all \
- && rm -rf /var/cache/yum
-
-# Install Maven
-# Source:
-# 1) https://github.com/carlossg/docker-maven/blob/925e49a1d0986070208e3c06a11c41f8f2cada82/openjdk-17/Dockerfile
-# 2) https://maven.apache.org/download.cgi
-ARG USER_HOME_DIR="/root"
-ARG SHA=89ab8ece99292476447ef6a6800d9842bbb60787b9b8a45c103aa61d2f205a971d8c3ddfb8b03e514455b4173602bd015e82958c0b3ddc1728a57126f773c743
-ARG MAVEN_DOWNLOAD_URL=https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
-
-RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
-  && curl -fsSL -o /tmp/apache-maven.tar.gz ${MAVEN_DOWNLOAD_URL} \
-  && echo "${SHA}  /tmp/apache-maven.tar.gz" | sha512sum -c - \
-  && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
-  && rm -f /tmp/apache-maven.tar.gz \
-  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
-
-ENV MAVEN_HOME /usr/share/maven
-ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
-
-# Set the working directory to /home/app
+# Set the working directory
 WORKDIR /build
 
 # Copy the source code into the image for building
@@ -434,166 +347,130 @@ COPY . /build
 # Build
 RUN mvn clean package -Pnative
 
-# The deployment Image
-FROM docker.io/oraclelinux:8-slim
+# The deployment container
+FROM gcr.io/distroless/java-base-debian12
 
 EXPOSE 8080
 
-# Copy the native executable into the containers
+# Copy the native executable into the container
 COPY --from=builder /build/target/jibber .
 ENTRYPOINT ["/jibber"]
 ```
 
-
 > ### Note: Building on Linux
-> If you are using Linux you don't need to use a multi-stage docker build and your build times will be faster.
-> You can just build the native executable locally and package it in the deployment container _01-native-image/Dockerfile.linux_
-> as follows:
+> If you are using Linux, you don't need to use a multi-stage Docker build and your build times will be faster.
+> You can just build the native executable locally and package it in the deployment container _01-native-image/Dockerfile.linux_ as follows:
 > ```bash
 > ./mvnw clean package -Pnative
 > docker build -f ./01-native-image/Dockerfile.linux --build-arg APP_FILE=target/jibber -t jibber:native.01 .
 > ```
 
-To build, run the following from your terminal:
+### Action
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-# Build a Docker Image
-docker build -f ./01-native-image/Dockerfile \
-             -t jibber:native.01 .
-# List the newly built image
-docker images | head -n2
-```
+1. To build, run the following from your terminal:
 
-And that is it. You can run this and test it as follows from your terminal:
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker build -f ./01-native-image/Dockerfile \
+                -t jibber:native.01 .
+    ```
+    List the newly built image:
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-docker run --rm -d --name "jibber-native" -p 8080:8080 jibber:native.01
-curl http://localhost:8080/jibber
-```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker images | head -n2
+    ```
 
-Again, you should see more nonsense verse in the style of the poem Jabberwocky. You can see how long the 
-application took to startup by inspecting the logs produced by the application as you did earlier. From your terminal, 
-run the following command and look for the startup time:
+2. Run this image and test it as follows from your terminal:
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-docker logs jibber-native
-```
-In our experiments, the native executable started up in 0.074s (compared to 3.896s for the Java application). A big improvement!
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker run --rm -d --name "jibber-native" -p 8080:8080 jibber:native.01
+    ```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    curl http://localhost:8080/jibber
+    ```
+    Again, you should see more nonsense verse in the style of the poem Jabberwocky.
 
-```
-2022-03-09 19:44:12.642  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 0.074 seconds (JVM running for 0.081)
-```
+3. You can see how long the application took to start. From your terminal, run the following command and look for the startup time:
 
-Terminate your container before moving onto the next step.
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-docker kill jibber-native
-```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker logs jibber-native
+    ```
 
-But before you go to the next step, take a look at the size of the container produced:
+    You should see a number close to 0.06s. Here is the extract from the logs:
+    ```
+    2025-05-23T18:24:55.143Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 0.062 seconds (process running for 0.103)
+    ```
+    That is a big improvement compared to the previous 1s!
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-size_in_bytes=`docker inspect -f "{{ .Size }}" jibber:native.01`
-echo $((size_in_bytes/1024/1024))
-```
+4. Terminate your container before moving onto the next step.
 
-The container image size we saw in our experiments was 171MB. Quite a lot smaller than the original Java container (589MB).
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker kill jibber-native
+    ```
 
-## **STEP 5**: Building a Mostly Static Executable and Packaging it in a Distroless Image
+5. But before you go to the next step, take a look at the size of the container produced:
 
-Let's recap, again, what you have done:
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    size_in_bytes=`docker inspect -f "{{ .Size }}" jibber:native.01`
+    echo $((size_in_bytes/1024/1024))
+    ```
 
-1. You have built a Spring Boot application with a HTTP endpoint, `/jibber`
-2. You have successfully containerised it
-3. You have built a native executable of your application using the Native Image build Tools for Maven
-4. You have containerised your native executable
+    The container image size should be around 123MB. Much smaller than the original Java container (690MB)!
 
-In this step, you will shrink your container size even further--smaller containers are quicker to download and start.
+## **STEP 5**: Build a Mostly-Static Image and Package It in a Distroless Container
+
+Recap, again, what you have done so far:
+
+- Built a Spring Boot application with a HTTP endpoint, /jibber
+- Successfully containerized it
+- Built a native executable of your application using the Native Image Build Tools for Maven
+- Containerized your native executable
+
+It would be great if you could shrink your container size even further, because smaller containers are quicker to download and start.
+
 With GraalVM Native Image you have the ability to statically link system libraries into the native executable.
-If you build a statically linked native executable, you can package the native executable directly into an empty 
-Docker image, also known as a "scratch" container.
+If you build a statically linked native executable, you can then package it directly into an empty container image, also known as a "scratch" container.
 
-Another option is to produce what is known as a mostly-statically linked native executable. With this, you statically link
-in all system libraries except for the standard C library, `glibc`. With such a native executable you can use a small container,
-such as Google's Distroless which contains the `glibc` library, some standard files, and SSL security certificates. The
-standard Distroless container is around 20MB in size.
+Another option is to produce what is known as a mostly-statically linked native executable.
+With this, you statically link in all system libraries except for the standard C library, `glibc`.
+With such a native executable you can use a small container, such as Google's "Distroless" which contains the `glibc` library, some standard files, and SSL security certificates.
 
-You will build a mostly-statically linked executable and then package it into a Distroless container.
+In this step, you will build a mostly-statically linked executable and then package it into a Distroless container.
 
-The _pom.xml_ tile contains a Maven profile (named `distroless`) to build this mostly-statically linked native executable.
-The only difference between this profile and the one you used before, `native`, is that it includes the option `-H:+StaticExecutableWithDynamicLibC`.
-This instructs `native-image` to build a mostly-statically linked native executable. The following is
-a snippet from the `distroless` profile in the _pom.xml_ file that includes this option:
+The _pom.xml_ tile contains a Maven profile (named `distroless`) for this build.
+The only difference between this profile and the one you used before, `native`, is that it includes the option `--static-nolibc`.
+This instructs `native-image` to build a mostly-statically linked native executable.
 
 ```xml
 <buildArgs>
-    <!-- Mostly static -->
-    <buildArg>-H:+StaticExecutableWithDynamicLibC</buildArg>
-    <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+    <buildArg>--static-nolibc</buildArg>
 </buildArgs>
 ```
 
-You can build your mostly-statically linked native executable as follows--be aware this will only work on Linux. We will
-build our native executable in a docker container in the next step, so if you are using OSX, don't worry.
-<!-- I don't understand this first sentence ^^ -->
-
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-./mvnw package -Pdistroless
-```
-
-The generated native executable is in the target directory _jibber-distroless_.
-
-Now to package it into a Distroless container. The Dockerfile to do this can be found in the directory 
-_native-image/containerisation/lab/02-smaller-containers/Dockerfile_. Again you are going to use a multi-stage build
-in order to build a linux executable on all OSes. Take a look at the contents of the Dockerfile, 
-which has comments to explain the contents:
+The Dockerfile for this step can be found in the directory _native-image/containerisation/lab/02-smaller-containers/Dockerfile_.
+Again you are going to use a multi-stage build.
+Take a look at the contents of the Dockerfile, which has comments to explain each line:
 
 ```dockerfile
-FROM ghcr.io/graalvm/graalvm-ce:ol8-java17-22 AS builder
+FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
 
-# Install tar and gzip to extract the Maven binaries
-RUN microdnf update \
- && microdnf install --nodocs \
-    tar \
-    gzip \
- && microdnf clean all \
- && rm -rf /var/cache/yum
-
-# Install Maven
-# Source:
-# 1) https://github.com/carlossg/docker-maven/blob/925e49a1d0986070208e3c06a11c41f8f2cada82/openjdk-17/Dockerfile
-# 2) https://maven.apache.org/download.cgi
-ARG USER_HOME_DIR="/root"
-ARG SHA=89ab8ece99292476447ef6a6800d9842bbb60787b9b8a45c103aa61d2f205a971d8c3ddfb8b03e514455b4173602bd015e82958c0b3ddc1728a57126f773c743
-ARG MAVEN_DOWNLOAD_URL=https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
-
-RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
-  && curl -fsSL -o /tmp/apache-maven.tar.gz ${MAVEN_DOWNLOAD_URL} \
-  && echo "${SHA}  /tmp/apache-maven.tar.gz" | sha512sum -c - \
-  && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
-  && rm -f /tmp/apache-maven.tar.gz \
-  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
-
-ENV MAVEN_HOME /usr/share/maven
-ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
-
-# Set the working directory to /home/app
+# Set the working directory
 WORKDIR /build
 
 # Copy the source code into the image for building
 COPY . /build
 
 # Build
-RUN mvn clean package -Pdistroless
+RUN mvn clean package -Pnative,distroless
 
-# Deployment Containers
-# This time we use the distroless image - which is around 20 MB in size. Even smaller versions are available.
-FROM gcr.io/distroless/base
+# The deployment container
+FROM gcr.io/distroless/base-debian12
 
 ARG APP_FILE
 EXPOSE 8080
@@ -603,81 +480,81 @@ ENTRYPOINT ["/app"]
 ```
 
 > ### Building on Linux
-> If you are using Linux you don't need to use a multi-stage docker build and your build times will be faster.
+> If you are using Linux, you do not need to use a multi-stage docker build and your build times will be faster.
 > You can just build the native executable locally and package it in our deployment container _02-smaller-containers/Dockerfile.linux_
 > as follows:
 > ```bash
-> ./mvnw clean package -Pdistroless
+> ./mvnw package -Pnative,distroless
 > docker build -f ./02-smaller-containers/Dockerfile.linux --build-arg APP_FILE=target/jibber-distroless -t jibber:distroless.01 .
 > ```
 
-To build, run the following command from your terminal:
+### Action
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-# Build a Docker Image
-docker build -f ./02-smaller-containers/Dockerfile \
-             -t jibber:distroless.01 .
-```
+1. To build, run the following command from your terminal:
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```shell
-# List the newly built image
-docker images | head -n2
-```
-You can run this and test it as follows:
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker build -f ./02-smaller-containers/Dockerfile \
+                -t jibber:distroless.01 .
+    ```
+    List the newly built image:
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```shell
-docker run --rm -d --name "jibber-distroless" -p 8080:8080 jibber:distroless.01
-curl http://localhost:8080/jibber
-```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker images | head -n2
+    ```
 
-<!-- I added this section, but I don't have the numbers  -->
-Again, you should see more nonsense verse in the style of the poem Jabberwocky. You can see how long the 
-application took to startup by inspecting the logs produced by the application as you did earlier. From your terminal, 
-run the following command and look for the startup time:
+2. Run this Docker image and test it:
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```bash
-docker logs jibber-native
-```
-In our experiments, the native executable started up in 0.074s (compared to 3.896s for the Java application). A big improvement!
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker run --rm -d --name "jibber-distroless" -p 8080:8080 jibber:distroless.01
+    ```
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    curl http://localhost:8080/jibber
+    ```
+    As before, you should see more nonsense verse in the style of the poem Jabberwocky.
 
-```
-2022-03-09 19:44:12.642  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 0.667 seconds (JVM running for 0.779)
-```
+3. You can check how long the application took to start by inspecting the logs:
 
-Clean up by terminating the running container.
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker logs jibber-distroless
+    ```
+    In this run, it should start even faster, around 0.04s:
+    ```
+    2025-05-23T18:33:03.918Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : Started DemoApplication in 0.043 seconds (process running for 0.053)
+    ```
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```shell
-docker kill jibber-distroless
-```
+4. Clean up by terminating the running container:
 
-Great! It worked. But how small, or large, is your container? Use the following commands to check the image size:
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    docker kill jibber-distroless
+    ```
+    Great! It worked. But how small, or large, is your container?
 
-![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
-```shell
-size_in_bytes=`docker inspect -f "{{ .Size }}" jibber:distroless.01`
-echo $((size_in_bytes/1024/1024))
-```
+5. Use the following commands to check the image size:
 
-In our experiments, we saw a size of around 82MB, compared to 171MB for an Oracle Linux 8 
-image. So we have shrunk the container by a lot. A long way down from our starting size, for 
-the Java container, of almost 600MB.
+    ![](images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
+    ```bash
+    size_in_bytes=`docker inspect -f "{{ .Size }}" jibber:distroless.01`
+    echo $((size_in_bytes/1024/1024))
+    ```
+
+    The size should be around 110MB. You have shrunk the container by a lot!
+    A long way down from the starting container size, the Java container, of 690MB to 110MB.
 
 ## Summary
 
-We hope you have enjoyed this lab and learnt a few things along the way. We've looked at how you can containerise
-a Java application. Then we've seen how to convert that Java application into a native executable, which starts significantly 
-faster than the Java application. You then containerised the native executable and have seen how the size of the 
-Docker image, with your native executable in it, is much smaller than the Java Docker Image.
-
-Finally, we looked at how we can build a mostly-statically linked native executable with Native Image. These can be
-packaged in smaller containers, such as Distroless and these let us shrink the size of the Docker Image even further.
+We hope you enjoyed this lab and learnt a few things along the way.
+You looked at how you can containerize a Java application.
+You saw how to use GraalVM Native Image to compile that Java application into a native executable, which starts significantly faster than its Java counterpart.
+Then, you containerized the native executable and saw that the size of the container image, with the native executable in it, is much smaller than the corresponding Java container image. Finally, you looked at how to build mostly-statically linked native executables with Native Image.
 
 ### Learn More
 
-- Watch a presentation by the Native Image architect Christian Wimmer [GraalVM Native Image: Large-scale static analysis for Java](https://www.youtube.com/embed/rLP-8q3Cb8M)
-- [GraalVM Native Image reference documentation](https://docs.oracle.com/en/graalvm/enterprise/21/docs/reference-manual/native-image/)
+- [Tiny Java Containers](https://github.com/graalvm/graalvm-demos/tree/master/native-image/tiny-java-containers)
+- [Build a Statically Linked or Mostly-Statically Linked Native Executable](https://www.graalvm.org/latest/reference-manual/native-image/guides/build-static-executables/)
+- [Building Native Images with Maven: An End-to-End Guide](https://graalvm.github.io/native-build-tools/latest/end-to-end-maven-guide.html)
