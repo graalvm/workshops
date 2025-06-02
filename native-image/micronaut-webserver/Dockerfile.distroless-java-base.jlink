@@ -3,17 +3,19 @@ COPY . /webserver
 WORKDIR /webserver
 RUN ./mvnw --no-transfer-progress clean package
 RUN ./mvnw dependency:build-classpath -Dmdep.outputFile=cp.txt
-RUN jdeps --ignore-missing-deps -q  --recursive --multi-release 24 --print-module-deps --class-path $(cat cp.txt) target/webserver-0.1.jar
-RUN jlink \
-        --module-path ${JAVA_HOME}/jmods \
-        --add-modules java.base,java.desktop,java.management,java.naming,java.sql,jdk.unsupported,org.graalvm.nativeimage \
-        --verbose \
-        --strip-debug \
-        --compress zip-9 \
-        --no-header-files \
-        --no-man-pages \
-        --strip-java-debug-attributes \
-        --output jlink-jre
+RUN CP=$(cat cp.txt) && \
+    MODULES=$(jdeps --ignore-missing-deps -q --recursive --multi-release 24 --print-module-deps --class-path "$CP" target/webserver-0.1.jar) && \
+    echo "Modules: $MODULES" && \
+    jlink \
+      --module-path "${JAVA_HOME}/jmods" \
+      --add-modules "$MODULES" \
+      --verbose \
+      --strip-debug \
+      --compress zip-9 \
+      --no-header-files \
+      --no-man-pages \
+      --strip-java-debug-attributes \
+      --output jlink-jre
 
 # Distroless Java Base-provides glibc and other libraries needed by the JDK
 FROM gcr.io/distroless/java-base-debian12
