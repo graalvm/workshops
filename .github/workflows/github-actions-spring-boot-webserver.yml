@@ -1,4 +1,4 @@
-name: Multi-Cloud with GraalVM - Building and Deploying Optimized Applications
+name: From JVM to Native - The Path to Efficient Java Containers
 on:
   push:
     paths:

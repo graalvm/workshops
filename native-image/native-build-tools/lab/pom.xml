@@ -10,15 +10,13 @@
 	<description>Demo project for Native Build Tools</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>21</java.version>
         <app.main.class>com.example.demo.DemoApplication</app.main.class>
+		<!-- Version of the Native Build Tools for Maven -->
+		<native.maven.plugin.version>0.10.6</native.maven.plugin.version>
 		<!--
-			Version of the Native Image Maven Build Tools
-		-->
-		<native.maven.plugin.version>0.9.13</native.maven.plugin.version>
-		<!--
-			Used to flag that we should skip building a native executable. We set to true
-			as a default to turn off native image executable and the change to true when
+			Indicates that a native executable should not be built. This is set to true
+			as a default to turn off native image building and then changed to false when
 			building with the native profile
 		-->
 		<skip.native.build>true</skip.native.build>
@@ -28,7 +26,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.8.1</version>
+			<version>5.11.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -36,49 +34,46 @@
 	<build>
 		<pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
 			<plugins>
-				<!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
 				<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.1.0</version>
-				</plugin>
-				<!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
-				<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.2.0</version>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.1.0</version>
 				</plugin>
 				<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.2.0</version>
 				</plugin>
 				<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M7</version>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.0</version>
 				</plugin>
 				<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.2</version>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M7</version>
 				</plugin>
 				<plugin>
-				<artifactId>maven-install-plugin</artifactId>
-				<version>2.5.2</version>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
 				</plugin>
 				<plugin>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.8.2</version>
-				</plugin>
-				<!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
-				<plugin>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>3.7.1</version>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.2</version>
 				</plugin>
 				<plugin>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>3.0.0</version>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.7.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>3.0.0</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
-            <!-- Compiler -->
+            <!-- Compile -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
@@ -146,9 +141,7 @@
 			<id>native</id>
             <build>
                 <plugins>
-					<!--
-						Copy over any tracing agent config generated when we run the tracing agent against the tests
-					-->
+					<!-- Copy over any tracing agent config generated when you run the tracing agent against the tests -->
 					<plugin>
 						<artifactId>maven-resources-plugin</artifactId>
 						<version>3.0.2</version>
@@ -182,7 +175,7 @@
 						<extensions>true</extensions>
 						<executions>
 							<!-- Binds to the package phase - causes the native binary to be created
-								when we run, mvn -Pnative package -->
+								when you run, mvn -Pnative package -->
 							<execution>
 								<id>build-native</id>
 								<goals>
@@ -191,7 +184,7 @@
 								<phase>package</phase>
 							</execution>
 							<!-- Binds to the test phase - causes the JUnit tests to be run as native code
-								when we run, mvn -Pnative test -->
+								when you run, mvn -Pnative test -->
 							<execution>
 								<id>test-native</id>
 								<goals>
@@ -204,14 +197,11 @@
 						<configuration>
 							<!-- Tracing Agent Configuration -->
 							<agent>
-								<!-- shared options -->
 								<options>
-									<option>experimental-class-loader-support</option>
-								</options>
-								<!-- test options -->
-								<options name="test">
 									<!-- Uses an access filter when running the Tracing Agent -->
-									<option>access-filter-file=${basedir}/src/test/resources/access-filter.json</option>
+									<accessFilterFiles>
+										<filterFile>access-filter-file=${basedir}/src/test/resources/access-filter.json</filterFile>
+									</accessFilterFiles>
 								</options>
 							</agent>
 							<!--

@@ -8,23 +8,53 @@ permissions:
   contents: read
 jobs:
   build:
-    name: Native Image Containerisation on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest]
+    name: Native Image Containerisation
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - uses: graalvm/setup-graalvm@v1
         with:
-          version: 'latest'
-          java-version: '17'
-          components: 'native-image'
+          java-version: '24'
+          distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Test Java Code
         run: |
           cd native-image/containerisation/lab/
           ./mvnw --no-transfer-progress clean package
-          ./mvnw --no-transfer-progress package -Pnative
+          # ./mvnw --no-transfer-progress package -Pnative
+
+          # I. Build and run a JAR in a container
+          docker build -f ./00-containerise/Dockerfile \
+                --build-arg JAR_FILE=./target/jibber-0.0.1-SNAPSHOT.jar \
+                -t jibber:jdk.01 .
+          container_id=$(docker run --rm -d --name "jibber-jdk" -p 8080:8080 jibber:jdk.01)
+          sleep 10
+          docker ps
+          curl "http://localhost:8080/jibber"
+          docker kill $container_id
+          docker ps
+
+          # II. Build a regular dynamic native image and containerize
+          docker build -f ./01-native-image/Dockerfile \
+                          -t jibber:native.01 .
+          container_id=$(docker run --rm -d --name "jibber-native" -p 8081:8080 jibber:native.01)
+          sleep 10
+          docker ps
+          curl "http://localhost:8081/jibber"
+          docker kill $container_id
+          docker ps
+
+          # III. Build a mostly-static native image and containerize
+          docker build -f ./02-smaller-containers/Dockerfile \
+                      -t jibber:distroless.01 .
+          container_id=$(docker run --rm -d --name "jibber-distroless" -p 8082:8080 jibber:distroless.01)
+          sleep 10
+          docker ps
+          curl "http://localhost:8082/jibber"
+          docker kill $container_id
+          docker ps
+
+          # List container images
+          docker images | head -n2
