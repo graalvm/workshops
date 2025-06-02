@@ -46,7 +46,7 @@ In this workshop you will:
 
 2. Unzip the static resources required for the application:
     ```bash
-    unzip src/main/resources/static.zip -d src/main/resources/static
+    unzip src/main/resources/static.zip -d src/main/resources
     ```
 
 3. Run the _build-jar-eclipse-temurin.sh_ script from the application directory:
