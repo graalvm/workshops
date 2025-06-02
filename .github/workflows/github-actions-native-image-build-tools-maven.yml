@@ -12,16 +12,22 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest]
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+    - name: Set up GraalVM
+      uses: graalvm/setup-graalvm@v1
+      with:
+        java-version: '24'
+        distribution: 'graalvm'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: graalvm/setup-graalvm@v1
-        with:
-          version: 'latest'
-          java-version: '17'
-          components: 'native-image'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and Test Java Code
-        run: |
-          cd native-image/native-build-tools/lab/
-          ./mvnw --no-transfer-progress clean test
+    - name: Build and Test Java Code
+      run: |
+        cd native-image/native-build-tools/lab/
+        ./mvnw --no-transfer-progress clean test
+        ./mvnw --no-transfer-progress package
+        java -jar ./target/demo-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.example.demo.StringReverser reverse Java
+        ./mvnw --no-transfer-progress -Pnative -DskipNativeTests=true -DskipNativeBuild=true -Dagent=true test
+        ./mvnw --no-transfer-progress -Pnative -DskipNativeBuild=true -Dagent=true test
+        ./target/native-tests
+        ./mvnw --no-transfer-progress -Pnative -Dagent=true package
+        ./target/demo com.example.demo.StringReverser reverse hello
