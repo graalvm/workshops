@@ -41,7 +41,7 @@ cd native-image/spring-boot-webserver
 
 Unzip the static resources required for the application:
 ```bash
-unzip src/main/resources/static.zip -d src/main/resources/static
+unzip src/main/resources/static.zip -d src/main/resources
 ```
 
 ## **STEP 1**: Compile and Run the Application from a JAR File Inside a Container
@@ -92,7 +92,7 @@ Jlink, or `jlink`, is a tool that generates a custom Java runtime image that con
 This is one of the approaches to make applications more space efficient and cloud-friendly, introduced in Java 11.
 
 The script _build-jlink.sh_ that runs `docker build` using the _Dockerfile.distroless-java-base.jlink_.
-The Dockerfile runs two stages: first it generates a Jlink custom runtime on a full JDK (`container-registry.oracle.com/graalvm/jdk:24`); then copies the runtime image folder along with static website pages into a Distroless Java base image, and sets the entrypoint.
+The Dockerfile runs two stages: first it generates a Jlink custom runtime on a full JDK (`container-registry.oracle.com/graalvm/jdk:24`); then copies the runtime image folder along with static website pages into a distroless Java base image, and sets the entrypoint.
 Distroless Java base image provides `glibc` and other libraries needed by the JDK, but not a full-blown JDK.
 
 The application does not have to be modular, but you need to figure out which modules the application depends on to be able to `jlink` it.
@@ -493,7 +493,7 @@ A _scratch_ container is a [Docker official image](https://hub.docker.com/_/scra
 A separate Maven profile exists for this step:
 ```xml
 <profile>
-    <id>fully-static</id>
+    <id>static</id>
     <build>
         <plugins>
             <plugin>
