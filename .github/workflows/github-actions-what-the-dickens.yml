@@ -1,0 +1,57 @@
+name: Native Image What_the_Dickens Pipeline
+on:
+  push:
+    paths:
+      - 'native-image/what-the-dickens/lab/**'
+      - '.github/workflows/github-actions-what-the-dickens.yml'
+jobs:
+  build:
+    name: Native Image What_the_Dickens
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up GraalVM
+      uses: graalvm/setup-graalvm@v1
+      with:
+        java-version: '24'
+        distribution: 'graalvm'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build and Test Java Code
+      run: |
+        cd native-image/what-the-dickens/lab/
+        # Build a JAR
+        ./mvnw --no-transfer-progress clean package
+
+        # Generate reachability metadata with the Tracing agent
+        java -Dpring.aot.enabled=true \
+        -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/native-image/ \
+        -jar target/what_the_dickens-0.0.1-SNAPSHOT.jar &
+        pid=$!
+        kill $pid
+
+        # Build a regular dynamic native image and containerize in docker.io/oraclelinux:8-slim container
+        docker build -f ./01-native-image/Dockerfile \
+              -t what_the_dickens:native.01 .
+        container_id=$(docker run --rm -d --name "what_the_dickens-native" -p 8080:8080 what_the_dickens:native.01)
+        sleep 10
+        docker ps
+        curl "http://localhost:8080/whatTheDickens"
+        docker kill $container_id
+        docker ps
+
+        # Build a mostly-static native image and containerize in gcr.io/distroless/base container
+        docker build -f ./02-smaller-containers/Dockerfile \
+          -t what_the_dickens:distroless.01 .
+        container_id=$(docker run --rm -d --name "what_the_dickens-distroless" -p 8081:8080 what_the_dickens:distroless.01)
+        sleep 10
+        docker ps
+        curl "http://localhost:8081/whatTheDickens"
+        docker kill $container_id
+        docker ps
+
+        # List container images
+        docker images
+
+        # Build a native image
+        ./mvnw --no-transfer-progress -Pnative -DskipTests=true package
