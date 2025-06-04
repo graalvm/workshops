@@ -54,7 +54,7 @@ In this workshop you will:
     ./build-jar-eclipse-temurin.sh
     ```
     Once the script finishes, a container image _eclispe-temurin-jar_ should be available.
-    Check its size. It should be **582MB**.
+    Check its size. It should be **472MB**.
     ```bash
     docker images
     ```
@@ -83,7 +83,7 @@ The entrypoint for this image is equivalent to `java -jar`, so only a path to a 
     ```bash
     docker run --rm -p8080:8080 webserver:distroless-java-base.jar
     ```
-    The container started in hundreds of milliseconds, **316ms**.
+    The container started in hundreds of milliseconds, **378ms**.
 
 3. Open a browser and navigate to [localhost:8080/](http://localhost:8080/). You see the GraalVM documentation pages served.
 
@@ -97,11 +97,11 @@ The entrypoint for this image is equivalent to `java -jar`, so only a path to a 
     ```
     ```
     REPOSITORY   TAG                        IMAGE ID       CREATED          SIZE
-    webserver    distroless-java-base.jar   e285476a8266   32 minutes ago   306MB
-    webserver    eclispe-temurin-jar        f6eef8d2aa40   33 minutes ago   582MB
+    webserver    distroless-java-base.jar   e285476a8266   32 minutes ago   216MB
+    webserver    eclispe-temurin-jar        f6eef8d2aa40   33 minutes ago   472MB
     ```
     Note that the website pages added **44MB** to the overall image size.
-    **306MB** is not bad for Java, but not great if you're optimizing for cold start and footprint.
+    **216MB** is not bad for Java, but not great if you are optimizing for cold start and footprint.
 
 ## **STEP 2**: Build and Run a Jlink Custom Runtime Image Inside a Container
 
@@ -122,11 +122,22 @@ In the builder stage, running on a full JDK, after compiling the project, Docker
 ```
 RUN ./mvnw dependency:build-classpath -Dmdep.outputFile=cp.txt
 ```
-Then, Docker runs the `jdeps` command with the classpath to check required modules for this Micronaut application:
+Then, Docker runs `jlink` to create a custom runtime in the specified output directory _jlink-jre_, by using the output of the `jdeps` commnand to obtain the required modules for this Micronaut application:
 ```bash
-RUN jdeps --ignore-missing-deps -q  --recursive --multi-release 24 --print-module-deps --class-path $(cat cp.txt) target/webserver-0.1.jar
+RUN CP=$(cat cp.txt) && \
+    MODULES=$(jdeps --ignore-missing-deps -q --recursive --multi-release 24 --print-module-deps --class-path "$CP" target/webserver-0.1.jar) && \
+    echo "Modules: $MODULES" && \
+    jlink \
+      --module-path "${JAVA_HOME}/jmods" \
+      --add-modules "$MODULES" \
+      --verbose \
+      --strip-debug \
+      --compress zip-9 \
+      --no-header-files \
+      --no-man-pages \
+      --strip-java-debug-attributes \
+      --output jlink-jre
 ```
-Finally, Docker runs `jlink` to create a custom runtime in the specified output directory _jlink-jre_.
 The `ENTRYPOINT` for the application would be `java` from the custom runtime.
 
 ### Action
@@ -154,9 +165,9 @@ The `ENTRYPOINT` for the application would be `java` from the custom runtime.
     The expected output is:
     ```
     REPOSITORY   TAG                          IMAGE ID       CREATED          SIZE
-    webserver    distroless-java-base.jlink   2a33effa1e0f   3 minutes ago    257MB
-    webserver    distroless-java-base.jar     e285476a8266   32 minutes ago   306MB
-    webserver    eclispe-temurin-jar          f6eef8d2aa40   33 minutes ago   582MB
+    webserver    distroless-java-base.jlink   2a33effa1e0f   3 minutes ago    167MB
+    webserver    distroless-java-base.jar     e285476a8266   32 minutes ago   216MB
+    webserver    eclispe-temurin-jar          f6eef8d2aa40   33 minutes ago   472MB
     ```
     Jlink shrinked the `distroless-java-base.jar` container by **49MB**.
     There is no dramatic performance change, but a solid step toward efficiency.
@@ -194,7 +205,7 @@ Learn more in ["Distroless" Container Images](https://github.com/GoogleContainer
     docker run --rm -p8080:8080 webserver:distroless-java-base.dynamic
     ```
 
-The application is running from the native image inside a container. The container started in **12ms**!
+The application is running from the native image inside a container. The container started in **20ms**!
 
 3. Open a browser and navigate to [localhost:8080/](http://localhost:8080/). You see the GraalVM documentation pages served.
 
@@ -207,14 +218,16 @@ The application is running from the native image inside a container. The contain
     The expected output is:
     ```bash
     REPOSITORY   TAG                            IMAGE ID       CREATED          SIZE
-    webserver    distroless-java-base.dynamic   53af84312571   5 minutes ago    246MB
-    webserver    distroless-java-base.jar       e285476a8266   32 minutes ago   306MB
-    webserver    eclispe-temurin-jar            f6eef8d2aa40   33 minutes ago   582MB
+    webserver    distroless-java-base.dynamic   53af84312571   5 minutes ago    132MB
+    webserver    distroless-java-base.jlink     dde1eb772aa5   12 minutes ago   167MB
+    webserver    distroless-java-base.jar       e285476a8266   32 minutes ago   216MB
+    webserver    eclispe-temurin-jar            f6eef8d2aa40   33 minutes ago   472MB
     ```
-    The new container image size is **246MB** and contains a dynamically linked native image of this Micronaut web server.
+    The new container image size is **132MB** and contains a dynamically linked native executable of this Micronaut web server.
+    The executable file size is **86MB**.
     Note that the static resources are "baked" into this native executable.
 
-    Ahead-of-time compilation not only reduced the container size, but also cut startup time by 25×—from hundreds of milliseconds to just 10 milliseconds.
+    Ahead-of-time compilation not only reduced the container size by **35MB**, but also cut startup time by almost 20×—from hundreds of milliseconds to just 20.
     That's how powerful native compilation can be!
 
 ## **STEP 4**: Build a Size-Optimized Native Image and Run Inside a Container
@@ -281,7 +294,7 @@ No Java Runtime Environment (JRE) is required.
     docker run --rm -p8080:8080 webserver:distroless-java-base.dynamic-optimized
     ```
 
-    The application is running from the native image inside a container. The container started in **10ms**.
+    The application is running from the native image inside a container. The container started in the same **20ms**.
 
 3. Open a browser and navigate to [localhost:8080/](http://localhost:8080/). You see the GraalVM documentation pages served.
 
@@ -294,14 +307,15 @@ No Java Runtime Environment (JRE) is required.
     The expected output is:
     ```bash
     REPOSITORY   TAG                                      IMAGE ID       CREATED         SIZE
-    webserver    distroless-java-base.dynamic-optimized   5e16a58b1649   23 seconds ago  220MB
-    webserver    distroless-java-base.dynamic             d7c449b9373d   45 seconds ago  246MB
-    webserver    distroless-java-base.jar                 e285476a8266   32 minutes ago  306MB
-    webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago  582MB
+    webserver    distroless-java-base.dynamic-optimized   5e16a58b1649   10 minutes ago  102MB
+    webserver    distroless-java-base.dynamic             d7c449b9373d   12 minutes ago  132MB
+    webserver    distroless-java-base.jlink               dde1eb772aa5   15 minutes ago  167MB
+    webserver    distroless-java-base.jar                 e285476a8266   32 minutes ago  216MB
+    webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago  472MB
     ```
 
-    The binary size decreased by **29MB** (from 194MB to 165MB) just by applying the file size optimization - with no change in behavior or startup time!
-    The size of the container is cut down from **246MB** to **220MB**.
+    The executable size decreased by **24MB** (from 86MB to 62MB) just by applying the file size optimization - with no change in behavior or startup time!
+    The size of the container is cut down from **132MB** to **102MB**.
 
 ## **STEP 5**: (Optional) Build a Size-Optimized Native Image with SkipFlow and Run Inside a Container
 
@@ -355,7 +369,6 @@ No Java Runtime Environment (JRE) is required.
     ```bash
     docker run --rm -p8080:8080 webserver:distroless-java-base.dynamic-skipflow
     ```
-
     The application is running from the native image inside a container.
     The startup time has not changed.
 
@@ -369,15 +382,15 @@ No Java Runtime Environment (JRE) is required.
     ```
     The expected output is:
     ```bash
-    REPOSITORY   TAG                                      IMAGE ID       CREATED              SIZE
-    webserver    distroless-java-base.dynamic-skipflow    6caada87f616   About a minute ago   219MB
-    webserver    distroless-java-base.dynamic-optimized   9b48cfa87493   14 minutes ago       220MB
-    webserver    distroless-java-base.dynamic             267c09b0a6d7   18 minutes ago       246MB
-    webserver    distroless-java-base.jlink               457473f123ac   24 minutes ago       257MB
-    webserver    distroless-java-base.jar                 e285476a8266   32 minutes ago       306MB
-    webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago       582MB
+    REPOSITORY   TAG                                      IMAGE ID       CREATED         SIZE
+    webserver    distroless-java-base.dynamic-skipflow    6caada87f616   8  minutes ago  101MB
+    webserver    distroless-java-base.dynamic-optimized   5e16a58b1649   10 minutes ago  102MB
+    webserver    distroless-java-base.dynamic             d7c449b9373d   12 minutes ago  132MB
+    webserver    distroless-java-base.jlink               dde1eb772aa5   15 minutes ago  167MB
+    webserver    distroless-java-base.jar                 e285476a8266   32 minutes ago  216MB
+    webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago  472MB
     ```
-    The gain is tiny: the container size reduced only by 1MB, from 220MB to **219MB**, but depending on the application, **SkipFlow can provide up to a 4% reduction in binary size without any additional impact on build time**.
+    The gain is tiny: the container size reduced only by 1MB, but depending on the application, **SkipFlow can provide up to a 4% reduction in binary size without any additional impact on build time**.
 
 ## **STEP 6**: Build a Size-Optimized Mostly Static Native Image and Run Inside a Container
 
@@ -428,7 +441,7 @@ A separate Maven profile exists for this step:
     docker run --rm -p8080:8080 webserver:distroless-base.mostly-static
     ```
 
-    The application is running from the mostly static native image inside a container. The container started in **19ms**.
+    The application is running from the mostly static native image inside a container. The startup time has not changed, around **20ms**.
 
 3. Open a browser and navigate to [localhost:8080/](http://localhost:8080/). You see the GraalVM documentation pages served.
 
@@ -440,20 +453,20 @@ A separate Maven profile exists for this step:
     ```
     The expected output is:
     ```bash
-    REPOSITORY   TAG                                      IMAGE ID       CREATED          SIZE
-    webserver    distroless-base.mostly-static            af0a790a6558   2 minutes ago    207MB
-    webserver    distroless-java-base.dynamic-skipflow    6caada87f616   6 minutes ago    219MB
-    webserver    distroless-java-base.dynamic-optimized   9b48cfa87493   19 minutes ago   220MB
-    webserver    distroless-java-base.dynamic             267c09b0a6d7   23 minutes ago   246MB
-    webserver    distroless-java-base.jlink               457473f123ac   30 minutes ago   257MB
-    webserver    distroless-java-base.jar                 e285476a8266   32 minutes ago   306MB
-    webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago   582MB
+    REPOSITORY   TAG                                      IMAGE ID       CREATED         SIZE
+    webserver    distroless-base.mostly-static            af0a790a6558   7 minutes ago   89.7MB
+    webserver    distroless-java-base.dynamic-skipflow    6caada87f616   8  minutes ago  101MB
+    webserver    distroless-java-base.dynamic-optimized   5e16a58b1649   10 minutes ago  102MB
+    webserver    distroless-java-base.dynamic             d7c449b9373d   12 minutes ago  132MB
+    webserver    distroless-java-base.jlink               dde1eb772aa5   15 minutes ago  167MB
+    webserver    distroless-java-base.jar                 e285476a8266   32 minutes ago  216MB
+    webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago  472MB
     ```
 
-    The size of the new _distroless-base.mostly-static_ container is **207MB**.
+    The size of the new _distroless-base.mostly-static_ container is **89.7MB**.
     The reduction in size is related to the fact that a smaller base image was pulled: **gcr.io/distroless/base-debian12**.
     [Distroless images](https://github.com/GoogleContainerTools/distroless) are very small, and the one used is only **48.3 MB**.
-    The size of the mostly static native image has not changed, and is **165MB**.
+    The size of the mostly static native image has not changed, and is **62MB**.
 
 ## **STEP 7**: Build a Size-Optimized Fully Static Native Image and Run Inside a Container
 
@@ -508,7 +521,7 @@ A separate Maven profile exists for this step:
     ```bash
     docker run --rm -p8080:8080 webserver:scratch.static
     ```
-    The startup time is almost the as before, and, as a result, you get a tiny container with a fully functional and deployable server application!
+    The startup time is the same as before, and, as a result, you get a tiny container with a fully functional and deployable server application!
 
 3. Open a browser and navigate to [localhost:8080/](http://localhost:8080/). You see the GraalVM documentation pages served.
 
@@ -520,17 +533,17 @@ A separate Maven profile exists for this step:
     ```
     The expected output is:
     ```bash
-    REPOSITORY   TAG                                      IMAGE ID       CREATED          SIZE
-    webserver    scratch.static                           767e0c290125   1 minutes ago    172MB
-    webserver    distroless-base.mostly-static            af0a790a6558   2 minutes ago    207MB
-    webserver    distroless-java-base.dynamic-skipflow    6caada87f616   6 minutes ago    219MB
-    webserver    distroless-java-base.dynamic-optimized   9b48cfa87493   19 minutes ago   220MB
-    webserver    distroless-java-base.dynamic             267c09b0a6d7   23 minutes ago   246MB
-    webserver    distroless-java-base.jlink               457473f123ac   30 minutes ago   257MB
-    webserver    distroless-java-base.jar                 e285476a8266   32 minutes ago   306MB
-    webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago   582MB
+    REPOSITORY   TAG                                      IMAGE ID       CREATED         SIZE
+    webserver    scratch.static                           ead2b9ac1bb8   6 minutes ago   69.2MB
+    webserver    distroless-base.mostly-static            af0a790a6558   7 minutes ago   89.7MB
+    webserver    distroless-java-base.dynamic-skipflow    6caada87f616   8  minutes ago  101MB
+    webserver    distroless-java-base.dynamic-optimized   5e16a58b1649   10 minutes ago  102MB
+    webserver    distroless-java-base.dynamic             d7c449b9373d   12 minutes ago  132MB
+    webserver    distroless-java-base.jlink               dde1eb772aa5   15 minutes ago  167MB
+    webserver    distroless-java-base.jar                 e285476a8266   32 minutes ago  216MB
+    webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago  472MB
     ```
-    A production-ready Micronaut web application was deployed in under **172MB**, starting in less than 20 milliseconds!
+    A production-ready Micronaut web application was deployed in under **69.2MB**, starting in 20 milliseconds!
 
 #### For Local Building
 
@@ -590,20 +603,20 @@ Finally, the compressed executable copied over to the _scratch_ container, and e
     ```
     The expected output is:
     ```bash
-    REPOSITORY   TAG                                      IMAGE ID       CREATED          SIZE
-    webserver    scratch.static-upx                       31accca9ac49   11 seconds ago   76.5MB
-    webserver    scratch.static                           767e0c290125   1 minutes ago    172MB
-    webserver    distroless-base.mostly-static            af0a790a6558   2 minutes ago    207MB
-    webserver    distroless-java-base.dynamic-skipflow    6caada87f616   6 minutes ago    219MB
-    webserver    distroless-java-base.dynamic-optimized   9b48cfa87493   19 minutes ago   220MB
-    webserver    distroless-java-base.dynamic             267c09b0a6d7   23 minutes ago   246MB
-    webserver    distroless-java-base.jlink               457473f123ac   30 minutes ago   257MB
-    webserver    distroless-java-base.jar                 e285476a8266   32 minutes ago   306MB
-    webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago   582MB
+    REPOSITORY   TAG                                      IMAGE ID       CREATED         SIZE
+    webserver    scratch.static-upx                       31accca9ac49   11 seconds ago  22.3MB
+    webserver    scratch.static                           ead2b9ac1bb8   6 minutes ago   69.2MB
+    webserver    distroless-base.mostly-static            af0a790a6558   7 minutes ago   89.7MB
+    webserver    distroless-java-base.dynamic-skipflow    6caada87f616   8  minutes ago  101MB
+    webserver    distroless-java-base.dynamic-optimized   5e16a58b1649   10 minutes ago  102MB
+    webserver    distroless-java-base.dynamic             d7c449b9373d   12 minutes ago  132MB
+    webserver    distroless-java-base.jlink               dde1eb772aa5   15 minutes ago  167MB
+    webserver    distroless-java-base.jar                 e285476a8266   32 minutes ago  216MB
+    webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago  472MB
     ```
-    The container size reduced dramatically to just **76.5MB**!
-    The `upx` tool compressed the static native image by **73M**.
-    That's nearly 8× smaller than the original container based on `eclipse-temurin:21`.
+    The container size reduced dramatically to just **22.3MB**!
+    The `upx` tool compressed the static native image from **62MB** to just **20MMB**.
+    That's nearly 20× smaller than the original container based on `eclipse-temurin:21`.
     The application still started instantly and served requests flawlessly!
 
 ## **STEP 9**: Clean up (Optional)
@@ -615,20 +628,20 @@ To clean up all images, run the `./clean.sh` script provided for that purpose.
 A fully functional and, at the same time, minimal, webserver application was compiled into a native Linux executable and packaged into base, distroless, and scratch containers thanks to GraalVM Native Image's support for various linking options.
 All the versions of this Micronaut web application are functionally equivalent.
 
-Sorted by size, it is clear that the fully static native image, compressed with `upx`, and then packaged on the _scratch_ container is the smallest at just **76.5MB**.
+Sorted by size, it is clear that the fully static native image, compressed with `upx`, and then packaged on the _scratch_ container is the smallest at just **22.3MB**.
 Note that the website static pages add 44MB to the container images size. Static resources are "baked” into the native image.
 
 | Container                              | Size of a build artefact <br> (JAR, Jlink runtime, native executable) | Base image | Container |
 |----------------------------------------|-----------------------------------------------------------------------|------------|-----------|
-| eclispe-temurin-jar                    | webserver-0.0.1-SNAPSHOT.jar **89MB**              | eclipse-temurin:21 201MB      | 582MB     |
-| distroless-java-base.jar               | webserver-0.0.1-SNAPSHOT.jar **89MB**              | java21-debian12 192MB         | 306MB     |
-| distroless-java-base.jlink             | jlink-jre custom runtime **68MB**                  | java-base-debian12 128MB      | 257MB     |
-| distroless-java-base.dynamic           | webserver.dynamic **194MB**                        | java-base-debian12 128MB      | 246MB     |
-| distroless-java-base.dynamic-optimized | webserver.dynamic-optimized **165MB**              | java-base-debian12 128MB      | 220MB     |
-| distroless-java-base.dynamic-skipflow  | webserver.dynamic-skipflow **164MB**               | java-base-debian12 128MB      | 219MB     |
-| distroless-base.mostly-static          | webserver.mostly-static **165MB**                  | base-debian12 48.3MB          | 207MB     |
-| scratch.static                         | webserver.static **165MB**                         | scratch 2MB                   | 172MB     |
-| scratch.static-upx                     | webserver.scratch.static-upx **73MB**              | scratch 2MB                   | 76.5MB    |
+| eclispe-temurin-jar                    | webserver-0.1.jar **24MB**                         | eclipse-temurin:21 201MB      | 472MB     |
+| distroless-java-base.jar               | webserver-0.1.jar **24MB**                         | java21-debian12 192MB         | 216MB     |
+| distroless-java-base.jlink             | jlink-jre custom runtime **68MB**                  | java-base-debian12 128MB      | 167MB     |
+| distroless-java-base.dynamic           | webserver.dynamic **86MB**                         | java-base-debian12 128MB      | 132MB     |
+| distroless-java-base.dynamic-optimized | webserver.dynamic-optimized **62MB**               | java-base-debian12 128MB      | 102MB     |
+| distroless-java-base.dynamic-skipflow  | webserver.dynamic-skipflow **61MB**                | java-base-debian12 128MB      | 101MB     |
+| distroless-base.mostly-static          | webserver.mostly-static **62MB**                   | base-debian12 48.3MB          | 89.7MB    |
+| scratch.static                         | webserver.static **62MB**                          | scratch 2MB                   | 69.2MB    |
+| scratch.static-upx                     | webserver.scratch.static-upx **20MB**              | scratch 2MB                   | 22.3MB    |
 
 ## Learn More
 
