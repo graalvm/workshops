@@ -129,7 +129,7 @@ RUN CP=$(cat cp.txt) && \
     echo "Modules: $MODULES" && \
     jlink \
       --module-path "${JAVA_HOME}/jmods" \
-      --add-modules "$MODULES" \
+      --add-modules "$MODULES",jdk.zipfs \
       --verbose \
       --strip-debug \
       --compress zip-9 \
@@ -152,7 +152,7 @@ The `ENTRYPOINT` for the application would be `java` from the custom runtime.
     docker run --rm -p8080:8080 webserver:distroless-java-base.jlink
     ```
 
-    The container started in **1.193 seconds**.
+    The container started in **340ms**.
 
 3. Open a browser and navigate to [localhost:8080/](http://localhost:8080/). You see the GraalVM documentation pages served.
 
@@ -615,7 +615,7 @@ Finally, the compressed executable copied over to the _scratch_ container, and e
     webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago  472MB
     ```
     The container size reduced dramatically to just **22.3MB**!
-    The `upx` tool compressed the static native image from **62MB** to just **20MMB**.
+    The `upx` tool compressed the static native image from **62MB** to just **20MB**.
     That's nearly 20× smaller than the original container based on `eclipse-temurin:21`.
     The application still started instantly and served requests flawlessly!
 

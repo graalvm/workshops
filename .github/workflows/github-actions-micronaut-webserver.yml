@@ -28,26 +28,62 @@ jobs:
 
         # Build JAR (Debian Distoless Java 21)
         ./build-jar-java-base.sh
+        container_id=$(docker run --rm -d -p8080:8080 webserver:distroless-java-base.jar)
+        sleep 10
+        docker ps
+        curl "http://localhost:8080/"
+        docker kill $container_id
+        docker ps
         #
 
         # Build JAR (Eclipse-temurin:21)
         ./build-jar-eclipse-temurin.sh
+        container_id=$(docker run --rm -d -p8081:8080 webserver:eclispe-temurin-jar)
+        sleep 10
+        docker ps
+        curl "http://localhost:8081/"
+        docker kill $container_id
+        docker ps
         #
 
         # Build Jlink custom runtime (Distroless Java Base Debian)
         ./build-jlink.sh
+        container_id=$(docker run --rm -d -p8082:8080 webserver:distroless-java-base.jlink)
+        sleep 10
+        docker ps
+        curl "http://localhost:8082/"
+        docker kill $container_id
+        docker ps
         #
 
         # Build dynamic image (Distroless Java Base Debian)
         ./build-dynamic-image.sh
+        container_id=$(docker run --rm -d -p8083:8080 webserver:distroless-java-base.dynamic)
+        sleep 10
+        docker ps
+        curl "http://localhost:8083/"
+        docker kill $container_id
+        docker ps
         #
 
         # Build dynamic image, optimized for size (Distroless Java Base Debian)
         ./build-dynamic-image-optimized.sh
+        container_id=$(docker run --rm -d -p8084:8080 webserver:distroless-java-base.dynamic-optimized)
+        sleep 10
+        docker ps
+        curl "http://localhost:8084/"
+        docker kill $container_id
+        docker ps
         #
 
         # Build dynamic image, optimized for size with SkipFlow (Distroless Java Base Debian)
         ./build-dynamic-image-skipflow.sh
+        container_id=$(docker run --rm -d -p8085:8080 webserver:distroless-java-base.dynamic-skipflow)
+        sleep 10
+        docker ps
+        curl "http://localhost:8085/"
+        docker kill $container_id
+        docker ps
         #
 
         # Setup musl toolchain
@@ -57,10 +93,22 @@ jobs:
 
         # Build mostly static image (Distroless Base Debian)
         ./build-mostly-static-image.sh
+        container_id=$(docker run --rm -d -p8086:8080 webserver:distroless-base.mostly-static)
+        sleep 10
+        docker ps
+        curl "http://localhost:8086/"
+        docker kill $container_id
+        docker ps
         #
 
         # Build fully static image (Scratch)
         ./build-static-image.sh
+        container_id=$(docker run --rm -d -p8087:8080 webserver:scratch.static)
+        sleep 10
+        docker ps
+        curl "http://localhost:8087/"
+        docker kill $container_id
+        docker ps
         #
 
         # Download upx
@@ -69,5 +117,11 @@ jobs:
 
         # Build fully static compressed image (Scratch UPX)
         ./build-static-upx-image.sh
+        container_id=$(docker run --rm -d -p8088:8080 webserver:scratch.static-upx)
+        sleep 10
+        docker ps
+        curl "http://localhost:8088/"
+        docker kill $container_id
+        docker ps
         #
         docker images webserver
