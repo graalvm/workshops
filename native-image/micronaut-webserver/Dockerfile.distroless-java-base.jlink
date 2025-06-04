@@ -8,7 +8,7 @@ RUN CP=$(cat cp.txt) && \
     echo "Modules: $MODULES" && \
     jlink \
       --module-path "${JAVA_HOME}/jmods" \
-      --add-modules "$MODULES" \
+      --add-modules "$MODULES",jdk.zipfs \
       --verbose \
       --strip-debug \
       --compress zip-9 \
