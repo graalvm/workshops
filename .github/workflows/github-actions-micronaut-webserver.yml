@@ -22,8 +22,12 @@ jobs:
       run: |
         # Prepare static resources
         pwd
-        unzip native-image/micronaut-webserver/src/main/resources/static.zip
         cd /home/runner/work/workshops/workshops/native-image/micronaut-webserver
+        pwd
+        unzip src/main/resources/static.zip -d src/main/resources
+        pwd
+        ls src/main/resources
+        ls
         #
 
         # Build JAR (Debian Distoless Java 21)
