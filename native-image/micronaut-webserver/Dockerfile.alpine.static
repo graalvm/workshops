@@ -1,0 +1,14 @@
+FROM container-registry.oracle.com/graalvm/native-image:24-muslib AS nativebuild
+COPY . /webserver
+WORKDIR /webserver
+# Build a fully static native image with optimization for size
+RUN ./mvnw --no-transfer-progress clean package -Dpackaging=native-image -Pstatic
+
+# Alternative way to pass Native Image build options with `-DbuildArgs` without using Maven profiles:
+# RUN ./mvnw --no-transfer-progress clean package -Dpackaging=native-image -DbuildArgs="--static --libc=musl,-Os,-o target/webserver.static"
+
+# Alpine - no glibc
+FROM alpine:3
+COPY --from=nativebuild /webserver/target/webserver.static-alpine /
+EXPOSE 8000
+ENTRYPOINT ["/webserver.static-alpine", "-b", "0.0.0.0", "-d", "/web"]

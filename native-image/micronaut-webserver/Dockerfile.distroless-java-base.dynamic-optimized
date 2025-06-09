@@ -1,0 +1,14 @@
+FROM container-registry.oracle.com/graalvm/native-image:24 AS nativebuild
+COPY . /webserver
+WORKDIR /webserver
+# Build a dynamically linked native image with optimization for size
+RUN ./mvnw --no-transfer-progress clean package -Dpackaging=native-image -Pdynamic-optimized
+
+# Alternative way to pass Native Image build options with `-DbuildArgs` without using Maven profiles:
+# RUN ./mvnw --no-transfer-progress clean package -Dpackaging=native-image -DbuildArgs="-Os,-o target/webserver.dynamic-optimized"
+
+# Distroless Java Base-provides glibc and other libraries needed by the JDK
+FROM gcr.io/distroless/java-base-debian12
+COPY --from=nativebuild /webserver/target/webserver.dynamic-optimized /
+EXPOSE 8000
+ENTRYPOINT ["/webserver.dynamic-optimized", "-b", "0.0.0.0", "-d", "/web"]
