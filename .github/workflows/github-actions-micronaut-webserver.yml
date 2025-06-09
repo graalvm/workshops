@@ -1,4 +1,4 @@
-name: Micronaut - The Path to Efficient Java Containers
+name: "From JIT to Native: Efficient Java Containers with GraalVM and Micronaut"
 on:
   push:
     paths:

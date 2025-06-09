@@ -1,16 +1,15 @@
-# Micronaut: The Path to Efficient Java Containers
+# From JIT to Native: Efficient Java Containers with GraalVM and Micronaut
 
-This workshop demonstrates how to serve static assets with [Micronaut](https://micronaut.io/) directly from the resources folder, without relying on [Micronaut Views](https://micronaut-projects.github.io/micronaut-views/latest/guide/) or its templating support.
-The application serves the latest GraalVM release documentation so you can benchmark accurately.
-
-Another key objective is to show how to **build size-optimized native applications** with [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/) and deploy them in various containers to optimize the runtime environment.
+This workshop demonstrates how to **build efficient, size-optimized native applications** with [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/) and the [Micronaut® framework](https://micronaut.io/), and deploy them in various containers to optimize the runtime environment. 
 Micronaut has first-class support for Native Image, simplifying project setup and configuration.
+
+In this example, we serve static assets (GraalVM documentation pages) with Micronaut directly from the resources folder in the classpath.
 
 Each step in this workshop is implemented as a multistage build.
 It uses the [Oracle GraalVM container image](https://container-registry.oracle.com/ords/ocr/ba/graalvm) as the builder and explores different base images for the runner.
 Each step is automated via scripts and Dockerfiles, and the application serves real, production-like content.
 
-Yet once compiled into a JAR and placed in a Docker container with a full JDK (`eclipse-temurin:21base`), this Micronaut web server weighs approximately 582MB.
+Yet, once compiled into a JAR and placed in a Docker container with a full JDK (`eclipse-temurin:21base`), this Micronaut web server weighs approximately 582MB.
 From there, you will iteratively reduce its size by testing alternative packaging strategies: replacing the JVM with custom runtimes, using native executables, and ultimately producing fully static binaries.
 
 ### Objectives
@@ -41,7 +40,7 @@ In this workshop you will:
     git clone https://github.com/graalvm/workshops.git
     ```
     ```bash
-    cd native-image/micronaut-webserver
+    cd workshops/native-image/micronaut-webserver
     ```
 
 2. Unzip the static resources required for the application:
@@ -69,7 +68,7 @@ It requires a container image with a JDK and runtime libraries.
 ### Explanation
 
 The Dockerfile provided for this step pulls [container-registry.oracle.com/graalvm/jdk:24](https://docs.oracle.com/en/graalvm/jdk/24/docs/getting-started/container-images/) for the builder, and then `gcr.io/distroless/java21-debian12` for the runtime.
-Using a `distroless java21-debian12` base image instead of `eclipse-temurin:21` should drop down the container size significantly.
+Using a `distroless java21-debian12` base image instead of `eclipse-temurin:21` should reduce the container size significantly.
 The entrypoint for this image is equivalent to `java -jar`, so only a path to a JAR file is specified in `CMD`.
 
 ### Action
@@ -111,10 +110,10 @@ See how much reduction in size you can gain.
 ### Explanation
 
 Jlink, or `jlink`, is a tool that generates a custom Java runtime image that contains only the platform modules that are required for your application.
-This is one of the approaches to make applications more space efficient and cloud-friendly, introduced in Java 11.
+Introduced in Java 11, it provides a way to make applications more space efficient and cloud-friendly.
 
 The script _build-jlink.sh_ that runs `docker build` using the _Dockerfile.distroless-java-base.jlink_.
-The Dockerfile runs two stages: first it generates a Jlink custom runtime on a full JDK (`container-registry.oracle.com/graalvm/jdk:24`); then copies the runtime image folder along with static assets into a distroless Java base image, and sets the entrypoint.
+The Dockerfile contains two stages: first it generates a Jlink custom runtime on a full JDK (`container-registry.oracle.com/graalvm/jdk:24`); then copies the runtime image folder along with static assets into a distroless Java base image, and sets the entrypoint.
 Distroless Java base image provides `glibc` and other libraries needed by the JDK, **but not a full-blown JDK**.
 
 The application does not have to be modular, but you need to figure out which modules the application depends on to be able to `jlink` it.
@@ -122,7 +121,7 @@ In the builder stage, running on a full JDK, after compiling the project, Docker
 ```
 RUN ./mvnw dependency:build-classpath -Dmdep.outputFile=cp.txt
 ```
-Then, Docker runs `jlink` to create a custom runtime in the specified output directory _jlink-jre_, by using the output of the `jdeps` commnand to obtain the required modules for this Micronaut application:
+Then, runs `jlink` to create a custom runtime in the specified output directory _jlink-jre_, by using the output of the `jdeps` command to obtain the required modules for this Micronaut application:
 ```bash
 RUN CP=$(cat cp.txt) && \
     MODULES=$(jdeps --ignore-missing-deps -q --recursive --multi-release 24 --print-module-deps --class-path "$CP" target/webserver-0.1.jar) && \
@@ -169,7 +168,7 @@ The `ENTRYPOINT` for the application would be `java` from the custom runtime.
     webserver    distroless-java-base.jar     e285476a8266   32 minutes ago   216MB
     webserver    eclispe-temurin-jar          f6eef8d2aa40   33 minutes ago   472MB
     ```
-    Jlink shrinked the `distroless-java-base.jar` container by **49MB**.
+    Jlink shrank the `distroless-java-base.jar` container by **49MB**.
     There is no dramatic performance change, but a solid step toward efficiency.
 
 ## **STEP 3**:  Build a Native Image and Run Inside a Container (Default Configuration)
@@ -242,15 +241,15 @@ GraalVM Native Image provides the option `-Os` which optimizes the resulting nat
 `-Os` enables `-O2` optimizations except those that can increase code or executable size significantly.
 Learn more about different optimization levels in the [Native Image documentation](https://www.graalvm.org/jdk24/reference-manual/native-image/optimizations-and-performance/#optimization-levels).
 
-To configure the Native Image build and have more manual control over the process, GraalVM team provides the [Native Build Tools](https://graalvm.github.io/native-build-tools/latest/index.html): Maven and Gradle plugins for building native images.
+To configure the Native Image build and have more manual control over the process, GraalVM provides the [Native Build Tools](https://graalvm.github.io/native-build-tools/latest/index.html): Maven and Gradle plugins for building native images.
 
-The project configuration already contains the [Native Image Maven plugin](https://graalvm.github.io/native-build-tools/latest/index.html) declaration, within a Maven profile.
+The project configuration already contains the [Native Image Maven plugin](https://graalvm.github.io/native-build-tools/latest/maven-plugin.html) declaration, within a Maven profile.
 [Maven profiles](https://maven.apache.org/guides/introduction/introduction-to-profiles.html) are a great way to have different build configurations within a single _pom.xml_ file.
 
 For convenience, you can have a separate Maven profile for each step, adding the plugin into it.
 This way you can differentiate from the default build, and give a different name for the output file.
 
-Below is the breakdown of the plugin declaration and build configuration for this step:
+The snippet below shows the profile with the plugin declaration and build configuration for this step:
 ```xml
   <profile>
     <id>dynamic-optimized</id>
@@ -314,8 +313,9 @@ No Java Runtime Environment (JRE) is required.
     webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago  472MB
     ```
 
+    The size of the container came down from **132MB** to **102MB**. 
     The executable size decreased by **24MB** (from 86MB to 62MB) just by applying the file size optimization - with no change in behavior or startup time!
-    The size of the container is cut down from **132MB** to **102MB**.
+    
 
 ## **STEP 5**: (Optional) Build a Size-Optimized Native Image with SkipFlow and Run Inside a Container
 
@@ -326,7 +326,7 @@ In this step, you will build another fully dynamically linked native image but w
 As of GraalVM for JDK 24, you can enable [SkipFlow](https://www.graalvm.org/release-notes/JDK_24/#native-image)-an extension to the Native Image static analysis that tracks unreachable branches to reduce code paths that may never run.
 The feature is experimental and can be enabled with the following host options: `-H:+TrackPrimitiveValues` and `-H:+UsePredicates`.
 
-For that, a separate Maven profile is provided, giving a different name for the output file:
+For this, we have added a separate Maven profile with a different name for the generated native executable:
 ```xml
 <profile>
     <id>dynamic-skipflow-optimized</id>
@@ -481,7 +481,7 @@ To build a fully static executable, pass the `--static --libc=musl` options at b
 A fully static image **does not rely on any libraries in the operating system environment** and can be packaged in the tiniest container.
 
 It is easy to deploy on a slim or distroless container, even a [_scratch_ container](https://hub.docker.com/_/scratch).
-A _scratch_ container is a [Docker official image](https://hub.docker.com/_/scratch), only 2MB in size, basically an empty file system, useful for building super minimal images.
+A _scratch_ container, an official Docker image, is only 2MB in size. It is basically an empty file system, useful for building super minimal images.
 
 A separate Maven profile exists for this step:
 ```xml
@@ -561,7 +561,7 @@ You should see "not a dynamic executable" for the response.
 
 ## **STEP 8**: Going Extreme: Compress a Static Native Image with UPX and Run Inside a Container
 
-_Not convincing? What can you do next to reduce the size even more?_
+_Not convincing enough? What can you do next to reduce the size even more?_
 
 In this step, you compress your fully static native image with UPX, then package into the same _scratch_ container, and run.
 
