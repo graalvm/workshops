@@ -9,7 +9,7 @@ Each step in this workshop is implemented as a multistage build.
 It uses the [Oracle GraalVM container image](https://container-registry.oracle.com/ords/ocr/ba/graalvm) as the builder and explores different base images for the runner.
 Each step is automated via scripts and Dockerfiles, and the application serves real, production-like content.
 
-Yet, once compiled into a JAR and placed in a Docker container with a full JDK (`eclipse-temurin:21base`), this Micronaut web server weighs approximately 582MB.
+Yet, once compiled into a JAR and placed in a Docker container with a full JDK (`eclipse-temurin:21base`), this Micronaut web server weighs approximately 472MB.
 From there, you will iteratively reduce its size by testing alternative packaging strategies: replacing the JVM with custom runtimes, using native executables, and ultimately producing fully static binaries.
 
 ### Objectives
