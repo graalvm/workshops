@@ -1,6 +1,6 @@
 # From JIT to Native: Efficient Java Containers with GraalVM and Micronaut
 
-This workshop demonstrates how to **build efficient, size-optimized native applications** with [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/) and the [Micronaut® framework](https://micronaut.io/), and deploy them in various containers to optimize the runtime environment. 
+This workshop demonstrates how to **build efficient, size-optimized native applications** with [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/) and the [Micronaut® framework](https://micronaut.io/), and deploy them in various containers to optimize the runtime environment.
 Micronaut has first-class support for Native Image, simplifying project setup and configuration.
 
 In this example, we serve static assets (GraalVM documentation pages) with Micronaut directly from the resources folder in the classpath.
@@ -9,7 +9,7 @@ Each step in this workshop is implemented as a multistage build.
 It uses the [Oracle GraalVM container image](https://container-registry.oracle.com/ords/ocr/ba/graalvm) as the builder and explores different base images for the runner.
 Each step is automated via scripts and Dockerfiles, and the application serves real, production-like content.
 
-Yet, once compiled into a JAR and placed in a Docker container with a full JDK (`eclipse-temurin:21base`), this Micronaut web server weighs approximately 472MB.
+Yet, once compiled into a JAR and placed in a Docker container with a full JDK, this web server weighs approximately ~470MB.
 From there, you will iteratively reduce its size by testing alternative packaging strategies: replacing the JVM with custom runtimes, using native executables, and ultimately producing fully static binaries.
 
 ### Objectives
@@ -68,7 +68,6 @@ It requires a container image with a JDK and runtime libraries.
 ### Explanation
 
 The Dockerfile provided for this step pulls [container-registry.oracle.com/graalvm/jdk:24](https://docs.oracle.com/en/graalvm/jdk/24/docs/getting-started/container-images/) for the builder, and then `gcr.io/distroless/java21-debian12` for the runtime.
-Using a `distroless java21-debian12` base image instead of `eclipse-temurin:21` should reduce the container size significantly.
 The entrypoint for this image is equivalent to `java -jar`, so only a path to a JAR file is specified in `CMD`.
 
 ### Action
@@ -102,18 +101,18 @@ The entrypoint for this image is equivalent to `java -jar`, so only a path to a 
     Note that the website pages added **44MB** to the overall image size.
     **216MB** is not bad for Java, but not great if you are optimizing for cold start and footprint.
 
-## **STEP 2**: Build and Run a Jlink Custom Runtime Image Inside a Container
+## **STEP 2**: Build and Run a `jlink` Custom Runtime Image Inside a Container
 
-In this step, you will create a custom runtime for this Micronaut web application with Jlink and run it inside a container image.
+In this step, you will create a custom runtime for this Micronaut web application with `jlink` and run it inside a container image.
 See how much reduction in size you can gain.
 
 ### Explanation
 
-Jlink, or `jlink`, is a tool that generates a custom Java runtime image that contains only the platform modules that are required for your application.
+`jlink` is a tool that generates a custom Java runtime image that contains only the platform modules that are required for your application.
 Introduced in Java 11, it provides a way to make applications more space efficient and cloud-friendly.
 
 The script _build-jlink.sh_ that runs `docker build` using the _Dockerfile.distroless-java-base.jlink_.
-The Dockerfile contains two stages: first it generates a Jlink custom runtime on a full JDK (`container-registry.oracle.com/graalvm/jdk:24`); then copies the runtime image folder along with static assets into a distroless Java base image, and sets the entrypoint.
+The Dockerfile contains two stages: first it generates a `jlink` custom runtime on a full JDK (`container-registry.oracle.com/graalvm/jdk:24`); then copies the runtime image folder along with static assets into a distroless Java base image, and sets the entrypoint.
 Distroless Java base image provides `glibc` and other libraries needed by the JDK, **but not a full-blown JDK**.
 
 The application does not have to be modular, but you need to figure out which modules the application depends on to be able to `jlink` it.
@@ -168,7 +167,7 @@ The `ENTRYPOINT` for the application would be `java` from the custom runtime.
     webserver    distroless-java-base.jar     e285476a8266   32 minutes ago   216MB
     webserver    eclispe-temurin-jar          f6eef8d2aa40   33 minutes ago   472MB
     ```
-    Jlink shrank the `distroless-java-base.jar` container by **49MB**.
+    `jlink` shrank the `distroless-java-base.jar` container by **49MB**.
     There is no dramatic performance change, but a solid step toward efficiency.
 
 ## **STEP 3**:  Build a Native Image and Run Inside a Container (Default Configuration)
@@ -313,9 +312,9 @@ No Java Runtime Environment (JRE) is required.
     webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago  472MB
     ```
 
-    The size of the container came down from **132MB** to **102MB**. 
+    The size of the container came down from **132MB** to **102MB**.
     The executable size decreased by **24MB** (from 86MB to 62MB) just by applying the file size optimization - with no change in behavior or startup time!
-    
+
 
 ## **STEP 5**: (Optional) Build a Size-Optimized Native Image with SkipFlow and Run Inside a Container
 
@@ -616,7 +615,7 @@ Finally, the compressed executable copied over to the _scratch_ container, and e
     ```
     The container size reduced dramatically to just **22.3MB**!
     The `upx` tool compressed the static native image from **62MB** to just **20MB**.
-    That's nearly 20× smaller than the original container based on `eclipse-temurin:21`.
+    That’s nearly 20× smaller than the original container size.
     The application still started instantly and served requests flawlessly!
 
 ## **STEP 9**: Clean up (Optional)
