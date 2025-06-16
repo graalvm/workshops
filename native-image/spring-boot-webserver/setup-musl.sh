@@ -13,7 +13,8 @@ rm -rf musl-1.2.4.tar.gz
 pushd musl-1.2.4
 ./configure --prefix=$MUSL_HOME --static
 # The next operation may require privileged access to system resources, so use sudo
-sudo make && make install
+sudo make
+sudo make install
 popd
 
 # Install a symlink for use by native-image
