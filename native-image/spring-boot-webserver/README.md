@@ -1,4 +1,4 @@
-# From JVM to Native: The Path to Efficient Java Containers
+# From JIT to Native: Efficient Java Containers with GraalVM and Spring Boot
 
 This workshop focuses on how to **build size-optimized native applications** using [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/) and how to leverage containerization to optimize the runtime environment.
 You are going to discover ways to minimize application footprint by taking advantage of different Native Image linking options, and packaging a size-compact application into various containers, focusing on two main strategies: distroless and static, discussing the trade-offs.
