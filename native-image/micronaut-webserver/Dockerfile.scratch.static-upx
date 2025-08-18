@@ -1,4 +1,4 @@
-FROM container-registry.oracle.com/graalvm/native-image:24-muslib AS nativebuild
+FROM container-registry.oracle.com/graalvm/native-image:25-muslib AS nativebuild
 COPY . /webserver
 WORKDIR /webserver
 

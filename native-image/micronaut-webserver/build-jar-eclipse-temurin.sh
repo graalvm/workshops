@@ -1,4 +1,4 @@
 #!/bin/sh
 
-# Eclipse-temurin:21
-docker build --no-cache . -f Dockerfile.eclispe-temurin-jar -t webserver:eclispe-temurin-jar
+# Eclipse Temurin Java 25
+docker build --no-cache . -f Dockerfile.eclipse-temurin-jar -t webserver:eclipse-temurin-jar

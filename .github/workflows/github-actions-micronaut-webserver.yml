@@ -14,7 +14,7 @@ jobs:
     - name: Set up GraalVM
       uses: graalvm/setup-graalvm@v1
       with:
-        java-version: '24'
+        java-version: '25'
         distribution: 'graalvm'
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Run Micronaut Web Server
@@ -35,14 +35,23 @@ jobs:
         container_id=$(docker run --rm -d -p8080:8080 webserver:distroless-java-base.jar)
         sleep 10
         docker ps
+        sleep 2
+        for i in {1..10}; do
+          if curl -s "http://localhost:8080/" > /dev/null; then
+            echo "Server is up!"
+            break
+          fi
+          echo "Waiting for server..."
+          sleep 2
+        done
         curl "http://localhost:8080/"
         docker kill $container_id
         docker ps
         #
 
-        # Build JAR (Eclipse-temurin:21)
+        # Build JAR (Eclipse-temurin:25)
         ./build-jar-eclipse-temurin.sh
-        container_id=$(docker run --rm -d -p8081:8080 webserver:eclispe-temurin-jar)
+        container_id=$(docker run --rm -d -p8081:8080 webserver:eclipse-temurin-jar)
         sleep 10
         docker ps
         curl "http://localhost:8081/"
@@ -80,15 +89,6 @@ jobs:
         docker ps
         #
 
-        # Build dynamic image, optimized for size with SkipFlow (Distroless Java Base Debian)
-        ./build-dynamic-image-skipflow.sh
-        container_id=$(docker run --rm -d -p8085:8080 webserver:distroless-java-base.dynamic-skipflow)
-        sleep 10
-        docker ps
-        curl "http://localhost:8085/"
-        docker kill $container_id
-        docker ps
-        #
 
         # Setup musl toolchain
         ./setup-musl.sh

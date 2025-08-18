@@ -15,7 +15,7 @@
 	<description>Demo project for Spring Boot</description>
     <properties>
         <java.version>21</java.version>
-		<native-buildtools.version>0.10.6</native-buildtools.version>
+		<native-buildtools.version>0.11.0</native-buildtools.version>
     </properties>
 	<dependencies>
 		<dependency>

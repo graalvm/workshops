@@ -28,7 +28,7 @@ In this workshop you will:
 
 Before starting this workshop, you must have installed:
 
-* [GraalVM for JDK 24](https://www.graalvm.org/downloads/) - you can use either the Community or Enterprise Edition.
+* [GraalVM 25](https://www.graalvm.org/downloads/) - you can use either the Community or Enterprise Edition.
 
 > If you see the laptop icon in the text, this means you need to do something such as enter a command.
 
@@ -223,7 +223,6 @@ The [Tracing agent](https://www.graalvm.org/latest/reference-manual/native-image
     ```
 
     ```json
-    {
       "reflection": [
         {
           "type": "StringReverser",

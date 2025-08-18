@@ -1,3 +1,9 @@
+/*
+ * Copyright © 2025 Oracle and/or its affiliates.
+ *
+ * Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
+ */
+
 package com.example.demo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,7 +59,7 @@ class DemoApplicationTests {
 	void testNonExistantClass() throws ReflectiveOperationException, Exception {
 		String[] args = {"com.example.demo.IDontExist", "reverse", "java"};
 		DemoApplication demo = new DemoApplication();
-		Throwable exception = assertThrows(ReflectiveOperationException.class, 
+		Throwable exception = assertThrows(ReflectiveOperationException.class,
 			() -> {demo.doSomething(args);});
 	}
 
@@ -66,7 +72,7 @@ class DemoApplicationTests {
 	void testNonExistantMethod() throws ReflectiveOperationException, Exception {
 		String[] args = {"com.example.demo.IDontExist", "iDontExist", "java"};
 		DemoApplication demo = new DemoApplication();
-		Throwable exception = assertThrows(ReflectiveOperationException.class, 
+		Throwable exception = assertThrows(ReflectiveOperationException.class,
 			() -> {demo.doSomething(args);});
 	}
 }

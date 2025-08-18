@@ -33,7 +33,7 @@ In workshop lab, you will:
 
 Before starting this workshop, you must have installed:
 
-* [GraalVM for JDK 24](https://www.graalvm.org/downloads/) - you can use either the Community or Enterprise Edition.
+* [GraalVM 25](https://www.graalvm.org/downloads/) - you can use either the Community or Enterprise Edition.
 
 > If you see the laptop icon in the text, this means you need to do something such as enter a command.
 
@@ -457,7 +457,7 @@ So far you have seen that the `-Dagent=true` command-line option injects the Tra
 You have also seen that you can generate a native executable of the unit tests, which you can run independently without using Maven.
 Now it is time to build a native executable of your application itself.
 
-1. This time, run the same command as before, but remove the option that switched off native image builing of the application (not tests), `-DskipNativeBuild=true`:
+1. This time, run the same command as before, but remove the option that switched off native image building of the application (not tests), `-DskipNativeBuild=true`:
 
     ![](./images/RMIL_Technology_Laptop_Bark_RGB_50.png#input)
     ```bash

@@ -9,7 +9,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- <app.main.class>oracle.App</app.main.class> -->
         <app.main.class>serialization.App</app.main.class>
-        <native.maven.plugin.version>0.10.6</native.maven.plugin.version>
+        <native.maven.plugin.version>0.11.0</native.maven.plugin.version>
         <exe.file.name>file-count</exe.file.name>
     </properties>
 

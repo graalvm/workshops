@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.3</version>
+		<version>3.5.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -13,8 +13,21 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>webserver</name>
 	<description>Demo project for Spring Boot</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>21</java.version> <!-- Temporary workaround till the distroless java 21 image comes out. -->
 		<start-class>com.example.webserver.WebserverApplication</start-class>
 	</properties>
 	<dependencies>
@@ -65,26 +78,6 @@
 		</plugins>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 	<profiles>
 	   <!-- Fully dynamically linked image + optimized for size -->
 		<profile>
@@ -98,27 +91,6 @@
 							<imageName>webserver.dynamic-optimized</imageName>
 							<buildArgs>
 								<buildArg>-Os</buildArg>
-							</buildArgs>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<!-- Fully dynamically linked image + optimized for size + SkipFlow -->
-		<profile>
-			<id>dynamic-skipflow-optimized</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.graalvm.buildtools</groupId>
-						<artifactId>native-maven-plugin</artifactId>
-						<configuration>
-							<imageName>webserver.dynamic-skipflow</imageName>
-							<buildArgs>
-								<buildArg>-Os</buildArg>
-								<buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
-								<buildArg>-H:+TrackPrimitiveValues</buildArg>
-								<buildArg>-H:+UsePredicates</buildArg>
 							</buildArgs>
 						</configuration>
 					</plugin>
@@ -146,7 +118,7 @@
 		</profile>
 		<!-- Fully static image + optimized for size -->
 		<profile>
-			<id>static</id>
+			<id>fully-static</id>
 			<build>
 				<plugins>
 					<plugin>

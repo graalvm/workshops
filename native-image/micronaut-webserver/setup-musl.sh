@@ -5,12 +5,12 @@ set +e
 export MUSL_HOME=$PWD/musl-toolchain
 
 # Download musl sources:
-curl -O https://musl.libc.org/releases/musl-1.2.4.tar.gz
+curl -O https://musl.libc.org/releases/musl-1.2.5.tar.gz
 
 # Build musl from source
-tar -xzvf musl-1.2.4.tar.gz
-rm -rf musl-1.2.4.tar.gz
-pushd musl-1.2.4
+tar -xzvf musl-1.2.5.tar.gz
+rm -rf musl-1.2.5.tar.gz
+pushd musl-1.2.5
 ./configure --prefix=$MUSL_HOME --static
 # The next operation may require privileged access to system resources, so use sudo
 sudo make

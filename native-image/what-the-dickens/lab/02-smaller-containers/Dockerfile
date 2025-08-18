@@ -1,5 +1,5 @@
 # Base Container Image
-FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
+FROM container-registry.oracle.com/graalvm/native-image:25 AS builder
 
 # Set the working directory to /build
 WORKDIR /build

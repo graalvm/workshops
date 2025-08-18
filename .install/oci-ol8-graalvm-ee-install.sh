@@ -52,12 +52,12 @@ readonly SETUP_SCRIPT_VERSION="1.0.0"
 
 echo "OCI OL8 GraalVM EE Install Script: VERSION ${SETUP_SCRIPT_VERSION}"
 
-# Check for Oracle Linux 8
-if [ "ol8" == `cat /etc/oracle-release | sed -E 's|Oracle Linux Server release 8\..+|ol8|'` ]; then
-  echo -e "\e[32mSystem is Oracle Linux 8\e[0m"
+# Check for Oracle Linux 9
+if [ "ol8" == `cat /etc/oracle-release | sed -E 's|Oracle Linux Server release 9\..+|ol9|'` ]; then
+  echo -e "\e[32mSystem is Oracle Linux 9\e[0m"
 else
-  echo -e "\e[31mSystem is NOT Oracle Linux 8\e[0m"
-  echo -e "\e[31mThis install script is only meant to run with Oracle Linnux 8\e[0m"
+  echo -e "\e[31mSystem is NOT Oracle Linux 9\e[0m"
+  echo -e "\e[31mThis install script is only meant to run with Oracle Linux 9\e[0m"
   exit 1
 fi
 
