@@ -1,10 +1,10 @@
-FROM container-registry.oracle.com/graalvm/jdk:24 AS build
+FROM container-registry.oracle.com/graalvm/jdk:25 AS build
 COPY . /webserver
 WORKDIR /webserver
 RUN ./mvnw --no-transfer-progress clean package
 RUN ./mvnw dependency:build-classpath -Dmdep.outputFile=cp.txt
 RUN CP=$(cat cp.txt) && \
-    MODULES=$(jdeps --ignore-missing-deps -q --recursive --multi-release 24 --print-module-deps --class-path "$CP" target/webserver-0.1.jar) && \
+    MODULES=$(jdeps --ignore-missing-deps -q --recursive --multi-release 25 --print-module-deps --class-path "$CP" target/webserver-0.1.jar) && \
     echo "Modules: $MODULES" && \
     jlink \
       --module-path "${JAVA_HOME}/jmods" \

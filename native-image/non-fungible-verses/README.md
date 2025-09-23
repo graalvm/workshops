@@ -86,7 +86,7 @@ Create a compute instance
 - Image: vanilla Oracle Linux 8
 
 Once the VM is up and running, SSH into it and carry out the following steps:
-* Install [Oracle GraalVM for JDK 24](https://docs.oracle.com/en/graalvm/jdk/24/docs/getting-started/oci/compute-instance/).
+* Install [Oracle GraalVM 25](https://docs.oracle.com/en/graalvm/jdk/25/docs/getting-started/oci/compute-instance/).
 * Stop and disable the firewall of the VM (normally this isn't recommended).
 * In the security list for the VCN Subnet of your VM, add an ingress rule for TCP traffic on port 8080.
 
@@ -238,13 +238,13 @@ Now move on to running it in a container.
 
 Containerizing a Java application in a container image is straightforward.
 You can build a new Docker image based on one that contains a JDK distribution.
-For this workshop, you will use a container with the Oracle Linux 8 and the Oracle GraalVM JDK: `container-registry.oracle.com/graalvm/jdk:24`.
+For this workshop, you will use a container with the Oracle Linux 8 and the Oracle GraalVM JDK: `container-registry.oracle.com/graalvm/jdk:25`.
 
 The following is a breakdown of the Dockerfile, which describes how to build the Docker image. See the comments to explain the contents.
 
 ```dockerfile
 # Base Image
-FROM container-registry.oracle.com/graalvm/jdk:24
+FROM container-registry.oracle.com/graalvm/jdk:25
 
 # Pass in the JAR file as an argument to the image build
 ARG JAR_FILE
@@ -447,7 +447,7 @@ and the second step copies the native executable into a deployment container.
 >    The first step in the process builds a Linux-compatible executable and the second step packages that into a container image for deployment.
 
 ```dockerfile
-FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
+FROM container-registry.oracle.com/graalvm/native-image:25 AS builder
 
 # Set the working directory
 WORKDIR /build
@@ -569,7 +569,7 @@ Again you are going to use a multi-stage build.
 Take a look at the contents of the Dockerfile, which has comments to explain each line:
 
 ```dockerfile
-FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
+FROM container-registry.oracle.com/graalvm/native-image:25 AS builder
 
 # Set the working directory
 WORKDIR /build

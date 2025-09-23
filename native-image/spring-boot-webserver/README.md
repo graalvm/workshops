@@ -28,9 +28,9 @@ In this workshop you will:
 * x86 Linux
 * `musl` toolchain
 * Container runtime such as [Docker](https://www.docker.com/gettingstarted/), or [Rancher Desktop](https://docs.rancherdesktop.io/getting-started/installation/) installed and running.
-* [GraalVM for JDK 24](https://www.graalvm.org/downloads/). We recommend using [SDKMAN!](https://sdkman.io/). (For other download options, see [GraalVM Downloads](https://www.graalvm.org/downloads/).)
+* [GraalVM 25](https://www.graalvm.org/downloads/). We recommend using [SDKMAN!](https://sdkman.io/). (For other download options, see [GraalVM Downloads](https://www.graalvm.org/downloads/).)
     ```bash
-    sdk install java 24-graal
+    sdk install java 25-graal
     ```
 
 ## Setup
@@ -67,7 +67,7 @@ It requires a container image with a full JDK and runtime libraries.
 
 ### Explanation
 
-The Dockerfile provided for this step pulls [container-registry.oracle.com/graalvm/jdk:24](https://docs.oracle.com/en/graalvm/jdk/24/docs/getting-started/container-images/) for the builder, and then `gcr.io/distroless/java21-debian12` for the runtime.
+The Dockerfile provided for this step pulls [container-registry.oracle.com/graalvm/jdk:25](https://docs.oracle.com/en/graalvm/jdk/25/docs/getting-started/container-images/) for the builder, and then `gcr.io/distroless/java21-debian12` for the runtime.
 The entrypoint for this image is equivalent to `java -jar`, so only a path to a JAR file is specified in `CMD`.
 
 ### Action
@@ -108,7 +108,7 @@ See how much reduction in size you can gain.
 This is one of the approaches to make applications more space efficient and cloud-friendly, introduced in Java 11.
 
 The script _build-jlink.sh_ that runs `docker build` using the _Dockerfile.distroless-java-base.jlink_.
-The Dockerfile runs two stages: first it generates a jlink custom runtime on a full JDK (`container-registry.oracle.com/graalvm/jdk:24`); then copies the runtime image folder along with static website pages into a distroless Java base image, and sets the entrypoint.
+The Dockerfile runs two stages: first it generates a jlink custom runtime on a full JDK (`container-registry.oracle.com/graalvm/jdk:25`); then copies the runtime image folder along with static website pages into a distroless Java base image, and sets the entrypoint.
 Distroless Java base image provides `glibc` and other libraries needed by the JDK, but not a full-blown JDK.
 
 The application does not have to be modular, but you need to figure out which modules the application depends on to be able to `jlink` it.
@@ -118,7 +118,7 @@ RUN ./mvnw dependency:build-classpath -Dmdep.outputFile=cp.txt
 ```
 Then, Docker runs the `jdeps` command with the classpath to check required modules for this Spring Boot application:
 ```bash
-RUN jdeps --ignore-missing-deps -q  --recursive --multi-release 24 --print-module-deps --class-path $(cat cp.txt) target/webserver-0.0.1-SNAPSHOT.jar
+RUN jdeps --ignore-missing-deps -q  --recursive --multi-release 25 --print-module-deps --class-path $(cat cp.txt) target/webserver-0.0.1-SNAPSHOT.jar
 ```
 Finally, Docker runs `jlink` to create a custom runtime in the specified output directory _jlink-jre_.
 The `ENTRYPOINT` for the application would be `java` from the custom runtime.
@@ -285,7 +285,7 @@ In this step, you will build a fully dynamically linked native image **with the 
 
 GraalVM Native Image provides the option `-Os` which optimizes the resulting native image for file size.
 `-Os` enables `-O2` optimizations except those that can increase code or executable size significantly.
-Learn more in [the Native Image documentation](https://www.graalvm.org/jdk24/reference-manual/native-image/optimizations-and-performance/#optimization-levels).
+Learn more in [the Native Image documentation](https://www.graalvm.org/jdk25/reference-manual/native-image/optimizations-and-performance/#optimization-levels).
 
 For that, a separate Maven profile is provided to differentiate this run from the default build, and giving a different name for the output file:
 ```xml

@@ -20,7 +20,7 @@ Estimated workshop time: 60 minutes
 
 Before starting this workshop, you must have installed:
 
-* [GraalVM for JDK 24](https://www.graalvm.org/downloads/) - you can use either the Community or Enterprise Edition.
+* [GraalVM 25](https://www.graalvm.org/downloads/) - you can use either the Community or Enterprise Edition.
 * A Docker-API compatible container runtime such as [Rancher Desktop](https://docs.rancherdesktop.io/getting-started/installation/), [Docker](https://www.docker.io/gettingstarted/), or [Podman](https://podman.io/getting-started/installation).
 
 ## **STEP 1**: Introducing the Sample Java Application
@@ -284,7 +284,7 @@ the second step copies the native executable into a deployment container.
 
 ```dockerfile
 # Base Container Image
-FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
+FROM container-registry.oracle.com/graalvm/native-image:25 AS builder
 
 # Set the working directory to /build
 WORKDIR /build
@@ -393,7 +393,7 @@ the second step copies the native executable into a Distroless container.
 
 ```dockerfile
 # Base Container Image
-FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
+FROM container-registry.oracle.com/graalvm/native-image:25 AS builder
 
 # Set the working directory to /build
 WORKDIR /build
@@ -494,7 +494,7 @@ Such an executable can be packaged in smaller Distroless containers, which enabl
 
 ### Learn More
 
-- [Static and Mostly Static Images](https://www.graalvm.org/jdk24/reference-manual/native-image/guides/build-static-executables/)
+- [Static and Mostly Static Images](https://www.graalvm.org/jdk25/reference-manual/native-image/guides/build-static-executables/)
 - [Tiny Java Containers](https://github.com/graalvm/graalvm-demos/tree/master/native-image/tiny-java-containers)
 - [Native Build Tools](https://graalvm.github.io/native-build-tools/latest/index.html)
 - [Improving Java Application Security with Practical Hardening Strategies by Shaun Smith at DevoxxUK 2024](https://www.youtube.com/watch?v=dBbYnVSTwQs)

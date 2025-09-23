@@ -1,6 +1,6 @@
 # GraalVM Native Image Quick Start
 
-This workshop takes you step by step through the process of building a cloud native Java application with [GraalVM Native Image](https://docs.oracle.com/en/graalvm/jdk/24/docs/reference-manual/native-image/).
+This workshop takes you step by step through the process of building a cloud native Java application with [GraalVM Native Image](https://docs.oracle.com/en/graalvm/jdk/25/docs/reference-manual/native-image/).
 It is aimed at developers with a knowledge of Java.
 
 GraalVM Native Image compiles Java code ahead of time into a self-contained native executable.
@@ -30,7 +30,7 @@ In this workshop you will perform the following tasks:
 
 Before starting this workshop, you must have installed:
 
-* [GraalVM for JDK 24](https://www.graalvm.org/downloads/) - you can use either the Community or Enterprise Edition.
+* [GraalVM 25](https://www.graalvm.org/downloads/) - you can use either the Community or Enterprise Edition.
 
 > If you see the laptop icon in the text, this means you need to do something such as enter a command.
 
@@ -88,7 +88,7 @@ Now that you have a basic understanding of what the application does, build it a
 
 ## **STEP 2**: Compile a Java Application into a Native Image
 
-Next, you are going to build a native executable version of the application using [GraalVM Native Image](https://docs.oracle.com/en/graalvm/jdk/24/docs/reference-manual/native-image/).
+Next, you are going to build a native executable version of the application using [GraalVM Native Image](https://docs.oracle.com/en/graalvm/jdk/25/docs/reference-manual/native-image/).
 
 #### Action
 
@@ -129,7 +129,7 @@ What do the parameters you passed to the `native-image` command in step 1 specif
 * `-jar` : Specifies the location of the JAR file containing the Java application. (You can also specify the classpath with `-cp`.)
 * `-o`: Specifies the name of the output executable file.
 
-The full list of options can be found [here](https://docs.oracle.com/en/graalvm/jdk/24/docs/reference-manual/native-image/overview/Options/).
+The full list of options can be found [here](https://docs.oracle.com/en/graalvm/jdk/25/docs/reference-manual/native-image/overview/Options/).
 
 You can also run the `native-image` tool using the [Maven plugin for GraalVM Native Image](https://graalvm.github.io/native-build-tools/latest/maven-plugin.html).
 The project `pom.xml` file contains the following snippet that enables the plugin:
@@ -253,15 +253,15 @@ You need a way to let `native-image` know about any uses of reflection.
 Luckily, the `native-image` tool is able to read in the configuration file that specify all classes that are referenced through reflection.
 
 You can write the configuration manually, or, **we recommend using the Tracing agent that comes with GraalVM**.
-The [Tracing agent](https://docs.oracle.com/en/graalvm/jdk/24/docs/reference-manual/native-image/metadata/AutomaticMetadataCollection/) collects all instances of reflection, JNI, proxies, and resources access that it can locate while your application is running, and generates the JSON file, _reachability-metadata.json_ in the _resources/META-INF/native-image/_ directory.
+The [Tracing agent](https://docs.oracle.com/en/graalvm/jdk/25/docs/reference-manual/native-image/metadata/AutomaticMetadataCollection/) collects all instances of reflection, JNI, proxies, and resources access that it can locate while your application is running, and generates the JSON file, _reachability-metadata.json_ in the _resources/META-INF/native-image/_ directory.
 
 **Note**: It is important to exercise all the code paths in your application when running the agent in order to ensure that all cases of reflection are identified.
 
-The complete documentation for providing configuration can be found [here](https://docs.oracle.com/en/graalvm/jdk/24/docs/reference-manual/native-image/metadata/).
+The complete documentation for providing configuration can be found [here](https://docs.oracle.com/en/graalvm/jdk/25/docs/reference-manual/native-image/metadata/).
 
-##  **STEP 4**: Use the Tracing Agent
+## **STEP 4**: Use the Tracing Agent
 
-Now use the [Tracing agent](https://docs.oracle.com/en/graalvm/jdk/24/docs/reference-manual/native-image/metadata/AutomaticMetadataCollection/) to generate the configuration while you run your application.
+Now use the [Tracing agent](https://docs.oracle.com/en/graalvm/jdk/25/docs/reference-manual/native-image/metadata/AutomaticMetadataCollection/) to generate the configuration while you run your application.
 
 1. Run the application with the agent on the JVM:
 

@@ -21,7 +21,7 @@ docker run --rm what_the_dickens:0.0.1-SNAPSHOT
 ### Executable with Native Build Tools
 
 Use this option if you want to explore more options such as running your tests as a native code.
-[GraalVM for JDK 24](https://www.graalvm.org/downloads/) should be installed on your machine.
+[GraalVM 25](https://www.graalvm.org/downloads/) should be installed on your machine.
 
 To create the executable, run the following goal:
 ```bash

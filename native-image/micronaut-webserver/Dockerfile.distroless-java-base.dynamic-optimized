@@ -1,4 +1,4 @@
-FROM container-registry.oracle.com/graalvm/native-image:24 AS nativebuild
+FROM container-registry.oracle.com/graalvm/native-image:25 AS nativebuild
 COPY . /webserver
 WORKDIR /webserver
 # Build a dynamically linked native image with optimization for size

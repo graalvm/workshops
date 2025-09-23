@@ -37,9 +37,9 @@ In this workshop you will:
 
 Before starting this workshop, you must have installed:
 
-* [GraalVM for JDK 24](https://www.graalvm.org/downloads/). We recommend using [SDKMAN!](https://sdkman.io/). (For other download options, see [GraalVM Downloads](https://www.graalvm.org/downloads/).)
+* [GraalVM 25](https://www.graalvm.org/downloads/). We recommend using [SDKMAN!](https://sdkman.io/). (For other download options, see [GraalVM Downloads](https://www.graalvm.org/downloads/).)
     ```bash
-    sdk install java 24-graal
+    sdk install java 25-graal
     ```
 * Container runtime such as [Docker](https://www.docker.com/gettingstarted/), or [Rancher Desktop](https://docs.rancherdesktop.io/getting-started/installation/) installed and running.
 
@@ -336,7 +336,7 @@ and the second step copies the native executable into a deployment container.
 >    The first step in the process builds a Linux-compatible executable and the second step packages that into a container image for deployment.
 
 ```dockerfile
-FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
+FROM container-registry.oracle.com/graalvm/native-image:25 AS builder
 
 # Set the working directory
 WORKDIR /build
@@ -458,7 +458,7 @@ Again you are going to use a multi-stage build.
 Take a look at the contents of the Dockerfile, which has comments to explain each line:
 
 ```dockerfile
-FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
+FROM container-registry.oracle.com/graalvm/native-image:25 AS builder
 
 # Set the working directory
 WORKDIR /build
