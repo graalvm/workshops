@@ -2,7 +2,7 @@ FROM container-registry.oracle.com/graalvm/native-image:25-muslib AS nativebuild
 COPY . /webserver
 WORKDIR /webserver
 # Build a fully static native image with optimization for size
-RUN ./mvnw -Dmaven.test.skip=true -Pnative,static native:compile
+RUN ./mvnw -Dmaven.test.skip=true -Pnative,fully-static native:compile
 
 # Scratch-nothing
 FROM scratch

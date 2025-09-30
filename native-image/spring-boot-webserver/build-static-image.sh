@@ -6,7 +6,7 @@
 # TOOLCHAIN_DIR=${SCRIPT_DIR}/musl-toolchain
 # PATH=${TOOLCHAIN_DIR}/bin:${PATH}
 
-# ./mvnw -Dmaven.test.skip=true -Pnative,static native:compile
+# ./mvnw -Dmaven.test.skip=true -Pnative,fully-static native:compile
 
 # Scratch-nothing
 docker build --no-cache . -f Dockerfile.scratch.static -t webserver:scratch.static
