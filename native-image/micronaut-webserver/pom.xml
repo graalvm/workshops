@@ -14,18 +14,18 @@
   <parent>
     <groupId>io.micronaut.platform</groupId>
     <artifactId>micronaut-parent</artifactId>
-    <version>4.8.2</version>
+    <version>4.9.2</version>
   </parent>
 
   <properties>
     <packaging>jar</packaging>
-    <jdk.version>21</jdk.version>
-    <release.version>21</release.version>
-    <micronaut.version>4.8.2</micronaut.version>
+    <jdk.version>21</jdk.version> <!-- TODO: Update to 25 once distroless java 25 image is available -->
+    <release.version>21</release.version> <!-- TODO: Update to 25 once distroless java 25 image is available -->
+    <micronaut.version>4.9.2</micronaut.version>
     <micronaut.runtime>netty</micronaut.runtime>
     <micronaut.aot.enabled>false</micronaut.aot.enabled>
     <exec.mainClass>com.example.webserver.Application</exec.mainClass>
-    <native.maven.plugin.version>0.10.6</native.maven.plugin.version>
+    <native.maven.plugin.version>0.11.1</native.maven.plugin.version>
   </properties>
 
   <dependencies>
@@ -130,28 +130,6 @@
         </plugins>
       </build>
   </profile>
-
-  <profile>
-      <id>dynamic-skipflow-optimized</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.graalvm.buildtools</groupId>
-            <artifactId>native-maven-plugin</artifactId>
-            <version>${native.maven.plugin.version}</version>
-            <configuration>
-              <imageName>webserver.dynamic-skipflow</imageName>
-              <buildArgs>
-                <buildArg>-Os</buildArg>
-                <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
-                <buildArg>-H:+TrackPrimitiveValues</buildArg>
-                <buildArg>-H:+UsePredicates</buildArg>
-              </buildArgs>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
 
     <profile>
       <id>mostly-static</id>

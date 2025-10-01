@@ -1,3 +1,9 @@
+/*
+ * Copyright © 2025 Oracle and/or its affiliates.
+ *
+ * Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
+ */
+
 package com.example.verses;
 
 import java.util.ArrayList;
@@ -60,7 +66,7 @@ public class DemoApplication {
                 if ((lines != null) && (uuidRead != null)) {
                     sb.append(fieldAsHTML("uuid ", uuidRead))
                     .append(fieldAsHTML("verse", lines))
-                    .append("<br/>");    
+                    .append("<br/>");
                 }
             }
         }

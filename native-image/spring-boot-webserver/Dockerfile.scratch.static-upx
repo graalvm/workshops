@@ -1,4 +1,4 @@
-FROM container-registry.oracle.com/graalvm/native-image:24-muslib AS nativebuild
+FROM container-registry.oracle.com/graalvm/native-image:25-muslib AS nativebuild
 COPY . /webserver
 WORKDIR /webserver
 
@@ -13,7 +13,7 @@ RUN microdnf -y install wget xz && \
     rm -rf upx-${UPX_VERSION}-amd64_linux
 
 # Build a fully static native image with optimization for size
-RUN  ./mvnw -Dmaven.test.skip=true -Pnative,static native:compile
+RUN  ./mvnw -Dmaven.test.skip=true -Pnative,fully-static native:compile
 RUN ls -lh /webserver/target
 # Compress with UPX
 RUN ./upx --lzma --best -o /webserver/webserver.static-upx /webserver/target/webserver.static

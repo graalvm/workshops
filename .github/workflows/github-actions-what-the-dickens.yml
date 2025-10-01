@@ -14,7 +14,7 @@ jobs:
     - name: Set up GraalVM
       uses: graalvm/setup-graalvm@v1
       with:
-        java-version: '24'
+        java-version: '25'
         distribution: 'graalvm'
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Build and Test Java Code
@@ -30,7 +30,7 @@ jobs:
         pid=$!
         kill $pid
 
-        # Build a regular dynamic native image and containerize in docker.io/oraclelinux:8-slim container
+        # Build a regular dynamic native image and containerize in docker.io/oraclelinux:9-slim container
         docker build -f ./01-native-image/Dockerfile \
               -t what_the_dickens:native.01 .
         container_id=$(docker run --rm -d --name "what_the_dickens-native" -p 8080:8080 what_the_dickens:native.01)

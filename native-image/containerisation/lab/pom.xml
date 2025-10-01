@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.0</version>
+        <version>3.5.6</version>
         <relativePath/>
     </parent>
     <groupId>com.example</groupId>
@@ -13,9 +13,22 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>jibber</name>
     <description>Demo project for Spring Boot with GraalVM Native Image</description>
-    <properties>
-        <java.version>21</java.version>
-		<native-buildtools.version>0.10.6</native-buildtools.version>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+        <java.version>25</java.version>
+		<native-buildtools.version>0.11.0</native-buildtools.version>
     </properties>
     <dependencies>
         <dependency>

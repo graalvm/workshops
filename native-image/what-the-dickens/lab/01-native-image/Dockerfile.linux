@@ -1,5 +1,5 @@
 # The deployment container image
-FROM docker.io/oraclelinux:8-slim
+FROM docker.io/oraclelinux:9-slim
 
 # Pass in the JAR file as an argument to the container image build
 ARG APP_FILE

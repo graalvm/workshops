@@ -2,7 +2,7 @@
 
 This workshop takes you step by step through the process of how to compile a Java application ahead of time with GraalVM Native Image and containerize it.
 
-[GraalVM Native Image](https://docs.oracle.com/en/graalvm/jdk/latest/docs/reference-manual/native-image/) compiles Java code ahead of time into a self-contained native executable.
+[GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/) compiles Java code ahead of time into a self-contained native executable.
 Only the code that is required by the application at run time is packaged into the executable.
 A native executable produced by Native Image has several important advantages, in that it:
 
@@ -37,9 +37,9 @@ In this workshop you will:
 
 Before starting this workshop, you must have installed:
 
-* [GraalVM for JDK 24](https://www.graalvm.org/downloads/). We recommend using [SDKMAN!](https://sdkman.io/). (For other download options, see [GraalVM Downloads](https://www.graalvm.org/downloads/).)
+* [GraalVM 25](https://www.graalvm.org/downloads/). We recommend using [SDKMAN!](https://sdkman.io/). (For other download options, see [GraalVM Downloads](https://www.graalvm.org/downloads/).)
     ```bash
-    sdk install java 24-graal
+    sdk install java 25-graal
     ```
 * Container runtime such as [Docker](https://www.docker.com/gettingstarted/), or [Rancher Desktop](https://docs.rancherdesktop.io/getting-started/installation/) installed and running.
 
@@ -124,13 +124,13 @@ To build the application, you are going to use Maven. The _pom.xml_ file was gen
 
 Containerizing a Java application in a container image is straightforward.
 You can build a new Docker image based on one that contains a JDK distribution.
-For this workshop, you will use a container with the Oracle Linux 8 and the [NFTC Oracle JDK 21 image](https://container-registry.oracle.com/ords/ocr/ba/java/jdk-no-fee-term): `container-registry.oracle.com/java/jdk-no-fee-term:21-oraclelinux8`.
+For this workshop, you will use a container with the Oracle Linux 9 and the [NFTC Oracle JDK 25 image](https://container-registry.oracle.com/ords/ocr/ba/java/jdk-no-fee-term): `container-registry.oracle.com/java/jdk-no-fee-term:25-oraclelinux9`.
 
 The following is a breakdown of the Dockerfile, which describes how to build the Docker image. See the comments to explain the contents.
 
 ```dockerfile
 # Base Image
-FROM container-registry.oracle.com/java/jdk-no-fee-term:21-oraclelinux8
+FROM container-registry.oracle.com/java/jdk-no-fee-term:25-oraclelinux9
 
 # Pass in the JAR file as an argument to the image build
 ARG JAR_FILE
@@ -336,7 +336,7 @@ and the second step copies the native executable into a deployment container.
 >    The first step in the process builds a Linux-compatible executable and the second step packages that into a container image for deployment.
 
 ```dockerfile
-FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
+FROM container-registry.oracle.com/graalvm/native-image:25 AS builder
 
 # Set the working directory
 WORKDIR /build
@@ -458,7 +458,7 @@ Again you are going to use a multi-stage build.
 Take a look at the contents of the Dockerfile, which has comments to explain each line:
 
 ```dockerfile
-FROM container-registry.oracle.com/graalvm/native-image:24 AS builder
+FROM container-registry.oracle.com/graalvm/native-image:25 AS builder
 
 # Set the working directory
 WORKDIR /build
