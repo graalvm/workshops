@@ -4,7 +4,7 @@ WORKDIR /webserver
 RUN ./mvnw --no-transfer-progress clean package
 
 # Distoless Java 21 (Debian)
-FROM gcr.io/distroless/java21-debian12
+FROM gcr.io/distroless/java25-debian13
 COPY --from=build /webserver/target/webserver-0.1.jar webserver-0.1.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "webserver-0.1.jar"]

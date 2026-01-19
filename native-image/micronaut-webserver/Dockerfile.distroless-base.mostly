@@ -8,7 +8,7 @@ RUN ./mvnw --no-transfer-progress clean package -Dpackaging=native-image -Pmostl
 # RUN ./mvnw --no-transfer-progress clean package -Dpackaging=native-image -DbuildArgs="--static-nolibc,-Os,-o target/webserver.mostly-static"
 
 # Distroless Base - provides glibc
-FROM gcr.io/distroless/base-debian12
+FROM gcr.io/distroless/base-debian13
 COPY --from=nativebuild /webserver/target/webserver.mostly-static /
 EXPOSE 8000
 ENTRYPOINT ["/webserver.mostly-static", "-b", "0.0.0.0", "-d", "/web"]

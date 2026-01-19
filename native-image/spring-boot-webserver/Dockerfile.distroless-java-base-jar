@@ -3,8 +3,7 @@ COPY . /webserver
 WORKDIR /webserver
 RUN ./mvnw clean package
 
-##### TODO: Upgrade to Distroless Java 25 (Debian)
-# Distoless Java 21 (Debian)
+# Distoless Java 25 (Debian)
 FROM gcr.io/distroless/java25-debian13
 COPY --from=build /webserver/target/webserver-0.0.1-SNAPSHOT.jar webserver-0.0.1-SNAPSHOT.jar
 EXPOSE 8080
