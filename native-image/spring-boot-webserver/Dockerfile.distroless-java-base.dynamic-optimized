@@ -5,7 +5,7 @@ WORKDIR /webserver
 RUN ./mvnw -Dmaven.test.skip=true -Pnative,dynamic-size-optimized native:compile
 
 # Distroless Java Base-provides glibc and other libraries needed by the JDK
-FROM gcr.io/distroless/java-base-debian12
+FROM gcr.io/distroless/java-base-debian13
 COPY --from=nativebuild /webserver/target/webserver.dynamic-optimized /
 EXPOSE 8000
 ENTRYPOINT ["/webserver.dynamic-optimized", "-b", "0.0.0.0", "-d", "/web"]

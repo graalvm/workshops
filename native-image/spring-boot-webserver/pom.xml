@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.6</version>
+		<version>4.0.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -27,7 +27,7 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>21</java.version> <!-- Temporary workaround till the distroless java 21 image comes out. -->
+		<java.version>25</java.version>
 		<start-class>com.example.webserver.WebserverApplication</start-class>
 		<native.maven.plugin.version>0.11.1</native.maven.plugin.version>
 	</properties>

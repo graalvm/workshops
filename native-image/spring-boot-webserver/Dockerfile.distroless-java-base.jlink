@@ -16,7 +16,7 @@ RUN jlink \
         --output jlink-jre
 
 # Distroless Java Base-provides glibc and other libraries needed by the JDK
-FROM gcr.io/distroless/java-base-debian12
+FROM gcr.io/distroless/java-base-debian13
 COPY --from=build /webserver/target/webserver-0.0.1-SNAPSHOT.jar webserver-0.0.1-SNAPSHOT.jar
 COPY --from=build /webserver/jlink-jre jlink-jre
 EXPOSE 8080

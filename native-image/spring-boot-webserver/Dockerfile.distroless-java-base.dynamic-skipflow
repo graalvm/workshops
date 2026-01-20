@@ -1,0 +1,11 @@
+FROM container-registry.oracle.com/graalvm/native-image:24 AS nativebuild
+COPY . /webserver
+WORKDIR /webserver
+# Build a dynamically linked native image with optimization for size
+RUN ./mvnw -Dmaven.test.skip=true -Pnative,dynamic-skipflow-optimized native:compile
+
+# Distroless Java Base-provides glibc and other libraries needed by the JDK
+FROM gcr.io/distroless/java-base-debian13
+COPY --from=nativebuild /webserver/target/webserver.dynamic-skipflow /
+EXPOSE 8000
+ENTRYPOINT ["/webserver.dynamic-skipflow", "-b", "0.0.0.0", "-d", "/web"]
