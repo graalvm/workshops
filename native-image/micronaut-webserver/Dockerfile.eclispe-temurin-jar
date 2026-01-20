@@ -3,7 +3,7 @@ COPY . /webserver
 WORKDIR /webserver
 RUN ./mvnw --no-transfer-progress clean package
 
-# Distoless Java 25 (Debian)
+# Eclipse Temurin Java 25
 FROM eclipse-temurin:25
 COPY --from=build /webserver/target/webserver-0.1.jar webserver-0.1.jar
 EXPOSE 8080

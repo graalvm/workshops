@@ -53,7 +53,7 @@ In this workshop you will:
     ./build-jar-eclipse-temurin.sh
     ```
     Once the script finishes, a container image _eclipse-temurin-jar_ should be available.
-    Check its size. It should be **472MB**.
+    Check its size. It should be **472MB**.      
     ```bash
     docker images
     ```
