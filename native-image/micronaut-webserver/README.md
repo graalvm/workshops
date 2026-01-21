@@ -28,7 +28,7 @@ In this workshop you will:
 * x86 Linux
 * `musl` toolchain
 * Container runtime such as [Docker](https://www.docker.com/gettingstarted/), or [Rancher Desktop](https://docs.rancherdesktop.io/getting-started/installation/) installed and running.
-* [GraalVM 25](https://www.graalvm.org/downloads/). We recommend using [SDKMAN!](https://sdkman.io/). (For other download options, see [GraalVM Downloads](https://www.graalvm.org/downloads/).)
+* [Oracle GraalVM 25](https://www.graalvm.org/downloads/). We recommend using [SDKMAN!](https://sdkman.io/). (For other download options, see [GraalVM Downloads](https://www.graalvm.org/downloads/).)
     ```bash
     sdk install java 25-graal
     ```
@@ -53,7 +53,7 @@ In this workshop you will:
     ./build-jar-eclipse-temurin.sh
     ```
     Once the script finishes, a container image _eclipse-temurin-jar_ should be available.
-    Check its size. It should be **472MB**.
+    Check its size. It should be **472MB**.      
     ```bash
     docker images
     ```
@@ -67,7 +67,7 @@ It requires a container image with a JDK and runtime libraries.
 
 ### Explanation
 
-The Dockerfile provided for this step pulls [container-registry.oracle.com/graalvm/jdk:24](https://docs.oracle.com/en/graalvm/jdk/24/docs/getting-started/container-images/) for the builder, and then `gcr.io/distroless/java21-debian12` for the runtime.
+The Dockerfile provided for this step pulls [container-registry.oracle.com/graalvm/jdk:25](https://docs.oracle.com/en/graalvm/jdk/25/docs/getting-started/container-images/) for the builder, and then `gcr.io/distroless/java25-debian13` for the runtime.
 The entrypoint for this image is equivalent to `java -jar`, so only a path to a JAR file is specified in `CMD`.
 
 ### Action
@@ -112,7 +112,7 @@ See how much reduction in size you can gain.
 Introduced in Java 11, it provides a way to make applications more space efficient and cloud-friendly.
 
 The script _build-jlink.sh_ that runs `docker build` using the _Dockerfile.distroless-java-base.jlink_.
-The Dockerfile contains two stages: first it generates a `jlink` custom runtime on a full JDK (`container-registry.oracle.com/graalvm/jdk:24`); then copies the runtime image folder along with static assets into a distroless Java base image, and sets the entrypoint.
+The Dockerfile contains two stages: first it generates a `jlink` custom runtime on a full JDK (`container-registry.oracle.com/graalvm/jdk:25`); then copies the runtime image folder along with static assets into a distroless Java base image, and sets the entrypoint.
 Distroless Java base image provides `glibc` and other libraries needed by the JDK, **but not a full-blown JDK**.
 
 The application does not have to be modular, but you need to figure out which modules the application depends on to be able to `jlink` it.
@@ -238,7 +238,7 @@ In this step, you will build a fully dynamically linked native image **with the 
 
 GraalVM Native Image provides the option `-Os` which optimizes the resulting native image for file size.
 `-Os` enables `-O2` optimizations except those that can increase code or executable size significantly.
-Learn more about different optimization levels in the [Native Image documentation](https://www.graalvm.org/latest/reference-manual/native-image/optimizations-and-performance/#optimization-levels).
+Learn more about different optimization levels in the [Native Image documentation](https://www.graalvm.org/jdk25/reference-manual/native-image/optimizations-and-performance/#optimization-levels).
 
 To configure the Native Image build and have more manual control over the process, GraalVM provides the [Native Build Tools](https://graalvm.github.io/native-build-tools/latest/index.html): Maven and Gradle plugins for building native images.
 
@@ -315,7 +315,85 @@ No Java Runtime Environment (JRE) is required.
     The size of the container came down from **132MB** to **102MB**.
     The executable size decreased by **24MB** (from 86MB to 62MB) just by applying the file size optimization - with no change in behavior or startup time!
 
-## **STEP 5**: Build a Size-Optimized Mostly Static Native Image and Run Inside a Container
+
+## **STEP 5**: (Optional) Build a Size-Optimized Native Image with SkipFlow and Run Inside a Container
+
+In this step, you will build another fully dynamically linked native image but with the **SkipFlow** and **file size** optimizations on. Then you run it inside a container.
+
+### Explanation
+
+As of Oracle GraalVM 25, more performance improvements are enabled by default.
+One of which is [SkipFlow](https://www.graalvm.org/release-notes/JDK_25/#native-image)-an extension to the Native Image static analysis that tracks primitive values and evaluates branching conditions dynamically during the process.
+
+Note: The feature is enabled by default. With the previous releases, it could be controlled using these host options: `-H:+TrackPrimitiveValues` and `-H:+UsePredicates`.
+
+For this, we have added a separate Maven profile with a different name for the generated native executable:
+```xml
+<profile>
+    <id>dynamic-skipflow-optimized</id>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <configuration>
+                    <imageName>webserver.dynamic-skipflow</imageName>
+                    <buildArgs>
+                        <buildArg>-Os</buildArg>
+                        <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
+                        <buildArg>-H:+TrackPrimitiveValues</buildArg>
+                        <buildArg>-H:+UsePredicates</buildArg>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+```
+
+> An alternative way to pass build options to Native Image, without creating Maven profiles, is by using `-DbuildArgs`:
+```bash
+./mvnw package -Dpackaging=native-image -DbuildArgs="-Os,-H:+UnlockExperimentalVMOptions,-H:+TrackPrimitiveValues,-H:+UsePredicates,-o target/webserver.dynamic-skipflow"
+```
+
+The Dockerfile for this step, _Dockerfile.distroless-java-base.dynamic-skipflow_, is pretty much the same as before: running a native image build inside the builder container, and then copying it over to a distroless base container with just enough to run the application.
+No Java Runtime Environment (JRE) is required.
+
+### Action
+
+1. Run the script to build a size-optimized native executable and package it into a container:
+    ```bash
+    ./build-dynamic-image-skipflow.sh
+    ```
+
+2. Once the build completes, a container image _distroless-java-base.dynamic-optimized_ should be available. Run it, mapping the ports:
+    ```bash
+    docker run --rm -p8080:8080 webserver:distroless-java-base.dynamic-skipflow
+    ```
+    The application is running from the native image inside a container.
+    The startup time has not changed.
+
+3. Open a browser and navigate to [localhost:8080/](http://localhost:8080/). You see the GraalVM documentation pages served.
+
+4. Return to the terminal and stop the running container by clicking CTRL+C.
+
+5. Check the size of this container image:
+    ```bash
+    docker images
+    ```
+    The expected output is:
+    ```bash
+    REPOSITORY   TAG                                      IMAGE ID       CREATED         SIZE
+    webserver    distroless-java-base.dynamic-skipflow    6caada87f616   8  minutes ago  101MB
+    webserver    distroless-java-base.dynamic-optimized   5e16a58b1649   10 minutes ago  102MB
+    webserver    distroless-java-base.dynamic             d7c449b9373d   12 minutes ago  132MB
+    webserver    distroless-java-base.jlink               dde1eb772aa5   15 minutes ago  167MB
+    webserver    distroless-java-base.jar                 e285476a8266   32 minutes ago  216MB
+    webserver    eclispe-temurin-jar                      f6eef8d2aa40   33 minutes ago  472MB
+    ```
+    The gain is tiny: the container size reduced only by 1MB, but depending on the application, **SkipFlow can provide up to a 4% reduction in binary size without any additional impact on build time**.
+
+## **STEP 6**: Build a Size-Optimized Mostly Static Native Image and Run Inside a Container
 
 In this step, you will build a **mostly static** native image, with the file size optimization on, and then package it into a container image that provides `glibc`, and run.
 
@@ -555,12 +633,13 @@ Note that the website static pages add 44MB to the container images size. Static
 
 | Container                              | Size of a build artefact <br> (JAR, Jlink runtime, native executable) | Base image | Container |
 |----------------------------------------|-----------------------------------------------------------------------|------------|-----------|
-| eclipse-temurin-jar                    | webserver-0.1.jar **24MB**                         | eclipse-temurin:25 201MB      | 472MB     |
-| distroless-java-base.jar               | webserver-0.1.jar **24MB**                         | java21-debian12 192MB         | 216MB     |
-| distroless-java-base.jlink             | jlink-jre custom runtime **68MB**                  | java-base-debian12 128MB      | 167MB     |
-| distroless-java-base.dynamic           | webserver.dynamic **86MB**                         | java-base-debian12 128MB      | 132MB     |
-| distroless-java-base.dynamic-optimized | webserver.dynamic-optimized **62MB**               | java-base-debian12 128MB      | 102MB     |
-| distroless-base.mostly-static          | webserver.mostly-static **62MB**                   | base-debian12 48.3MB          | 89.7MB    |
+| eclispe-temurin-jar                    | webserver-0.1.jar **24MB**                         | eclipse-temurin:25 201MB      | 472MB     |
+| distroless-java-base.jar               | webserver-0.1.jar **24MB**                         | java25-debian13 192MB         | 216MB     |
+| distroless-java-base.jlink             | jlink-jre custom runtime **68MB**                  | java-base-debian13 128MB      | 167MB     |
+| distroless-java-base.dynamic           | webserver.dynamic **86MB**                         | java-base-debian13 128MB      | 132MB     |
+| distroless-java-base.dynamic-optimized | webserver.dynamic-optimized **62MB**               | java-base-debian13 128MB      | 102MB     |
+| distroless-java-base.dynamic-skipflow  | webserver.dynamic-skipflow **61MB**                | java-base-debian13 128MB      | 101MB     |
+| distroless-base.mostly-static          | webserver.mostly-static **62MB**                   | base-debian13 48.3MB          | 89.7MB    |
 | scratch.static                         | webserver.static **62MB**                          | scratch 2MB                   | 69.2MB    |
 | scratch.static-upx                     | webserver.scratch.static-upx **20MB**              | scratch 2MB                   | 22.3MB    |
 
