@@ -566,7 +566,7 @@ A separate Maven profile exists for this step:
 #### For Local Building
 
 If you build a native image locally, it requires the `musl` toolchain with `zlib` installed on your machine.
-We provide a script to download and configure the `musl` toolchain, and install `zlib` into the toolchain:
+We provide a script to download and configure the `musl` toolchain:
 ```bash
 ./setup-musl.sh
 ```
